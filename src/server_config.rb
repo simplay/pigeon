@@ -2,7 +2,7 @@ java_import 'java.util.logging.Level'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Config'
 require 'java'
 require 'pry'
-require 'lib/teamspeak3-api-1.0.12.jar'
+require_relative '../lib/teamspeak3-api-1.0.12.jar'
 
 class ServerConfig
   def initialize
