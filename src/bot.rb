@@ -44,19 +44,17 @@ class Bot
     @api.registerAllEvents
     @api.addTS3Listeners TS3Listener.impl {|name, event|
       unless event.getInvokerName.include?(@name)
-        if name.to_s.include?("onTextMessage")
-          case name.to_s
-          when 'onTextMessage'
-            sender_name = event.getInvokerName
-            if sender_name.downcase.include?(MASTER_NAME)
-              if event.getMessage == "!bb"
-                say_in_current_channel("I'm leaving now - cu <3")
-                shut_down
-              end
+        case name.to_s
+        when 'onTextMessage'
+          sender_name = event.getInvokerName
+          if sender_name.downcase.include?(MASTER_NAME)
+            if event.getMessage == "!bb"
+              say_in_current_channel("I'm leaving now - cu <3")
+              shut_down
             end
-            if event.getMessage == "!poke"
-              say_in_current_channel("Hey, stop poking me!")
-            end
+          end
+          if event.getMessage == "!poke"
+            say_in_current_channel("Hey, stop poking me!")
           end
         end
       end
