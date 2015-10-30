@@ -1,0 +1,5 @@
+require 'rubygems'
+require 'pry'
+$LOAD_PATH << '.'
+require_relative 'bot_manager'
+BotManager.new
