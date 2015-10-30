@@ -15,3 +15,19 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
  + `b_virtualserver_client_list 1`
  + `b_virtualserver_servergroup_list 1`
  + `b_virtualserver_channelgroup 1`
+
+## Installation
+1 Clone this repository.
+
+2 Create a text file in `./secrets/` called `credentials.txt`. This file is supposed to contain the query admin login data, the server ip address and the server port. The file is structured as the follows: 
+```
+query admin login name
+query admin login password
+server ip address
+server port
+```
+Do not worry, this wile is ignored by git and thus cannot accidently commited onto this repository in case you plan to contribute. 
+
+3 run bundler via `bundle`.
+
+4 run the bot via `ruby pigeon`.
