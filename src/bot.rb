@@ -40,6 +40,10 @@ class Bot
 
   protected
 
+  def perform_command(sender, message)
+
+  end
+
   def attach_listeners
     @api.registerAllEvents
     @api.addTS3Listeners TS3Listener.impl {|name, event|
