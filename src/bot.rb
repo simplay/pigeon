@@ -10,6 +10,7 @@ class Bot
     @query = TS3Query.new(config.data)
     @name = name
     @is_started = false
+    binding.pry
   end
 
   def start
