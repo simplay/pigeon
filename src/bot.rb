@@ -1,5 +1,4 @@
 require 'java'
-require 'pry'
 require 'lib/teamspeak3-api-1.0.12.jar'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
