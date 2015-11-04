@@ -1,4 +1,0 @@
-require 'rubygems'
-$LOAD_PATH << '.'
-require_relative 'src/bot_manager'
-BotManager.new
