@@ -1,6 +1,3 @@
-require_relative 'bot'
-require_relative 'server_config'
-
 class BotManager
   def initialize
     config = ServerConfig.new
