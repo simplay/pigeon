@@ -52,6 +52,13 @@ class Bot
     Command.all(self)[identifier].invoke_by(sender)
   end
 
+  def command?(message)
+    !(message =~/^\!(.)+/).nil?
+  end
+
+  def parse_message(a_message)
+  end
+
   def attach_listeners
     @api.registerAllEvents
     @api.addTS3Listeners TS3Listener.impl {|name, event|
@@ -59,7 +66,9 @@ class Bot
         case name.to_s
         when 'onTextMessage'
           sender_name = event.getInvokerName
-          perform_command(nil, event.getMessage)
+          message = event.getMessage
+          command?(message) ? perform_command(nil, message)
+                            : parse_message(message)
         end
       end
     }
