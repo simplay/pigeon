@@ -10,5 +10,6 @@ require 'teamspeak3-api-1.0.12.jar'
 require 'bot'
 require 'bot_manager'
 require 'server_config'
+require 'command'
 
 BotManager.new if __FILE__ == $PROGRAM_NAME

@@ -21,6 +21,10 @@ class Bot
     end
   end
 
+  def api
+    @api
+  end
+
   def started?
     @is_started
   end
@@ -36,10 +40,16 @@ class Bot
     @api.sendChannelMessage(msg)
   end
 
+  def leave_server(silent=false)
+    say_in_current_channel("I'm leaving now - cu <3") unless silent
+    shut_down
+  end
+
   protected
 
   def perform_command(sender, message)
-
+    identifier = message.split("!").last.to_sym
+    Command.all(self)[identifier].invoke_by(sender)
   end
 
   def attach_listeners
@@ -49,15 +59,7 @@ class Bot
         case name.to_s
         when 'onTextMessage'
           sender_name = event.getInvokerName
-          if sender_name.downcase.include?(MASTER_NAME)
-            if event.getMessage == "!bb"
-              say_in_current_channel("I'm leaving now - cu <3")
-              shut_down
-            end
-          end
-          if event.getMessage == "!poke"
-            say_in_current_channel("Hey, stop poking me!")
-          end
+          perform_command(nil, event.getMessage)
         end
       end
     }
