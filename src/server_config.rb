@@ -10,7 +10,7 @@ class ServerConfig
     #credentials = read_secrets
     @config.setHost(ENV['P_IP_ADDRESS'])
     @config.setCommandTimeout(1000)
-    @config.setQueryPort(ENV['P_PORT'])
+    @config.setQueryPort(ENV['P_PORT'].to_i)
     @config.setLoginCredentials(ENV['P_USER'], ENV['P_PASSWORD']);
   end
 
