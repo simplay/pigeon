@@ -7,11 +7,11 @@ class ServerConfig
   def initialize
     @config = TS3Config.new
     @config.setDebugLevel(Level::ALL)
-    credentials = read_secrets
-    @config.setHost(credentials[2])
+    #credentials = read_secrets
+    @config.setHost(ENV['P_IP_ADDRESS'])
     @config.setCommandTimeout(1000)
-    @config.setQueryPort(credentials[3].to_i)
-    @config.setLoginCredentials(credentials[0], credentials[1]);
+    @config.setQueryPort(ENV['P_PORT'])
+    @config.setLoginCredentials(ENV['P_USER'], ENV['P_PASSWORD']);
   end
 
   def data
