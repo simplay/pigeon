@@ -16,7 +16,6 @@ module AuthLevel
   }
 
   def method_missing(*arg, &block)
-    binding.pry
     if LEVELS.keys.include? arg
 
     else
