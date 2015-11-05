@@ -5,7 +5,10 @@ class User
     scg = server_groups(api)
     @users = api.getClients.map do |client|
       cg_ids = client.server_groups.map &:to_i
-      User.new(client.get_id, client.get_nickname, scg.values_at(*cg_ids))
+      cg_names = scg.values_at(*cg_ids)
+      levels = cg_ids.zip(cg_names)
+      levels = Hash[*levels.flatten]
+      User.new(client.get_id, client.get_nickname, levels)
     end
   end
 
@@ -33,12 +36,13 @@ class User
     @nick
   end
 
-  def level?(cmp_level)
-    levels.include?(cmp_level)
+  def level?(cmp_lvl)
+    top_lvl = levels.keys.min
+    top_lvl <= cmp_lvl
   end
 
   def levels
-    @levels.map &:downcase
+    @levels
   end
 
   def try_run_command(invoking_command)
