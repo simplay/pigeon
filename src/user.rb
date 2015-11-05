@@ -42,7 +42,7 @@ class User
   end
 
   def bot?
-    @levels.values.include?("Query Admin")
+    @levels.values.include?("Admin Server Query")
   end
 
   def try_run_command(invoking_command)
