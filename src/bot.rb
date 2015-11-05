@@ -1,3 +1,4 @@
+require 'pry'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
@@ -81,11 +82,11 @@ class Bot
   def attach_listeners
     @api.registerAllEvents
     @api.addTS3Listeners TS3Listener.impl {|name, event|
-      unless event.getInvokerName.include?(@name)
+      sender_name = event.getInvokerName
+      user = User.find_by_nick(@api, sender_name)
+      unless user.bot?
         case name.to_s
         when 'onTextMessage'
-          sender_name = event.getInvokerName
-          user = User.find_by_nick(@api, sender_name)
           message = event.getMessage
           command?(message) ? perform_command(user, message)
                             : parse_message(user, message)
