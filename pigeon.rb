@@ -14,5 +14,6 @@ require 'bot_manager'
 require 'server_config'
 require 'command'
 require 'user'
+require 'server'
 
 BotManager.new if __FILE__ == $PROGRAM_NAME
