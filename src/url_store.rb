@@ -28,12 +28,12 @@ class UrlStore
     end
   end
 
-  # @return [Array<Url>] list of Urls sorted by creation date.
+  # @return [Array<Url>]
   def all
     store.transaction do
       store.roots.flat_map do |user_id|
         store.fetch(user_id, [])
-      end.sort
+      end
     end
   end
 
@@ -58,7 +58,7 @@ class UrlStore
   # @return [Array<Url>] list of Urls stored for user_id.
   def urls(user_id)
     store.transaction do
-      store.fetch(user_id, []).sort
+      store.fetch(user_id, [])
     end
   end
 

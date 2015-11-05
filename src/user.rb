@@ -12,9 +12,9 @@ class User
     end
   end
 
-  def self.find_by_name(api, user_name)
+  def self.find_by_nick(api, nick)
     users = fetch_all(api)
-    users.find {|user| user.nick==user_name}
+    users.find {|user| user.nick==nick}
   end
 
   def self.server_groups(api)

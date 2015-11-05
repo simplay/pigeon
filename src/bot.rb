@@ -45,11 +45,29 @@ class Bot
     shut_down
   end
 
+  def list_urls(nicks)
+    if nicks.empty?
+      url_store.all
+    else
+      users = nicks.map { |nick| User.find_by_nick @api, nick }
+      users.flat_map { |u| url_store.urls(u.id) }
+    end.sort.each do |url|
+      say_in_current_channel("[URL]#{url.url.gsub("/", "\/")}[\/URL]")
+    end
+  end
+
   protected
 
+  def url_store
+    @url_store ||= UrlStore.new
+  end
+
   def perform_command(sender, message)
-    identifier = message.split("!").last.to_sym
-    Command.all(self)[identifier].invoke_by(sender)
+    command_id, *args = message.strip.split
+    return if command_id.nil?
+
+    command_id = command_id.tr('!', '').to_sym
+    Command.all(self)[command_id].invoke_by(sender, args)
   end
 
   def command?(message)
@@ -67,7 +85,7 @@ class Bot
         case name.to_s
         when 'onTextMessage'
           sender_name = event.getInvokerName
-          user = User.find_by_name(@api, sender_name)
+          user = User.find_by_nick(@api, sender_name)
           message = event.getMessage
           command?(message) ? perform_command(user, message)
                             : parse_message(user, message)

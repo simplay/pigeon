@@ -2,8 +2,9 @@ class Command
 
   def self.all(bot)
     @all ||= {
-      :poke => Command.new {bot.say_in_current_channel("Hey, stop poking me!")},
-      :bb => Command.new {bot.leave_server}
+      :poke => Command.new { bot.say_in_current_channel("Hey, stop poking me!") },
+      :bb => Command.new { bot.leave_server },
+      :ll => Command.new { |nicks| bot.list_urls(nicks) }
     }
   end
 
@@ -16,9 +17,9 @@ class Command
     @instr = instr
   end
 
-  def invoke_by(user)
+  def invoke_by(user, args)
     if user.level? @auth_level
-      @instr.call
+      @instr.call(args)
     end
   end
 
