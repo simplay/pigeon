@@ -1,5 +1,6 @@
 require 'pstore'
 require 'url'
+require 'singleton'
 
 # Persists urls per user on file system. Can be used to keep track of what urls
 # users posted in chat.
