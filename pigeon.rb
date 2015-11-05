@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 $LOAD_PATH << '.'
 $LOAD_PATH << File.expand_path('../src', __FILE__)
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
@@ -15,5 +13,3 @@ require 'server_config'
 require 'command'
 require 'user'
 require 'server'
-
-BotManager.new if __FILE__ == $PROGRAM_NAME
