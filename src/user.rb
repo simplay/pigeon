@@ -2,7 +2,7 @@
 class User
 
   def self.fetch_all(api)
-    scg = server_channel_groups(api)
+    scg = server_groups(api)
     @users = api.getClients.map do |client|
       cg_ids = client.server_groups.map &:to_i
       User.new(client.get_id, client.get_nickname, scg.values_at(*cg_ids))
@@ -14,7 +14,7 @@ class User
     users.find {|user| user.nick==user_name}
   end
 
-  def self.server_channel_groups(api)
+  def self.server_groups(api)
     scg = api.getServerGroups.map {|cg| [cg.getId(), cg.get_name]}
     Hash[*scg.flatten]
   end
