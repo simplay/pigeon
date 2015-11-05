@@ -1,27 +1,18 @@
 class User
   attr_reader :id, :nick
 
-  def self.fetch_all
-    api = Server.api
-    scg = server_groups
-    @users = api.getClients.map do |client|
-      cg_ids = client.server_groups.map &:to_i
-      cg_names = scg.values_at(*cg_ids)
-      levels = cg_ids.zip(cg_names)
-      levels = Hash[*levels.flatten]
-      User.new(client.get_id, client.get_nickname, levels)
+  def self.all
+    server_groups = Server.groups
+    @users = Server.api.get_clients.map do |client|
+      group_ids = client.server_groups.map &:to_i
+      group_names = server_groups.values_at(*group_ids)
+      permission_levels = group_id_names_hash(group_ids, group_names)
+      User.new(client.get_id, client.get_nickname, permission_levels)
     end
   end
 
   def self.find_by_nick(nick)
-    users = fetch_all
-    users.find {|user| user.nick==nick}
-  end
-
-  def self.server_groups
-    api = Server.api
-    scg = api.getServerGroups.map {|cg| [cg.getId(), cg.get_name]}
-    Hash[*scg.flatten]
+    all.find {|user| user.nick==nick}
   end
 
   def self.users
@@ -52,6 +43,11 @@ class User
   end
 
   protected
+
+  def self.group_id_names_hash(ids, names)
+      levels = ids.zip(names)
+      Hash[*levels.flatten]
+  end
 
   # Obtain a unique user id
   # @info: first id value is equal zero.

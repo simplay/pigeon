@@ -19,6 +19,11 @@ class Server
     instance.api
   end
 
+  def self.groups
+    scg = api.getServerGroups.map {|cg| [cg.getId(), cg.get_name]}
+    Hash[*scg.flatten]
+  end
+
   # @param config [ServerConfig]
   def initialize(config)
     @query = TS3Query.new(config.data)
