@@ -7,6 +7,10 @@ class User
 
   attr_reader :id, :nick
 
+  # Returns a nil user used to represnt and fetch an incorrect user state.
+  #
+  # @hint: Such a user yields false when invoking User#exists? on it.
+  # @return [User] sentinel user.
   def self.nil_user
     User.new(-1,"nil_user",{},true)
   end
