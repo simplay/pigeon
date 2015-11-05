@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'gli'
+require './pigeon'
+
+include GLI::App
+
+program_desc 'Pigeon Control'
+
+desc 'Start a pigeon'
+command :start do |c|
+  c.action do
+    BotManager.new
+  end
+end
+
+exit run(ARGV)

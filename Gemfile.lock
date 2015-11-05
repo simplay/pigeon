@@ -4,6 +4,7 @@ GEM
     awesome_print (1.6.1)
     coderay (1.1.0)
     ffi (1.9.10-java)
+    gli (2.13.2)
     method_source (0.8.2)
     minitest (5.4.1)
     pry (0.10.3-java)
@@ -20,6 +21,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  gli
   minitest
   pry
 
