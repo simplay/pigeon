@@ -7,6 +7,7 @@ class Bot
     Server.instance(config)
     @name = name
     @is_started = false
+    @mutex = Mutex.new
   end
 
   def start
@@ -24,12 +25,17 @@ class Bot
   end
 
   def started?
-    @is_started
+    @mutex.synchronize do
+      @is_started
+    end
   end
 
   def shut_down
     if started?
-      @is_started = false
+      @mutex.synchronize do
+        @is_started = false
+      end
+      api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
   end
@@ -73,11 +79,11 @@ class Bot
   end
 
   def attach_listeners
-    api.addTS3Listeners TS3Listener.impl {|name, event|
+    @ts3_listener = TS3Listener.impl {|name, event|
       if started?
         sender_name = event.getInvokerName
         user = User.find_by_nick(sender_name)
-        unless user.bot?
+        if user.exists?
           case name.to_s
           when 'onTextMessage'
             message = event.getMessage
@@ -87,5 +93,6 @@ class Bot
         end
       end
     }
+    api.addTS3Listeners(@ts3_listener)
   end
 end
