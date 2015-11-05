@@ -14,6 +14,7 @@ class Bot
       @is_started = true
       Server.start
       api.setNickname(@name)
+      api.registerAllEvents
       attach_listeners
     end
   end
@@ -72,16 +73,17 @@ class Bot
   end
 
   def attach_listeners
-    api.registerAllEvents
     api.addTS3Listeners TS3Listener.impl {|name, event|
-      sender_name = event.getInvokerName
-      user = User.find_by_nick(sender_name)
-      unless user.bot?
-        case name.to_s
-        when 'onTextMessage'
-          message = event.getMessage
-          command?(message) ? perform_command(user, message)
-                            : parse_message(user, message)
+      if started?
+        sender_name = event.getInvokerName
+        user = User.find_by_nick(sender_name)
+        unless user.bot?
+          case name.to_s
+          when 'onTextMessage'
+            message = event.getMessage
+            command?(message) ? perform_command(user, message)
+                              : parse_message(user, message)
+          end
         end
       end
     }
