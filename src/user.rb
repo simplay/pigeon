@@ -1,15 +1,44 @@
-require_relative 'auth_level'
 
 class User
 
-  def initialize(name, params={})
-    @name = name
-    @level = 0
-    @id = next_id
+  def self.fetch_all(api)
+    scg = server_channel_groups(api)
+    @users = api.getClients.map do |client|
+      cg_ids = client.server_groups.map &:to_i
+      User.new(client.get_id, client.get_nickname, scg.values_at(*cg_ids))
+    end
   end
 
-  def level
-    @level
+  def self.find_by_name(api, user_name)
+    users = fetch_all(api)
+    users.find {|user| user.nick==user_name}
+  end
+
+  def self.server_channel_groups(api)
+    scg = api.getServerGroups.map {|cg| [cg.getId(), cg.get_name]}
+    Hash[*scg.flatten]
+  end
+
+  def self.users
+    @users
+  end
+
+  def initialize(id, nick, lvls)
+    @nick = nick
+    @levels = lvls
+    @id = id
+  end
+
+  def nick
+    @nick
+  end
+
+  def level?(cmp_level)
+    levels.include?(cmp_level)
+  end
+
+  def levels
+    @levels.map &:downcase
   end
 
   def try_run_command(invoking_command)

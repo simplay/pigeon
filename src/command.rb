@@ -11,15 +11,15 @@ class Command
   # @param auth_level [AuthLevel] required authentication level required to
   #   invoke the target command.
   # @param instr [Procedure] lambda defining the invoked command instuction.
-  def initialize(auth_level=3, &instr)
+  def initialize(auth_level="guest", &instr)
     @auth_level = auth_level
     @instr = instr
   end
 
   def invoke_by(user)
-    #if user.level == @auth_level
+    if user.level? @auth_level
       @instr.call
-    #end
+    end
   end
 
 end

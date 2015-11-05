@@ -1,3 +1,5 @@
+require 'pry'
+require_relative 'user'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
@@ -66,8 +68,9 @@ class Bot
         case name.to_s
         when 'onTextMessage'
           sender_name = event.getInvokerName
+          user = User.find_by_name(@api, sender_name)
           message = event.getMessage
-          command?(message) ? perform_command(nil, message)
+          command?(message) ? perform_command(user, message)
                             : parse_message(message)
         end
       end
