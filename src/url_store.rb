@@ -6,21 +6,35 @@ require 'url'
 #
 # @example
 #
-#   store = UrlStore.new
-#
 #   # adding urls
-#   store.add_url(
+#   UrlStore.add_url(
 #     :user_id => 2,
 #     :url => "http://definitely-not-porn.com"
 #   )
 #
 #   # retrieving urls
-#   urls = store.urls(2)
+#   UrlStore.urls(2)
 #   urls.first.user_id # => 2
 #   urls.first.url # => "http://definitely-not-porn.com"
 class UrlStore
+  include Singleton
+
   # How many urls to persist per user.
   MAX_URLS_PER_USER = 50
+
+  class << self
+    def all
+      instance.all
+    end
+
+    def add_url(args)
+      instance.add_url(args)
+    end
+
+    def urls(user_id)
+      instance.urls(user_id)
+    end
+  end
 
   # @return [Array<Url>]
   def all

@@ -46,20 +46,16 @@ class Bot
 
   def list_urls(nicks)
     if nicks.empty?
-      url_store.all
+      UrlStore.all
     else
       users = nicks.map { |nick| User.find_by_nick @api, nick }
-      users.flat_map { |u| url_store.urls(u.id) }
+      users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort.each do |url|
-      say_in_current_channel("[URL]#{url.url.gsub("/", "\/")}[\/URL]")
+      say_in_current_channel url.escaped
     end
   end
 
   protected
-
-  def url_store
-    @url_store ||= UrlStore.new
-  end
 
   def perform_command(sender, message)
     command_id, *args = message.strip.split

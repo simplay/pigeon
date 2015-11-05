@@ -10,4 +10,9 @@ class Url
   def <=>(other)
     created_at <=> other.created_at
   end
+
+  # @return [String] the url with teamspeak url escape tags.
+  def escaped
+    "[URL]#{url.gsub("/", "\/")}[\/URL]"
+  end
 end
