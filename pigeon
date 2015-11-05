@@ -14,4 +14,4 @@ command :start do |c|
   end
 end
 
-exit run(ARGV)
+run(ARGV)
