@@ -4,7 +4,7 @@ java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
 
 class Bot
   def initialize(config, name="Sir Pigeon")
-    Server.instance(config.data)
+    Server.instance(config)
     @name = name
     @is_started = false
   end
