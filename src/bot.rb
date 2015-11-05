@@ -30,6 +30,7 @@ class Bot
   def shut_down
     if started?
       @is_started = false
+      api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
   end
@@ -47,7 +48,7 @@ class Bot
     if nicks.empty?
       UrlStore.all
     else
-      users = nicks.map { |nick| User.find_by_nick api, nick }
+      users = nicks.map { |nick| User.find_by_nick(nick) }
       users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort.each do |url|
       say_in_current_channel url.escaped
@@ -73,11 +74,11 @@ class Bot
   end
 
   def attach_listeners
-    api.addTS3Listeners TS3Listener.impl {|name, event|
+    @ts3_listener = TS3Listener.impl {|name, event|
       if started?
         sender_name = event.getInvokerName
         user = User.find_by_nick(sender_name)
-        unless user.bot?
+        if user.human?
           case name.to_s
           when 'onTextMessage'
             message = event.getMessage
@@ -87,5 +88,6 @@ class Bot
         end
       end
     }
+    api.addTS3Listeners(@ts3_listener)
   end
 end
