@@ -1,4 +1,5 @@
 require 'pstore'
+require 'url'
 
 # Persists urls per user on file system. Can be used to keep track of what urls
 # users posted in chat.
@@ -20,13 +21,6 @@ require 'pstore'
 class UrlStore
   # How many urls to persist per user.
   MAX_URLS_PER_USER = 50
-
-  Url = Struct.new(:user_id, :url, :created_at) do
-    include Comparable
-    def <=>(other)
-      created_at <=> other.created_at
-    end
-  end
 
   # @return [Array<Url>]
   def all
