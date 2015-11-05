@@ -108,7 +108,7 @@ class User
   #
   # @info: User instances that yield true correspond to real human clients.
   # @return [Boolean] true if user is a human client otherwise false.
-  def exists?
+  def human?
     return false if @is_nil_user
     !bot?
   end
