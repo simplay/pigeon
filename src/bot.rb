@@ -1,5 +1,3 @@
-require 'pry'
-require_relative 'user'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
