@@ -45,7 +45,7 @@ class UrlStore
   def add_url(args)
     user_id = args.fetch(:user_id)
     url = args.fetch(:url)
-    created_at = args.fetch(:url, Time.now)
+    created_at = args.fetch(:created_at, Time.now)
 
     store.transaction do
       urls = store[user_id] ||= []
