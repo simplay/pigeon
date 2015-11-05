@@ -17,17 +17,18 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
  + `b_virtualserver_channelgroup 1`
 
 ## Installation
-1 Clone this repository.
 
-2 Create a text file in `./secrets/` called `credentials.txt`. This file is supposed to contain the query admin login data, the server ip address and the server port. The file is structured as the follows: 
+1. Clone this repository.
+
+2. Define the following environment variables (e.g. in your `.bash_profile` file):
+
 ```
-query admin login name
-query admin login password
-server ip address
-server port
+export P_USER="YOUR_TS3_ADMIN_QUERY_USER_NAME"
+export P_PASSWORD="YOUR_TS3_ADMIN_QUERY_PW"
+export P_IP_ADDRESS="YOUR_TS3_IP_ADDRESS"
+export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
 ```
-Do not worry, this wile is ignored by git and thus cannot accidently commited onto this repository in case you plan to contribute. 
 
-3 run bundler via `bundle`.
+3. run bundler via `bundle`.
 
-4 run the bot via `ruby pigeon`.
+4. run the bot via `ruby pigeon`.
