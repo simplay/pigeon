@@ -29,7 +29,7 @@ class Bot
   def shut_down
     if started?
       @is_started = false
-      Server.exit
+      Server.stop
     end
   end
 
@@ -75,7 +75,7 @@ class Bot
     api.registerAllEvents
     api.addTS3Listeners TS3Listener.impl {|name, event|
       sender_name = event.getInvokerName
-      user = User.find_by_nick(api, sender_name)
+      user = User.find_by_nick(sender_name)
       unless user.bot?
         case name.to_s
         when 'onTextMessage'

@@ -1,8 +1,9 @@
 class User
   attr_reader :id, :nick
 
-  def self.fetch_all(api)
-    scg = server_groups(api)
+  def self.fetch_all
+    api = Server.api
+    scg = server_groups
     @users = api.getClients.map do |client|
       cg_ids = client.server_groups.map &:to_i
       cg_names = scg.values_at(*cg_ids)
@@ -12,12 +13,13 @@ class User
     end
   end
 
-  def self.find_by_nick(api, nick)
-    users = fetch_all(api)
+  def self.find_by_nick(nick)
+    users = fetch_all
     users.find {|user| user.nick==nick}
   end
 
-  def self.server_groups(api)
+  def self.server_groups
+    api = Server.api
     scg = api.getServerGroups.map {|cg| [cg.getId(), cg.get_name]}
     Hash[*scg.flatten]
   end
