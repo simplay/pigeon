@@ -1,5 +1,5 @@
-
 class User
+  attr_reader :id, :nick
 
   def self.fetch_all(api)
     scg = server_groups(api)
@@ -30,10 +30,6 @@ class User
     @nick = nick
     @levels = lvls
     @id = id
-  end
-
-  def nick
-    @nick
   end
 
   def level?(cmp_lvl)

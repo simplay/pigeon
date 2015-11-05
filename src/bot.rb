@@ -1,4 +1,3 @@
-require 'pry'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
@@ -57,7 +56,8 @@ class Bot
     !(message =~/^\!(.)+/).nil?
   end
 
-  def parse_message(a_message)
+  def parse_message(user, message)
+    UrlExtractor.new(user, message).extract
   end
 
   def attach_listeners
@@ -70,7 +70,7 @@ class Bot
           user = User.find_by_name(@api, sender_name)
           message = event.getMessage
           command?(message) ? perform_command(user, message)
-                            : parse_message(message)
+                            : parse_message(user, message)
         end
       end
     }

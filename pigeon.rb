@@ -7,11 +7,12 @@ $LOAD_PATH << File.expand_path('../lib', __FILE__)
 require 'java'
 require 'teamspeak3-api-1.0.12.jar'
 
+require 'url_store'
+require 'url_extractor'
 require 'bot'
 require 'bot_manager'
 require 'server_config'
 require 'command'
 require 'user'
-require 'url_store'
 
 BotManager.new if __FILE__ == $PROGRAM_NAME
