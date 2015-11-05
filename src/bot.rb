@@ -47,7 +47,7 @@ class Bot
     if nicks.empty?
       UrlStore.all
     else
-      users = nicks.map { |nick| User.find_by_nick api, nick }
+      users = nicks.map { |nick| User.find_by_nick(nick) }
       users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort.each do |url|
       say_in_current_channel url.escaped
