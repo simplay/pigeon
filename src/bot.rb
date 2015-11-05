@@ -4,7 +4,7 @@ java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
 
 class Bot
   def initialize(config, name="Sir Pigeon")
-    @query = TS3Query.new(config.data)
+    Server.instance(config)
     @name = name
     @is_started = false
   end
@@ -12,16 +12,15 @@ class Bot
   def start
     unless started?
       @is_started = true
-      @query.connect
-      @api = @query.getApi
-      @api.selectVirtualServerById(1)
-      @api.setNickname(@name)
+      Server.start
+      api.setNickname(@name)
+      api.registerAllEvents
       attach_listeners
     end
   end
 
   def api
-    @api
+    Server.api
   end
 
   def started?
@@ -31,12 +30,12 @@ class Bot
   def shut_down
     if started?
       @is_started = false
-      @query.exit
+      Server.stop
     end
   end
 
   def say_in_current_channel(msg)
-    @api.sendChannelMessage(msg)
+    api.sendChannelMessage(msg)
   end
 
   def leave_server(silent=false)
@@ -48,7 +47,7 @@ class Bot
     if nicks.empty?
       UrlStore.all
     else
-      users = nicks.map { |nick| User.find_by_nick @api, nick }
+      users = nicks.map { |nick| User.find_by_nick api, nick }
       users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort.each do |url|
       say_in_current_channel url.escaped
@@ -74,16 +73,17 @@ class Bot
   end
 
   def attach_listeners
-    @api.registerAllEvents
-    @api.addTS3Listeners TS3Listener.impl {|name, event|
-      sender_name = event.getInvokerName
-      user = User.find_by_nick(@api, sender_name)
-      unless user.bot?
-        case name.to_s
-        when 'onTextMessage'
-          message = event.getMessage
-          command?(message) ? perform_command(user, message)
-                            : parse_message(user, message)
+    api.addTS3Listeners TS3Listener.impl {|name, event|
+      if started?
+        sender_name = event.getInvokerName
+        user = User.find_by_nick(sender_name)
+        unless user.bot?
+          case name.to_s
+          when 'onTextMessage'
+            message = event.getMessage
+            command?(message) ? perform_command(user, message)
+                              : parse_message(user, message)
+          end
         end
       end
     }
