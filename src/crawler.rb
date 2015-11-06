@@ -5,14 +5,10 @@ require "json"
 # Reddit content crawler
 class Crawler
 
-  # A list Array<String> of fetched links.
-  attr_reader :links
-
-  REDDIT_ADDESS = "https://www.reddit.com/"
+  REDDIT_ADDRESS = "https://www.reddit.com/"
 
   # @param keyword [String] a target keyword interpreted
   #   as a certain subreddit r/keyword
-  # @info: The url should end by a '/' character.
   # @example
   #   Crawler.new # fetch links in https://www.reddit.com/new.json
   #   Crawler.new("cute") # fetch links in https://www.reddit.com/r/cute
@@ -23,24 +19,37 @@ class Crawler
     @links = extract_images(page_as_json)
   end
 
+  # Fetched crawler links wither their tile
+  #
+  # @return [Hash{PostTitle => PostUrl}]
+  def links
+    Hash[*@links.flatten]
+  end
+
   protected
 
+  # Extract content of posts from target reddit/subreddit.
+  #
+  # @info: The title and the relevant link to the post is
+  #   extracted.
   # @param json_hash [Hash] json hash of a target reddit page.
+  # @return [Array<Array[String]] a list containing the extracted
+  #   title and links of a particular reddit post.
   def extract_images(json_hash)
     json_hash['data']['children'].map do |node|
-      title = node['data']['title']
-      [title, fetched_content_of(node)]
+      post = node['data']
+      title = post['title']
+      [title, fetched_content_of(post)]
     end
   end
 
-  def fetched_content_of(node)
-    link = node['data']['selftext_html']
-    return link unless link.nil?
-    case node['data']['domain']
+  # Extract youtube link or permalink from current post.
+  def fetched_content_of(post)
+    case post['domain']
     when 'youtube'
-      node['data']["secure_media"]['oembed']["url"]
+      post["secure_media"]['oembed']["url"]
     else
-      node['data']['permalink']
+      post['permalink']
     end
   end
 
@@ -57,6 +66,7 @@ class Crawler
 
 end
 
+# Fetches image links from /r/pics
 class RedditImgCrawler < Crawler
   def initialize
     super('pics')
@@ -64,8 +74,8 @@ class RedditImgCrawler < Crawler
 
   protected
 
-  def fetched_content_of(node)
-    node['data']['url']
+  def fetched_content_of(post)
+    post['url']
   end
 
 end
