@@ -16,7 +16,12 @@ class Crawler
     base_address = (keyword == 'new') ? REDDIT_ADDRESS : "#{REDDIT_ADDRESS}r/"
     url = "#{base_address}#{keyword}/.json"
     page_as_json = open_as_json(url)
-    @links = extract_images(page_as_json)
+    @links = extract_images(page_as_json) unless page_as_json.empty?
+  end
+
+  # does links contain meaningful fetched data
+  def ok?
+    !@links.nil?
   end
 
   # Fetched crawler links wither their tile
@@ -61,6 +66,7 @@ class Crawler
   def open_as_json(json_url)
     uri = URI.parse(json_url)
     response = Net::HTTP.get_response(uri)
+    return {} unless response.code == "200"
     JSON.parse(response.body)
   end
 

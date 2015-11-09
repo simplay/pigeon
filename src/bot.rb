@@ -58,15 +58,20 @@ class Bot
 
   def crawl_for(keyword, amount)
     say_in_current_channel "Searching for random stuff..."
-    results = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
-    results.links.first(amount).each do |result|
+    crawler = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
+    unless crawler.ok?
+      say_in_current_channel("Sorry, nothing found...")
+      return
+    end
+    crawler.links.first(amount).each do |result|
       say_in_current_channel("https://reddit.com"+result.last, true)
     end
   end
 
   def crawl_img
     say_in_current_channel "Searching for random stuff..."
-    results = RedditImgCrawler.new.links
+    crawler = RedditImgCrawler.new
+    results = crawler.links
     random_idx = rand(0..results.count-1)
     say_in_current_channel(results.values[random_idx], true)
   end
