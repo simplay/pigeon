@@ -7,20 +7,15 @@ task :test do
   ENV['P_PORT'] = "10011"
   ENV['P_IP_ADDRESS'] = "127.0.0.1"
 
-  # prestore previouse root path
-  prev_root = Dir.pwd
-
-  # spawn new thread such that ts3 can properly run
+  # spawn new thread such that ts3 can properly run
   Thread.new do
-    Dir.chdir "test/server/"
-    system("./ts3server_mac >/dev/null 2>&1")
+    system("./test/server/ts3server_mac >/dev/null 2>&1")
   end
 
   # let the server spawn: otherwise it might not have established
   # a proper connection.
   sleep 3
 
-  Dir.chdir prev_root
   Dir.glob('./test/*_test.rb').each { |f| require f }
   MiniTest::Unit.after_tests do
     system("ps aux | grep ts3server_mac | xargs kill -9 >/dev/null 2>&1")
