@@ -2,3 +2,5 @@ tags
 .DS_Store
 *.pstore
 logs
+test/server/*.*
+test/server/**/*.*
