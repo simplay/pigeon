@@ -4,5 +4,4 @@ tags
 logs
 *.sqlitedb
 test/test_server_credentials.yml
-test/server/*.*
-test/server/**/*.*
+test/server/
