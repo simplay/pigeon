@@ -1,9 +1,9 @@
 task :default => :test
 task :test do
-
+  require 'pry'
   # Testserver data - only works for this test server.
-  ENV['P_USER'] = "serveradmin"
-  ENV['P_PASSWORD'] = "Gq+nrzTq"
+  ENV['P_USER'] = "testserver"
+  ENV['P_PASSWORD'] = "9wN1sRuZ"
   ENV['P_PORT'] = "10011"
   ENV['P_IP_ADDRESS'] = "127.0.0.1"
 
