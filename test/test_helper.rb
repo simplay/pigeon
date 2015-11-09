@@ -18,7 +18,7 @@ end
 
 # let the server spawn: otherwise it might not have established
 # a proper connection.
-sleep 3
+sleep 5
 
 # kill all ts3 servers when we're done testing
 Minitest.after_run do
