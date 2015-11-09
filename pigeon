@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'gli'
-require './pigeon'
-
 include GLI::App
 
 program_desc 'Pigeon Control'
@@ -10,7 +8,29 @@ program_desc 'Pigeon Control'
 desc 'Start a pigeon'
 command :start do |c|
   c.action do
+    require './pigeon'
     BotManager.new
+  end
+end
+
+desc 'Start the test ts3 server'
+command :server do |c|
+  c.action do
+    system 'cd test/server && ./ts3server_mac'
+  end
+end
+
+desc 'Kill all local ts3 servers'
+command :kill_servers do |c|
+  c.action do
+    system 'ps aux | grep ts3server_mac | xargs kill -9 >/dev/null 2>&1'
+  end
+end
+
+desc 'Run the test suite'
+command :test do |c|
+  c.action do
+    system 'rake test'
   end
 end
 
