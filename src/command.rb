@@ -5,7 +5,8 @@ class Command
       :poke => Command.new { bot.say_in_current_channel("Hey, stop poking me!") },
       :bb => Command.new { bot.leave_server }, # bybye
       :ll => Command.new { |nicks| bot.list_urls(nicks) }, # list links
-      :rs => Command.new {|keyword| bot.crawl_for(keyword, 1)} # random shit
+      :rs => Command.new {|keyword| bot.crawl_for(keyword, 1)}, # random shit
+      :rsi => Command.new {bot.crawl_img}
     }
   end
 
