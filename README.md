@@ -22,13 +22,17 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 
 2. Define the following environment variables (e.g. in your `.bash_profile` file):
 
-```
-export P_USER="YOUR_TS3_ADMIN_QUERY_USER_NAME"
-export P_PASSWORD="YOUR_TS3_ADMIN_QUERY_PW"
-export P_IP_ADDRESS="YOUR_TS3_IP_ADDRESS"
-export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
-```
+  ```bash
+  export P_USER="YOUR_TS3_ADMIN_QUERY_USER_NAME"
+  export P_PASSWORD="YOUR_TS3_ADMIN_QUERY_PW"
+  export P_IP_ADDRESS="YOUR_TS3_IP_ADDRESS"
+  export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
+  ```
 
-3. run bundler via `bundle`.
+3. Install dependencies with `bundle`
 
-4. run the bot via `ruby pigeon`.
+## Running
+
+```bash
+./pigeon start
+```

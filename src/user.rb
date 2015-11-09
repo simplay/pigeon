@@ -7,12 +7,22 @@ class User
 
   attr_reader :id, :nick
 
+  # Returns a nil user used to represnt and fetch an incorrect user state.
+  #
+  # @hint: Such a user yields false when invoking User#exists? on it.
+  # @return [User] sentinel user.
+  def self.nil_user
+    User.new(-1,"nil_user",{},true)
+  end
+
   # List all online users.
   #
   # @return [Array<User>] list of all users currently online on this server.
   def self.all
     server_groups = Server.groups
-    @users = Server.api.get_clients.map do |client|
+    server_clients = Server.api.get_clients
+    return [] if server_clients.nil?
+    @users = server_clients.map do |client|
       group_ids = client.server_groups.map &:to_i
       group_names = server_groups.values_at(*group_ids)
       permission_levels = group_id_names_hash(group_ids, group_names)
@@ -38,7 +48,9 @@ class User
   # @return [User, nil] user with given name
   #   or nil, if no such user is online.
   def self.find_by_nick(nick)
-    all.find {|user| user.nick==nick}
+    all_clients = all
+    return nil_user if all_clients.empty?
+    all_clients.find {|user| user.nick==nick}
   end
 
   # List all fetched users previousely fetched via #all
@@ -54,10 +66,11 @@ class User
   # @param nick [String] corresponds to client nick name in ts3 db.
   # @param lvls [Hash{ServerGroupId=>ServerGroupName}] list of user's
   #   ts3 permissions.
-  def initialize(id, nick, permissions)
+  def initialize(id, nick, permissions, is_nil_user=false)
     @id = id
     @nick = nick
     @levels = permissions
+    @is_nil_user = is_nil_user
   end
 
   # Checks whether this user the required permissings.
@@ -89,6 +102,15 @@ class User
   # @return [Boolean] true if bot otherwise false.
   def bot?
     @levels.values.include?("Admin Server Query")
+  end
+
+  # Check whether this user is neither a bot nor the nil_user.
+  #
+  # @info: User instances that yield true correspond to real human clients.
+  # @return [Boolean] true if user is a human client otherwise false.
+  def human?
+    return false if @is_nil_user
+    !bot?
   end
 
   protected
