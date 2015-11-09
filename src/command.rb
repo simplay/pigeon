@@ -3,8 +3,9 @@ class Command
   def self.all(bot)
     @all ||= {
       :poke => Command.new { bot.say_in_current_channel("Hey, stop poking me!") },
-      :bb => Command.new { bot.leave_server },
-      :ll => Command.new { |nicks| bot.list_urls(nicks) }
+      :bb => Command.new { bot.leave_server }, # bybye
+      :ll => Command.new { |nicks| bot.list_urls(nicks) }, # list links
+      :rs => Command.new {|keyword| bot.crawl_for(keyword, 1)} # random shit
     }
   end
 

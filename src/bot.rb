@@ -54,6 +54,14 @@ class Bot
     end
   end
 
+  def crawl_for(keyword, amount)
+    say_in_current_channel "Searching for random stuff..."
+    results = keyword.empty? ? Crawler.new : Crawler.new(keyword)
+    results.links.first(amount).each do |result|
+      say_in_current_channel result.last
+    end
+  end
+
   protected
 
   def perform_command(sender, message)
