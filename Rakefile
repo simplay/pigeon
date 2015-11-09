@@ -9,7 +9,7 @@ task :test do
 
   # spawn new thread such that ts3 can properly run
   Thread.new do
-    system("./test/server/ts3server_mac >/dev/null 2>&1")
+    system("cd test/server && ./ts3server_mac >/dev/null 2>&1")
   end
 
   # let the server spawn: otherwise it might not have established
