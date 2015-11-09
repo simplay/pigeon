@@ -28,7 +28,9 @@ class Server
   #
   # @return [Hash{ServerGroupId => ServerGroupName}] list of all server groups.
   def self.groups
-    scg = api.get_server_groups.map {|cg| [cg.get_id, cg.get_name]}
+    server_groups = api.get_server_groups
+    return {} if server_groups.nil?
+    scg = server_groups.map {|cg| [cg.get_id, cg.get_name]}
     Hash[*scg.flatten]
   end
 
