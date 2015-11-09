@@ -16,7 +16,7 @@ end
 desc 'Start the test ts3 server'
 command :server do |c|
   c.action do
-    system 'cd test/server && ./ts3server_mac'
+    system "cd #{ENV['P_SERVER_PATH']} && ./ts3server_mac"
   end
 end
 

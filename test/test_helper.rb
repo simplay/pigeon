@@ -10,10 +10,10 @@ ENV['P_USER'] = credentials.fetch('user', 'serveradmin')
 ENV['P_PASSWORD'] = credentials.fetch('password')
 ENV['P_PORT'] = credentials.fetch('port', '10011').to_s
 ENV['P_IP_ADDRESS'] = credentials.fetch('ip', '127.0.0.1')
-
+ENV['P_SERVER_PATH'] = credentials.fetch('server_path')
 # spawn new thread such that ts3 can properly run
 Thread.new do
-  system("cd test/server && ./ts3server_mac >/dev/null 2>&1")
+  system("cd #{ENV['P_SERVER_PATH']} && ./ts3server_mac >/dev/null 2>&1")
 end
 
 # let the server spawn: otherwise it might not have established
