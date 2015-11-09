@@ -35,7 +35,8 @@ class Bot
     end
   end
 
-  def say_in_current_channel(msg)
+  def say_in_current_channel(msg, is_url=false)
+    msg = "[URL]#{msg}[\/URL]" if is_url
     api.sendChannelMessage(msg)
   end
 
@@ -59,7 +60,7 @@ class Bot
     say_in_current_channel "Searching for random stuff..."
     results = keyword.empty? ? Crawler.new : Crawler.new(keyword)
     results.links.first(amount).each do |result|
-      say_in_current_channel result.last
+      say_in_current_channel("https://reddit.com"+result.last, true)
     end
   end
 
