@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 
 class BotTest < MiniTest::Test
+
   def setup
     Server.flush
     @bot = Bot.new ServerConfig.new
@@ -13,12 +14,12 @@ class BotTest < MiniTest::Test
 
   def test_can_access_to_api
     assert @bot.started?
-    assert !@bot.api.nil?
+    refute @bot.api.nil?
   end
 
   def test_can_be_shut_down
     @bot.shut_down
-    assert_equal(@bot.started?, false)
+    refute @bot.started?
   end
 
   def test_foobar
