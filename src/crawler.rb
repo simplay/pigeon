@@ -19,16 +19,21 @@ class Crawler
     @links = extract_images(page_as_json) unless page_as_json.empty?
   end
 
-  # does links contain meaningful fetched data
+  # Checks whether the crawler could fetch and store meanungfu data in links.
+  #
+  # @return [Boolean] true if fetching web-content yield status 200,
+  #   otherwise false.
   def ok?
     !@links.nil?
   end
 
-  # Fetched crawler links wither their tile
+  # Retrieve a hash containing a crawler's fetched data.
   #
-  # @return [Hash{PostTitle => PostUrl}]
+  # @info: links are randomly re-sorted.
+  # @return [Hash{PostTitle => PostUrl}] fetched crawler links with their title
   def links
-    Hash[*@links.flatten]
+    randomly_sorted_links = @links.shuffle
+    Hash[*randomly_sorted_links.flatten]
   end
 
   protected
