@@ -1,7 +1,7 @@
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
-require 'pry'
+
 class Bot
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
