@@ -1,0 +1,6 @@
+poke: Ping pigeon.
+ll: List all links posted by players. If passing an additional user name, all links of a certain user will be listed.
+bb: Shut down the pigeon process. Requires admin right.
+rs: Crawl random reddit stuff. If passing a additional argument a random post of a subreddit called the same as the passed argument will be fetched.
+rsi: Crawl a random reddit image.
+h: Show this message
