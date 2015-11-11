@@ -43,9 +43,14 @@ class Server
     @query = TS3Query.new(config.data)
   end
 
-  # Start this server.
+  # Try to establish a connection to a ts3 server.
   def start
-    @query.connect
+    begin
+      @query.connect
+    rescue Exception => e
+      puts "#{e}. Could not connect to Teamspeak server. No server is running."
+      exit(1)
+    end
     @api = @query.get_api
     @api.select_virtual_server_by_id(1)
   end
