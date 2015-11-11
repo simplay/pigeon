@@ -24,6 +24,10 @@ class Server
     instance.api
   end
 
+  def self.flush
+    @instance = nil
+  end
+
   # Retrive a list of all available server groups.
   #
   # @return [Hash{ServerGroupId => ServerGroupName}] list of all server groups.

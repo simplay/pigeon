@@ -1,3 +1,7 @@
 tags
 .DS_Store
 *.pstore
+logs
+*.sqlitedb
+test/test_server_credentials.yml
+test/server/
