@@ -33,7 +33,8 @@ class Command
   def self.help
     @bot.say_in_current_channel("Available commands")
     @all.keys.each do |cmd|
-      @bot.say_in_current_channel("!#{cmd.to_s}")
+      description = CommandDescription.parse(cmd)
+      @bot.say_in_current_channel("!#{cmd.to_s} - #{description}")
     end
   end
 
