@@ -3,6 +3,7 @@ require 'yaml'
 # Singleton to fetch command descriptions.
 class CommandDescription
 
+  # @return [CommandDescription] singleton
   def self.instance
     @instance ||= CommandDescription.new
   end
@@ -24,10 +25,15 @@ class CommandDescription
     end
   end
 
+  # Parse command descriptions via yaml.
   def initialize
     @descriptions = YAML.load_file('data/command_descriptions.yml')
   end
 
+  # Hash containing command descriptions.
+  #
+  # @info: Parsed yaml file 'data/command_descriptions.yml'
+  # @return [Hash{command_name => command_description}]
   def descriptions
     @descriptions
   end
