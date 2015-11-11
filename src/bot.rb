@@ -1,7 +1,7 @@
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
-
+require 'pry'
 class Bot
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
@@ -35,7 +35,8 @@ class Bot
     end
   end
 
-  def say_in_current_channel(msg)
+  def say_in_current_channel(msg, is_url=false)
+    msg = "[URL]#{msg}[\/URL]" if is_url
     api.sendChannelMessage(msg)
   end
 
@@ -53,6 +54,26 @@ class Bot
     end.sort.each do |url|
       say_in_current_channel url.escaped
     end
+  end
+
+  def crawl_for(keyword, amount)
+    say_in_current_channel "Searching for random stuff..."
+    crawler = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
+    unless crawler.ok?
+      say_in_current_channel("Sorry, nothing found...")
+      return
+    end
+    crawler.links.first(amount).each do |result|
+      say_in_current_channel("https://reddit.com"+result.last, true)
+    end
+  end
+
+  def crawl_img
+    say_in_current_channel "Searching for random stuff..."
+    crawler = RedditImgCrawler.new
+    results = crawler.links
+    random_idx = rand(0..results.count-1)
+    say_in_current_channel(results.values[random_idx], true)
   end
 
   protected
