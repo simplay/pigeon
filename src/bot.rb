@@ -3,6 +3,7 @@ java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
 
 class Bot
+
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
     @name = name
@@ -11,6 +12,7 @@ class Bot
 
   def start
     unless started?
+      Command.prepare(self)
       @is_started = true
       Server.start
       api.setNickname(@name)
@@ -83,7 +85,7 @@ class Bot
     return if command_id.nil?
 
     command_id = command_id.tr('!', '').to_sym
-    Command.all(self)[command_id].invoke_by(sender, args)
+    Command.all[command_id].invoke_by(sender, args)
   end
 
   def command?(message)
