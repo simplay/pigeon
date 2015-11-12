@@ -36,9 +36,25 @@ class Bot
     end
   end
 
+  # Send a given message into the channel in which the bot
+  # pigeon is currently located. This message can be read by
+  # all client that are currently in this channel.
+  #
+  # @info: An url message is parsed as a clickable-hyperlink
+  # @param msg [String] message that should be broadcasted
+  #   into the current channel.
+  # @param is_url [Boolean] should message interpreted as an url?
   def say_in_current_channel(msg, is_url=false)
     msg = "[URL]#{msg}[\/URL]" if is_url
     api.sendChannelMessage(msg)
+  end
+
+  # Send a poke message to a target user.
+  #
+  # @param user [User] the user we want to poke
+  # @param msg [String] poke message that is sent to user.
+  def say_as_poke(user, msg)
+    api.poke_client(user.id, msg)
   end
 
   protected

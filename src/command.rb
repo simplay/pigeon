@@ -27,7 +27,7 @@ class Command
   end
 
   def self.poke
-    @bot.api.poke_client(Command.sender.id, "Hey, stop poking me!")
+    @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
   end
 
   # list all available help files
