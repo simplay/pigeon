@@ -32,10 +32,11 @@ class Command
 
   # list all available help files
   def self.help
-    @bot.say_in_current_channel("Available commands")
+    sender = Command.sender
+    @bot.say_as_private(sender, "Available commands")
     @all.keys.each do |cmd|
       description = CommandDescription.parse(cmd)
-      @bot.say_in_current_channel("!#{cmd.to_s} - #{description}")
+      @bot.say_as_private(sender, "!#{cmd.to_s} - #{description}")
     end
   end
 
@@ -51,7 +52,7 @@ class Command
       users = nicks.map { |nick| User.find_by_nick(nick) }
       users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort.each do |url|
-      @bot.say_in_current_channel url.escaped
+      @bot.say_as_private(Command.sender, url.escaped)
     end
   end
 

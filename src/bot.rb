@@ -57,6 +57,27 @@ class Bot
     api.poke_client(user.id, msg)
   end
 
+  # Send a private message to a target user.
+  #
+  # @info: Private means that a separate chat-tab
+  #   between pigeon and the user is opened in which
+  #   all messages are send to.
+  # @param user [User] the user we want to send a private message.
+  # @param msg [String] private message that is sent to user.
+  def say_as_private(user, msg)
+    api.send_private_message(user.id, msg)
+  end
+
+  # Send an offline message to a target user.
+  def say_as_offline_message(user, msg)
+    api.send_offline_message(user.id, msg)
+  end
+
+  # Send a message to the virual server the bot is currently logged in.
+  def say_to_server(message)
+    api.send_server_message
+  end
+
   protected
 
   def perform_command(sender, message)
