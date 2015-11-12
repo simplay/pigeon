@@ -90,3 +90,17 @@ class RedditImgCrawler < Crawler
   end
 
 end
+
+class WtfCrawler < Crawler
+
+  def initialize
+    super('WTF')
+  end
+
+  protected
+
+  def fetched_content_of(post)
+    post['url']
+  end
+
+end

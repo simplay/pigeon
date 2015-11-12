@@ -7,6 +7,7 @@ class Command
       :ll => Command.new { |nicks| list_urls(nicks) }, # list links
       :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new { crawl_img },
+      :rsw => Command.new { crawl_wtf },
       :h => Command.new { help }
     }
   end
@@ -78,6 +79,14 @@ class Command
   def self.crawl_img
     @bot.say_in_current_channel "Searching for random stuff..."
     crawler = RedditImgCrawler.new
+    results = crawler.links
+    random_idx = rand(0..results.count-1)
+    @bot.say_in_current_channel(results.values[random_idx], true)
+  end
+
+  def self.crawl_wtf
+    @bot.say_in_current_channel "Searching for wtf stuff..."
+    crawler = WtfCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
     @bot.say_in_current_channel(results.values[random_idx], true)
