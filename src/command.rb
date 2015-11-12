@@ -19,6 +19,13 @@ class Command
     @instr = instr
   end
 
+  # Try to invoke a given command by a user.
+  #
+  # @info: Invoking commands is guarded. A particular command
+  #   can only be invoked if the invoking user has enough priviliges
+  #   to invoe that command.
+  # @param user [User] sender of command
+  # @param args [Array] command name and its arguments
   def invoke_by(user, args)
     if user.level? @auth_level
       Command.sender = user

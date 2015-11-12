@@ -69,11 +69,17 @@ class Bot
   end
 
   # Send an offline message to a target user.
+  #
+  # @param user [User] the user we want to send an offline message.
+  # @param msg [String] the offline message that is sent to user.
   def say_as_offline_message(user, msg)
     api.send_offline_message(user.id, msg)
   end
 
   # Send a message to the virual server the bot is currently logged in.
+  #
+  # @info: Such a message can be read globally in the server message channel.
+  # @param message [String] a message that is sent to the server channel.
   def say_to_server(message)
     api.send_server_message
   end
