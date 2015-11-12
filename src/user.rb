@@ -32,7 +32,7 @@ class User
 
   # Try to find a user with a given nick name.
   #
-  # @param nick [String] target user's nickname.
+  # @param nick [String] target exact user's nickname.
   # @info: This query tries to fully match a user's nickname
   #   with a provided nick name string. Thus, partial matches will
   #   result in a missmatch.
@@ -43,14 +43,15 @@ class User
   #   #=> #<User:0x30c86ea3 @id=1, @levels={6=>"Server Admin"}, @nick="Foo">
   #
   #   User.find_by_nick("foo")
-  #   #=> nil
+  #   #=> nil_user
   #
-  # @return [User, nil] user with given name
-  #   or nil, if no such user is online.
+  # @return [User] user with given name
+  #   or the nil_user, if no such could be found being online.
   def self.find_by_nick(nick)
     all_clients = all
     return nil_user if all_clients.empty?
-    all_clients.find {|user| user.nick==nick}
+    target_user = all_clients.find {|user| user.nick==nick}
+    target_user.nil? ? nil_user : target_user
   end
 
   # List all fetched users previousely fetched via #all

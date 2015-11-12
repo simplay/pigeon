@@ -21,12 +21,13 @@ class Command
 
   def invoke_by(user, args)
     if user.level? @auth_level
+      Command.sender = user
       @instr.call(args)
     end
   end
 
   def self.poke
-    @bot.say_in_current_channel("Hey, stop poking me!")
+    @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
   end
 
   # list all available help files
@@ -74,8 +75,25 @@ class Command
     @bot.say_in_current_channel(results.values[random_idx], true)
   end
 
+  # Remember running pigeon bot instance.
+  #
+  # @param bot [Bot] running Pigeon instance listening to clients on server.
   def self.prepare(bot)
     @bot ||= bot
+  end
+
+  # Return sender of current command
+  #
+  # @return [User] user who sent last message to Bot.
+  def self.sender
+    @sender
+  end
+
+  # Remember sender of last message
+  #
+  # @param sender [User] user who sent last message to Bot.
+  def self.sender=(sender)
+    @sender = sender
   end
 
 end
