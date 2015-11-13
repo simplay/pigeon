@@ -1,3 +1,5 @@
+require 'thread'
+
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
@@ -8,6 +10,7 @@ class Bot
     @name = name
     @is_started = false
     @tasks = Tasks.new
+    @command_processor = CommandProcessor.new(@tasks, self)
   end
 
   def start
@@ -18,6 +21,7 @@ class Bot
       api.setNickname(@name)
       api.registerAllEvents
       attach_listeners
+      @command_processor.start
     end
   end
 
@@ -87,30 +91,8 @@ class Bot
 
   protected
 
-  def perform_command(sender, message)
-    command_id, *args = message.strip.split
-    return if command_id.nil?
-
-    command_id = command_id.tr('!', '').to_sym
-    Command.all[command_id].invoke_by(sender, args)
-  end
-
-  def command?(message)
-    !(message =~/^\!(.)+/).nil?
-  end
-
-  def parse_message(user, message)
-    UrlExtractor.new(user, message).extract
-  end
-
   def append_task(user, message)
     @tasks.append(CommandTask.new(user, message))
-  end
-
-  def perform_next_action
-    task = @tasks.deque
-    command?(task.message) ? perform_command(task.sender, task.message)
-                           : parse_message(task.sender, task.message)
   end
 
   def attach_listeners
@@ -123,7 +105,6 @@ class Bot
           when 'onTextMessage'
             message = event.getMessage
             append_task(user, message)
-            perform_next_action
           end
         end
       end
@@ -131,3 +112,5 @@ class Bot
     api.addTS3Listeners(@ts3_listener)
   end
 end
+
+
