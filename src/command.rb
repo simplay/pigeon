@@ -8,7 +8,8 @@ class Command
       :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new { crawl_img },
       :rsw => Command.new { crawl_wtf },
-      :h => Command.new { help }
+      :h => Command.new { help },
+      :d => Command.new { debug }
     }
   end
 
@@ -18,6 +19,10 @@ class Command
   def initialize(auth_level=8, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  def self.debug
+    puts "AAA => #{@bot.tasks.inspect}"
   end
 
   # Try to invoke a given command by a user.

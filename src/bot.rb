@@ -10,7 +10,7 @@ class Bot
     @name = name
     @is_started = false
     @tasks = Tasks.new
-    @command_processor = CommandProcessor.new(@tasks, self)
+    @command_processor = CommandProcessor.new(@tasks)
   end
 
   def start
@@ -21,6 +21,11 @@ class Bot
       api.setNickname(@name)
       api.registerAllEvents
       attach_listeners
+
+    usr = User.find_by_nick("simplaY@mac")
+    msg = "!poke"
+    @tasks.add CommandTask.new(usr, "!h")
+    @tasks.add CommandTask.new(usr, msg)
       @command_processor.start
     end
   end
@@ -36,6 +41,7 @@ class Bot
   def shut_down
     if started?
       @is_started = false
+      @command_processor.shut_down
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
@@ -91,8 +97,15 @@ class Bot
 
   protected
 
+  # Append a new CommandTask fetched by pigeon's channel chat
+  # listener.
+  #
+  # @param user [User] sender
+  # @param message [String] instruction given by sender.
   def append_task(user, message)
-    @tasks.append(CommandTask.new(user, message))
+    Thread.new do
+      @tasks.append(CommandTask.new(user, message))
+    end
   end
 
   def attach_listeners
