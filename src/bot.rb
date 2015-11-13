@@ -7,6 +7,7 @@ class Bot
     Server.instance(config)
     @name = name
     @is_started = false
+    @tasks = Tasks.new
   end
 
   def start
@@ -102,6 +103,16 @@ class Bot
     UrlExtractor.new(user, message).extract
   end
 
+  def append_task(user, message)
+    @tasks.append(CommandTask.new(user, message))
+  end
+
+  def perform_next_action
+    task = @tasks.deque
+    command?(task.message) ? perform_command(task.sender, task.message)
+                           : parse_message(task.sender, task.message)
+  end
+
   def attach_listeners
     @ts3_listener = TS3Listener.impl {|name, event|
       if started?
@@ -111,8 +122,8 @@ class Bot
           case name.to_s
           when 'onTextMessage'
             message = event.getMessage
-            command?(message) ? perform_command(user, message)
-                              : parse_message(user, message)
+            append_task(user, message)
+            perform_next_action
           end
         end
       end
