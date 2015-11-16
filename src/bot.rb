@@ -71,7 +71,8 @@ class Bot
   #   all messages are send to.
   # @param user [User] the user we want to send a private message.
   # @param msg [String] private message that is sent to user.
-  def say_as_private(user, msg)
+  def say_as_private(user, msg, is_url=false)
+    msg = "[URL]#{msg}[\/URL]" if is_url
     api.send_private_message(user.id, msg)
   end
 

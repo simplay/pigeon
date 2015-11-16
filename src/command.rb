@@ -8,6 +8,7 @@ class Command
       :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new { crawl_img },
       :rsw => Command.new { crawl_wtf },
+      :ot => Command.new { open_terminal},
       :h => Command.new { help }
     }
   end
@@ -32,6 +33,10 @@ class Command
       Command.sender = user
       @instr.call(args)
     end
+  end
+
+  def self.open_terminal
+    @bot.say_as_private(Command.sender, "How can I serve you?")
   end
 
   def self.poke
@@ -66,31 +71,31 @@ class Command
   end
 
   def self.crawl_for(keyword, amount)
-    @bot.say_in_current_channel "Searching for random stuff..."
+    @bot.say_in_current_channel "Searching for wtf stuff..."
     crawler = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
     unless crawler.ok?
-      @bot.say_in_current_channel("Sorry, nothing found...")
+      @bot.say_as_private(Command.sender, "Sorry, nothing found...")
       return
     end
     crawler.links.first(amount).each do |result|
-      @bot.say_in_current_channel("https://reddit.com"+result.last, true)
+      @bot.say_as_private(Command.sender, "https://reddit.com"+result.last, true)
     end
   end
 
   def self.crawl_img
-    @bot.say_in_current_channel "Searching for random stuff..."
+    @bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = RedditImgCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_in_current_channel(results.values[random_idx], true)
+    @bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   def self.crawl_wtf
-    @bot.say_in_current_channel "Searching for wtf stuff..."
+    @bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = WtfCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_in_current_channel(results.values[random_idx], true)
+    @bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   # Remember running pigeon bot instance.
