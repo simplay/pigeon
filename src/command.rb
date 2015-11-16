@@ -41,11 +41,12 @@ class Command
   # list all available help files
   def self.help
     sender = Command.sender
-    @bot.say_as_private(sender, "Available commands")
-    @all.keys.each do |cmd|
+    header = "Available commands: \n"
+    help_msgs = @all.keys.map do |cmd|
       description = CommandDescription.parse(cmd)
-      @bot.say_as_private(sender, "!#{cmd.to_s} - #{description}")
+      "!#{cmd.to_s} - #{description} \n"
     end
+    @bot.say_as_private(sender, header+help_msgs.join)
   end
 
   def self.leave_server
