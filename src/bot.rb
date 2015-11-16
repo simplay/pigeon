@@ -22,12 +22,6 @@ class Bot
       api.registerAllEvents
       @bot_id = api.whoAmI.getId
       attach_listeners
-
-    usr = User.find_by_nick("simplaY@mac")
-    msg = "!poke"
-    @tasks.add CommandTask.new(usr, "!h")
-    @tasks.add CommandTask.new(usr, msg)
-      @command_processor.start
     end
   end
 
@@ -104,9 +98,7 @@ class Bot
   # @param user [User] sender
   # @param message [String] instruction given by sender.
   def append_task(user, message)
-    Thread.new do
-      @tasks.append(CommandTask.new(user, message))
-    end
+    @tasks.append(CommandTask.new(user, message))
   end
 
   def attach_listeners

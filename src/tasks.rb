@@ -18,7 +18,6 @@ class Tasks
       end
       @idx = @idx + 1
       add(t)
-      puts "AAA info => #{@tasks.inspect}"
       @resource.broadcast
     end
   end
@@ -30,14 +29,10 @@ class Tasks
   # returns oldest task stored on the task list.
   def deque
     @mutex.synchronize do
-      puts "BBB consuming => #{@tasks.inspect}"
       while @tasks.empty?
         @resource.wait(@mutex)
       end
       val = @tasks.shift
-      #t = @tasks[@idx]
-      #@tasks.delete(t)
-      #@tasks
       @resource.broadcast
       return val
     end

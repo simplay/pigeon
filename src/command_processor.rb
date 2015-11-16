@@ -16,8 +16,7 @@ class CommandProcessor
     Thread.new do
       loop do
         perform_next_action
-        #sleep 1.0*rand
-        #break if @has_terminated
+        break if @has_terminated
       end
     end
   end
