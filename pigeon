@@ -9,7 +9,8 @@ desc 'Start a pigeon'
 command :start do |c|
   c.action do
     require './pigeon'
-    BotManager.new
+    config = ServerConfig.new
+    Bot.new(config, "Sir Pigeon").start
   end
 end
 
