@@ -1,3 +1,5 @@
+require 'thread'
+
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
@@ -7,6 +9,8 @@ class Bot
     Server.instance(config)
     @name = name
     @is_started = false
+    @tasks = Tasks.new
+    @command_processor = CommandProcessor.new(@tasks)
   end
 
   def start
@@ -18,6 +22,7 @@ class Bot
       api.registerAllEvents
       @bot_id = api.whoAmI.getId
       attach_listeners
+      @command_processor.start
     end
   end
 
@@ -32,6 +37,7 @@ class Bot
   def shut_down
     if started?
       @is_started = false
+      @command_processor.shut_down
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
@@ -87,20 +93,13 @@ class Bot
 
   protected
 
-  def perform_command(sender, message)
-    command_id, *args = message.strip.split
-    return if command_id.nil?
-
-    command_id = command_id.tr('!', '').to_sym
-    Command.all[command_id].invoke_by(sender, args)
-  end
-
-  def command?(message)
-    !(message =~/^\!(.)+/).nil?
-  end
-
-  def parse_message(user, message)
-    UrlExtractor.new(user, message).extract
+  # Append a new CommandTask fetched by pigeon's channel chat
+  # listener.
+  #
+  # @param user [User] sender
+  # @param message [String] instruction given by sender.
+  def append_task(user, message)
+    @tasks.append(CommandTask.new(user, message))
   end
 
   def attach_listeners
@@ -112,8 +111,7 @@ class Bot
           case name.to_s
           when 'onTextMessage'
             message = event.getMessage
-            command?(message) ? perform_command(user, message)
-                              : parse_message(user, message)
+            append_task(user, message)
           end
         end
       end
@@ -121,3 +119,5 @@ class Bot
     api.addTS3Listeners(@ts3_listener)
   end
 end
+
+

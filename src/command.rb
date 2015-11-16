@@ -38,7 +38,7 @@ class Command
     @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
   end
 
-  # list all available help files
+  # list all available help commands
   def self.help
     sender = Command.sender
     header = "Available commands: \n"
