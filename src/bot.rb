@@ -20,6 +20,7 @@ class Bot
       Server.start
       api.setNickname(@name)
       api.registerAllEvents
+      @bot_id = api.whoAmI.getId
       attach_listeners
 
     usr = User.find_by_nick("simplaY@mac")
@@ -111,9 +112,9 @@ class Bot
   def attach_listeners
     @ts3_listener = TS3Listener.impl {|name, event|
       if started?
-        sender_name = event.getInvokerName
-        user = User.find_by_nick(sender_name)
-        if user.human?
+        unless event.get_invoker_id == @bot_id
+          sender_name = event.getInvokerName
+          user = User.find_by_nick(sender_name)
           case name.to_s
           when 'onTextMessage'
             message = event.getMessage
