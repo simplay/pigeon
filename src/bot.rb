@@ -22,6 +22,7 @@ class Bot
       api.registerAllEvents
       @bot_id = api.whoAmI.getId
       attach_listeners
+      @command_processor.start
     end
   end
 

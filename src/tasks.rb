@@ -11,13 +11,12 @@ class Tasks
   end
 
   def append(task)
-    t = task
     @mutex.synchronize do
       while @tasks.count > 10
         @resource.wait(@mutex)
       end
       @idx = @idx + 1
-      add(t)
+      add(task)
       @resource.broadcast
     end
   end
