@@ -9,6 +9,7 @@ class Command
       :rsi => Command.new { crawl_img },
       :rsw => Command.new { crawl_wtf },
       :ot => Command.new { open_terminal},
+      :pm => Command.new { |args| pm_to(args[0], args[1]) },
       :h => Command.new { help }
     }
   end
@@ -41,6 +42,16 @@ class Command
 
   def self.poke
     @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
+  end
+
+  # Fuzzy matching private message sending via pigeon
+  def self.pm_to(fuzzy_nick, msg)
+    matched_users = User.try_find_all_by_nick(fuzzy_nick)
+    sender = Command.sender
+    header = "#{sender.nick} sent you: "
+    matched_users.each do |user|
+      @bot.say_as_private(user, header+msg) if user.human?
+    end
   end
 
   # list all available help commands
