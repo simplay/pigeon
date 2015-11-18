@@ -1,9 +1,10 @@
 class Command
 
   def self.all
+    puts "sudo level: #{ServerGroup.sudo.id}"
     @all ||= {
       :poke => Command.new { poke },
-      :bb => Command.new { leave_server }, # bybye
+      :bb => Command.new(ServerGroup.sudo.id) { leave_server }, # bybye
       :ll => Command.new { |nicks| list_urls(nicks) }, # list links
       :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new { crawl_img },
@@ -28,14 +29,21 @@ class Command
   # @param user [User] sender of command
   # @param args [Array] command name and its arguments
   def invoke_by(user, args)
+    Command.sender = user
     if user.level? @auth_level
-      Command.sender = user
       @instr.call(args)
+    else
+      msg = "You do not have permission to use this command!"
+      Command.let_bot_say(Command.sender, msg)
     end
   end
 
   def self.poke
-    @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
+    let_bot_say(Command.sender, "Hey, stop poking me!")
+  end
+
+  def self.let_bot_say(sender, msg)
+    @bot.say_as_poke(sender, msg)
   end
 
   # list all available help commands
