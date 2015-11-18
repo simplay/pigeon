@@ -4,7 +4,7 @@ class Command
     puts "sudo level: #{ServerGroup.sudo.id}"
     @all ||= {
       :poke => Command.new { poke },
-      :bb => Command.new(ServerGroup.sudo.id) { leave_server }, # bybye
+      :bb => Command.new(ServerGroup.sudo) { leave_server }, # bybye
       :ll => Command.new { |nicks| list_urls(nicks) }, # list links
       :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new { crawl_img },
@@ -16,7 +16,7 @@ class Command
   # @param auth_level [AuthLevel] required authentication level required to
   #   invoke the target command.
   # @param instr [Procedure] lambda defining the invoked command instuction.
-  def initialize(auth_level=8, &instr)
+  def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
   end

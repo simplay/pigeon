@@ -12,7 +12,7 @@ class User
   # @hint: Such a user yields false when invoking User#exists? on it.
   # @return [User] sentinel user.
   def self.nil_user
-    User.new(-1,"nil_user",{},true)
+    User.new(-1,"nil_user",[ServerGroup.nil_group],true)
   end
 
   # List all online users.
@@ -25,7 +25,7 @@ class User
     @users = server_clients.map do |client|
       group_ids = client.server_groups.map &:to_i
       group_names = server_groups.values_at(*group_ids)
-      permission_levels = group_id_names_hash(group_ids, group_names)
+      permission_levels = ServerGroup.to_groups group_id_names_hash(group_ids, group_names)
       User.new(client.get_id, client.get_nickname, permission_levels)
     end
   end
@@ -65,7 +65,7 @@ class User
 
   # @param id [Integer] corresponds to client id in ts3 db.
   # @param nick [String] corresponds to client nick name in ts3 db.
-  # @param lvls [Hash{ServerGroupId=>ServerGroupName}] list of user's
+  # @param lvls [Array<ServerGroup>] list of groups the user belongs to.
   #   ts3 permissions.
   def initialize(id, nick, permissions, is_nil_user=false)
     @id = id
@@ -76,16 +76,12 @@ class User
 
   # Checks whether this user the required permissings.
   #
-  # @info: TS3 convention: Lower level values mean higher permission levels.
-  #   This means that a low level value corresponds to a very priviliged user
-  #   and a high user level corresponds to a low user level
-  #   (i.e. a user with only a few rights).
   # @param required_level [Integer] minimal required permission level.
   # @return [Boolean] true if this user's permission level is
   #   meets the required permission level.
   def level?(required_level)
-    top_lvl = levels.keys.min
-    top_lvl <= required_level
+    top_lvl = levels.max
+    top_lvl >= required_level
   end
 
   # List of user's permissons.
