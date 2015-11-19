@@ -1,14 +1,13 @@
 class Command
 
   def self.all
-    puts "sudo level: #{ServerGroup.sudo.id}"
     @all ||= {
       :poke => Command.new { poke },
-      :bb => Command.new(ServerGroup.sudo) { leave_server }, # bybye
-      :ll => Command.new { |nicks| list_urls(nicks) }, # list links
-      :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
-      :rsi => Command.new { crawl_img },
-      :rsw => Command.new { crawl_wtf },
+      :bb => Command.new(ServerGroup.server_admin) { leave_server }, # bybye
+      :ll => Command.new(ServerGroup.normal) { |nicks| list_urls(nicks) }, # list links
+      :rs => Command.new(ServerGroup.normal) { |keyword| crawl_for(keyword, 1) }, # random shit
+      :rsi => Command.new(ServerGroup.normal) { crawl_img },
+      :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :h => Command.new { help }
     }
   end

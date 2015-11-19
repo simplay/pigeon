@@ -17,6 +17,43 @@ class ServerGroup
     @name = args[1]
   end
 
+  def self.find_by_name(a_name)
+    findings = all.select do |group|
+      pretty_name = group.name.downcase.gsub(" ","_")
+      pretty_name == a_name
+    end
+  end
+
+  class << self
+
+    def method_missing(method_sym, *arguments, &block)
+      if contains_group?(method_sym)
+        find_by_name(method_sym.to_s)
+      else
+        super
+      end
+    end
+
+    def respond_to?(method_sym, include_private = false)
+      if contains_group?(method_sym)
+        true
+      else
+        super
+      end
+    end
+
+    def contains_group?(a_group)
+      pretty_group_names.any? {|name| a_group.to_s == name}
+    end
+
+    def pretty_group_names
+      all.map(&:name).map(&:downcase).map do |name|
+        name.gsub(" ", "_")
+      end
+    end
+
+  end
+
   # @info: the lover the id, the higher the server grouo level.
   #   this is why we have to use the times -1.
   # @param other [ServerGroup]
@@ -24,16 +61,12 @@ class ServerGroup
     -id <=> -other.id
   end
 
-  def self.sudo
-    all.min do |group|
-      group.id
-    end
+  def self.highest
+    [all.max]
   end
 
   def self.lowest
-    all.max do |group|
-      group.id
-    end
+    [all.min]
   end
 
   def self.nil_group

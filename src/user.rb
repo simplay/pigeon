@@ -81,7 +81,7 @@ class User
   #   meets the required permission level.
   def level?(required_level)
     top_lvl = levels.max
-    top_lvl >= required_level
+    required_level.any? {|req_lvl| top_lvl >= req_lvl}
   end
 
   # List of user's permissons.
