@@ -5,7 +5,7 @@ Implementing a jruby TS3 Bot using [TeamSpeak-3-Java-API](https://github.com/The
 This project is licensed under the [MIT License](https://github.com/simplay/pigeon/blob/master/LICENSE).
 
 ## Requirements
-+ JRuby 9.0.0.1
++ JRuby 9.0.1.0
 + Java 7
 + The Bundler gem
 + A Teamspeak 3 server with query admin access. Please note that the following **Guest Server Goup** permissions have to be set like specified below in order to let the bot run properly:
