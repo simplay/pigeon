@@ -55,7 +55,7 @@ class Command
   end
 
   def self.open_terminal
-    @bot.say_as_private(Command.sender, "How can I serve you?")
+    @bot.say_as_private(Command.sender, "How may I serve you?")
   end
 
   def self.poke
