@@ -9,7 +9,7 @@ class Command
       :rsi => Command.new(ServerGroup.normal) { crawl_img },
       :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
-      :ot => Command.new { open_terminal},
+      :ot => Command.new(ServerGroup.normal) { open_terminal},
       :h => Command.new { help }
     }
   end
