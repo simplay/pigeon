@@ -10,6 +10,7 @@ class Command
       :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :ot => Command.new(ServerGroup.normal) { open_terminal},
+      :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
       :h => Command.new { help }
     }
   end
@@ -39,8 +40,24 @@ class Command
     end
   end
 
+  # drags a client by its nick (fuzzy) to the channel
+  # where the command sender is currently in.
+  #
+  # @info: Only partial match is required. Movement is applied to
+  #   every user retrieved by fuzzy finder.
+  # @param fuzzy_nick [String] name of user to be dragged
+  def self.drag_and_drop(fuzzy_nick)
+    matches = User.try_find_all_by_nick(fuzzy_nick)
+    unless matches.empty?
+      sender = Command.sender
+      matches.each do |user|
+        @bot.move_target(user, sender.channel_id)
+      end
+    end
+  end
+
   def self.open_terminal
-    @bot.say_as_private(Command.sender, "How can I serve you?")
+    @bot.say_as_private(Command.sender, "How may I serve you?")
   end
 
   def self.poke
@@ -67,9 +84,11 @@ class Command
     header = "Available commands: \n"
     help_msgs = @all.keys.map do |cmd|
       description = CommandDescription.parse(cmd)
-      "!#{cmd.to_s} - #{description} \n"
+      "!#{cmd.to_s} #{description} \n"
     end
-    @bot.say_as_private(sender, header+help_msgs.join)
+    msg_count = help_msgs.length
+    @bot.say_as_private(sender, "[1/2] " + header + help_msgs.first(5).join)
+    @bot.say_as_private(sender, "[2/2] " + header + help_msgs.last(msg_count-5).join)
   end
 
   def self.leave_server
