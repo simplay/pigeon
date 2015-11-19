@@ -43,6 +43,8 @@ class Command
   # drags a client by its nick (fuzzy) to the channel
   # where the command sender is currently in.
   #
+  # @info: Only partial match is required. Movement is applied to
+  #   every user retrieved by fuzzy finder.
   # @param fuzzy_nick [String] name of user to be dragged
   def self.drag_and_drop(fuzzy_nick)
     matches = User.try_find_all_by_nick(fuzzy_nick)
