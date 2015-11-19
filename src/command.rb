@@ -84,9 +84,11 @@ class Command
     header = "Available commands: \n"
     help_msgs = @all.keys.map do |cmd|
       description = CommandDescription.parse(cmd)
-      "!#{cmd.to_s} - #{description} \n"
+      "!#{cmd.to_s} #{description} \n"
     end
-    @bot.say_as_private(sender, header+help_msgs.join)
+    msg_count = help_msgs.length
+    @bot.say_as_private(sender, "[1/2] " + header + help_msgs.first(5).join)
+    @bot.say_as_private(sender, "[2/2] " + header + help_msgs.last(msg_count-5).join)
   end
 
   def self.leave_server

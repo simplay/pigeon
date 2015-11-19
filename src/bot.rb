@@ -43,7 +43,7 @@ class Bot
     end
   end
 
-  # Move a given user to a target channel.
+  # Move a given user into a target channel.
   #
   # @param user [User] target user that should be moved into given channel.
   # @param channel_id [Integer] an id of an existing channel.
