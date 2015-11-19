@@ -43,6 +43,11 @@ class Bot
     end
   end
 
+  # Move a given user to a target channel
+  def move_target(user, channel_id)
+    api.move_client(user.id, channel_id)
+  end
+
   # Send a given message into the channel in which the bot
   # pigeon is currently located. This message can be read by
   # all client that are currently in this channel.
