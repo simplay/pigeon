@@ -78,14 +78,15 @@ class Command
   end
 
   def self.list_urls(nicks)
-    if nicks.empty?
+    sorted_links = if nicks.empty?
       UrlStore.all
     else
       users = nicks.map { |nick| User.find_by_nick(nick) }
       users.flat_map { |u| UrlStore.urls(u.id) }
-    end.sort.each do |url|
-      @bot.say_as_private(Command.sender, url.escaped)
-    end
+    end.sort
+
+    message = "Links: \n" + sorted_links.map(&:escaped).join("\n")
+    @bot.say_as_private(Command.sender, message)
   end
 
   def self.crawl_for(keyword, amount)
