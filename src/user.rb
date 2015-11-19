@@ -12,7 +12,7 @@ class User
   # @hint: Such a user yields false when invoking User#exists? on it.
   # @return [User] sentinel user.
   def self.nil_user
-    User.new(-1,"nil_user",[ServerGroup.nil_group],true)
+    User.new(-1,"nil_user",[ServerGroup.nil_group],-1,true)
   end
 
   # List all online users.
@@ -26,7 +26,7 @@ class User
       group_ids = client.server_groups.map &:to_i
       group_names = server_groups.values_at(*group_ids)
       permission_levels = ServerGroup.to_groups group_id_names_hash(group_ids, group_names)
-      User.new(client.get_id, client.get_nickname, permission_levels)
+      User.new(client.get_id, client.get_nickname, permission_levels, client.get_channel_id)
     end
   end
 
