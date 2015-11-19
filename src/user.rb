@@ -12,7 +12,7 @@ class User
   # @hint: Such a user yields false when invoking User#exists? on it.
   # @return [User] sentinel user.
   def self.nil_user
-    User.new(-1,"nil_user",[ServerGroup.nil_group],true)
+    User.new(-1,"nil_user",[ServerGroup.nil_group],-1,true)
   end
 
   # List all online users.
@@ -26,7 +26,7 @@ class User
       group_ids = client.server_groups.map &:to_i
       group_names = server_groups.values_at(*group_ids)
       permission_levels = ServerGroup.to_groups group_id_names_hash(group_ids, group_names)
-      User.new(client.get_id, client.get_nickname, permission_levels)
+      User.new(client.get_id, client.get_nickname, permission_levels, client.get_channel_id)
     end
   end
 
@@ -54,6 +54,18 @@ class User
     target_user.nil? ? nil_user : target_user
   end
 
+  # Fetch all user that include fuzzily a given nickname.
+  #
+  # @info: in case of a mismatch the nil_user will be returned.
+  # @param nick [String] fuzzy nick of target user.
+  # @return [Array<User>] matching the given nickname.
+  def self.try_find_all_by_nick(nick)
+    all_clients = all
+    return [nil_user] if all_clients.empty?
+    found_users = all_clients.select {|user| user.nick.downcase.include? nick.downcase}
+    found_users.empty? ? [nil_user] : found_users
+  end
+
   # List all fetched users previousely fetched via #all
   #
   # @info: in case User#all was not previousely invoked,
@@ -67,10 +79,11 @@ class User
   # @param nick [String] corresponds to client nick name in ts3 db.
   # @param lvls [Array<ServerGroup>] list of groups the user belongs to.
   #   ts3 permissions.
-  def initialize(id, nick, permissions, is_nil_user=false)
+  def initialize(id, nick, permissions, channel_id, is_nil_user=false)
     @id = id
     @nick = nick
     @levels = permissions
+    @channel_id = channel_id
     @is_nil_user = is_nil_user
   end
 

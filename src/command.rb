@@ -7,7 +7,9 @@ class Command
       :ll => Command.new(ServerGroup.normal) { |nicks| list_urls(nicks) }, # list links
       :rs => Command.new(ServerGroup.normal) { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new(ServerGroup.normal) { crawl_img },
+      :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
+      :ot => Command.new { open_terminal},
       :h => Command.new { help }
     }
   end
@@ -37,12 +39,26 @@ class Command
     end
   end
 
+  def self.open_terminal
+    @bot.say_as_private(Command.sender, "How can I serve you?")
+  end
+
   def self.poke
     let_bot_say(Command.sender, "Hey, stop poking me!")
   end
 
   def self.let_bot_say(sender, msg)
     @bot.say_as_poke(sender, msg)
+  end
+
+  # Fuzzy matching private message sending via pigeon
+  def self.pm_to(fuzzy_nick, msg)
+    matched_users = User.try_find_all_by_nick(fuzzy_nick)
+    sender = Command.sender
+    header = "#{sender.nick} sent you: "
+    matched_users.each do |user|
+      @bot.say_as_private(user, header+msg) if user.human?
+    end
   end
 
   # list all available help commands
@@ -73,31 +89,31 @@ class Command
   end
 
   def self.crawl_for(keyword, amount)
-    @bot.say_in_current_channel "Searching for random stuff..."
+    @bot.say_in_current_channel "Searching for wtf stuff..."
     crawler = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
     unless crawler.ok?
-      @bot.say_in_current_channel("Sorry, nothing found...")
+      @bot.say_as_private(Command.sender, "Sorry, nothing found...")
       return
     end
     crawler.links.first(amount).each do |result|
-      @bot.say_in_current_channel("https://reddit.com"+result.last, true)
+      @bot.say_as_private(Command.sender, "https://reddit.com"+result.last, true)
     end
   end
 
   def self.crawl_img
-    @bot.say_in_current_channel "Searching for random stuff..."
+    @bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = RedditImgCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_in_current_channel(results.values[random_idx], true)
+    @bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   def self.crawl_wtf
-    @bot.say_in_current_channel "Searching for wtf stuff..."
+    @bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = WtfCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_in_current_channel(results.values[random_idx], true)
+    @bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   # Remember running pigeon bot instance.

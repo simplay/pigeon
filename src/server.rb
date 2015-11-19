@@ -38,6 +38,15 @@ class Server
     Hash[*scg.flatten]
   end
 
+  # Retrive a list of all available server channels.
+  #
+  # @return [Hash{ServerChannels=> ServerChannelName}] list of all server channel.
+  def self.channels
+    server_channels = api.get_channels
+    sc = server_channels.map {|sc| [sc.get_id, sc.get_name]}
+    Hash[*sc.flatten]
+  end
+
   # @param config [ServerConfig]
   def initialize(config)
     @query = TS3Query.new(config.data)
