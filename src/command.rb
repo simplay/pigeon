@@ -10,6 +10,7 @@ class Command
       :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :ot => Command.new(ServerGroup.normal) { open_terminal},
+      :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
       :h => Command.new { help }
     }
   end
@@ -36,6 +37,20 @@ class Command
     else
       msg = "You do not have permission to use this command!"
       Command.let_bot_say(Command.sender, msg)
+    end
+  end
+
+  # drags a client by its nick (fuzzy) to the channel
+  # where the command sender is currently in.
+  #
+  # @param fuzzy_nick [String] name of user to be dragged
+  def self.drag_and_drop(fuzzy_nick)
+    matches = User.try_find_all_by_nick(fuzzy_nick)
+    unless matches.empty?
+      sender = Command.sender
+      matches.each do |user|
+        @bot.move_target(user, sender.channel_id)
+      end
     end
   end
 
