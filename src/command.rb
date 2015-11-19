@@ -85,6 +85,7 @@ class Command
       users.flat_map { |u| UrlStore.urls(u.id) }
     end.sort
 
+    return if sorted_links.empty?
     message = "Links: \n" + sorted_links.map(&:escaped).join("\n")
     @bot.say_as_private(Command.sender, message)
   end
