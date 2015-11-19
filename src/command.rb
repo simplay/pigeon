@@ -3,13 +3,13 @@ class Command
   def self.all
     @all ||= {
       :poke => Command.new { poke },
-      :bb => Command.new { leave_server }, # bybye
-      :ll => Command.new { |nicks| list_urls(nicks) }, # list links
-      :rs => Command.new { |keyword| crawl_for(keyword, 1) }, # random shit
-      :rsi => Command.new { crawl_img },
-      :rsw => Command.new { crawl_wtf },
+      :bb => Command.new(ServerGroup.server_admin) { leave_server }, # bybye
+      :ll => Command.new(ServerGroup.normal) { |nicks| list_urls(nicks) }, # list links
+      :rs => Command.new(ServerGroup.normal) { |keyword| crawl_for(keyword, 1) }, # random shit
+      :rsi => Command.new(ServerGroup.normal) { crawl_img },
+      :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
+      :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :ot => Command.new { open_terminal},
-      :pm => Command.new { |args| pm_to(args[0], args[1]) },
       :h => Command.new { help }
     }
   end
@@ -17,7 +17,7 @@ class Command
   # @param auth_level [AuthLevel] required authentication level required to
   #   invoke the target command.
   # @param instr [Procedure] lambda defining the invoked command instuction.
-  def initialize(auth_level=8, &instr)
+  def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
   end
@@ -30,9 +30,12 @@ class Command
   # @param user [User] sender of command
   # @param args [Array] command name and its arguments
   def invoke_by(user, args)
+    Command.sender = user
     if user.level? @auth_level
-      Command.sender = user
       @instr.call(args)
+    else
+      msg = "You do not have permission to use this command!"
+      Command.let_bot_say(Command.sender, msg)
     end
   end
 
@@ -41,7 +44,11 @@ class Command
   end
 
   def self.poke
-    @bot.say_as_poke(Command.sender, "Hey, stop poking me!")
+    let_bot_say(Command.sender, "Hey, stop poking me!")
+  end
+
+  def self.let_bot_say(sender, msg)
+    @bot.say_as_poke(sender, msg)
   end
 
   # Fuzzy matching private message sending via pigeon
