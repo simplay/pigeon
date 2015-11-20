@@ -107,12 +107,16 @@ class Bot
     @ts3_listener = TS3Listener.impl {|name, event|
       if started?
         unless event.get_invoker_id == @bot_id
-          sender_name = event.getInvokerName
-          user = User.find_by_nick(sender_name)
           case name.to_s
           when 'onTextMessage'
-            message = event.getMessage
+            sender_name = event.get_invoker_name
+            user = User.find_by_nick(sender_name)
+            message = event.get_message
             append_task(user, message)
+          when 'onClientJoin'
+            joining_client_nick = event.get_client_nickname
+            user = User.find_by_nick(joining_client_nick)
+            append_task(user, "!ot")
           end
         end
       end
