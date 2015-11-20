@@ -101,10 +101,9 @@ class User
   #
   # @info: A user is supposed to be contained in this list, if he has
   #   subscribed himself via sending Sir Pigeon the command `!s`.
+  #   Assumption: A user's uniqueness is determined by its nickname.
   # @return [Boolean] true if user is in this list, otherwise false.
   def in_ot_list?
-    puts "AAA => #{OtList.include?(self)}"
-    puts "BBB => #{OtList.instance.inspect}"
     OtList.include?(self)
   end
 
