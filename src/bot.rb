@@ -124,7 +124,7 @@ class Bot
           when 'onClientJoin'
             joining_client_nick = event.get_client_nickname
             user = User.find_by_nick(joining_client_nick)
-            append_task(user, "!ot")
+            append_task(user, "!ot") if user.in_ot_list?
           end
         end
       end

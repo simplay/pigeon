@@ -11,6 +11,8 @@ class Command
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :ot => Command.new(ServerGroup.normal) { open_terminal},
       :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
+      :s => Command.new(ServerGroup.normal) { subscribe_to_ot_list },
+      :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
       :h => Command.new { help }
     }
   end
@@ -21,6 +23,19 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  # Subscribes the command caller to pigeon's ot list.
+  # When a user on that list enters the server, it will
+  # receive a private message sent trough a private channel to Sir Pigeon.
+  # This channel can be used for sending commands to the bot.
+  def self.subscribe_to_ot_list
+    OtList.append(Command.sender)
+  end
+
+  # Unsubscribes command caller from the ot list.
+  def self.unsubscribe_from_ot_list
+    OtList.remove(Command.sender)
   end
 
   # Try to invoke a given command by a user.
