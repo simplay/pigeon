@@ -1,6 +1,13 @@
 require_relative 'test_helper'
 
 class OtListTest < MiniTest::Test
+
+  OtList.class_eval do
+    def store
+      @file_db ||= PStore.new('test/ot_list_test.pstore')
+    end
+  end
+
   def setup
     @usr = User.new(1,"peter", nil, 1)
   end
