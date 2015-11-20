@@ -5,7 +5,7 @@
 # E.g. the logic behing the '!ll' command.
 class User
 
-  attr_reader :id, :nick
+  attr_reader :id, :nick, :channel_id
 
   # Returns a nil user used to represnt and fetch an incorrect user state.
   #

@@ -1,6 +1,10 @@
-poke: Ping pigeon.
-ll: List all links posted by players. If passing an additional user name, all links of a certain user will be listed.
-bb: Shut down the pigeon process. Requires admin right.
-rs: Crawl random reddit stuff. If passing a additional argument a random post of a subreddit called the same as the passed argument will be fetched.
-rsi: Crawl a random reddit image.
-h: Show this message
+poke: Pokes the pigeon bot and he immediatly will poke you back. Acts as a ping method.
+ll: <NICKNAME> Lists all posted links. Providing <NICKNAME> will list all recently posted links by that particular user. Otherwise, all recently posted links (from any user) will be listed. Requires Normal privileges.
+bb: Shut down the pigeon process. Requires Server Admin privileges.
+rs: <SUBREDDIT> Crawls random posts from reddit. The argument <SUBREDDIT> is optional. It corresponds to a desired subreddit. If not specified, a random reddit post from the section new will be fetched. Requires Normal privileges.
+rsi: Crawls a random reddit image.
+rsw: Crawls a random reddit image from the subreddit wtf.
+dd: <NICKNAME> moves a given user that matches the nickname <NICKNAME> into the same channel as the command invoking user is located at. Requires Server Admin privileges.
+ot: Opens a private chat between the caller and pigeon. Allows to send commands to Sir Pigeon. Requires Normal privileges. 
+pm: <NICKNAME> send a message via Sir Pigeon to another target user matching a given nickname. Requires Normal privileges.
+h: Shows this message.
