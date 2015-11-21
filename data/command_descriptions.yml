@@ -7,4 +7,6 @@ rsw: Crawls a random reddit image from the subreddit wtf.
 dd: <NICKNAME> moves a given user that matches the nickname <NICKNAME> into the same channel as the command invoking user is located at. Requires Server Admin privileges.
 ot: Opens a private chat between the caller and pigeon. Allows to send commands to Sir Pigeon. Requires Normal privileges. 
 pm: <NICKNAME> send a message via Sir Pigeon to another target user matching a given nickname. Requires Normal privileges.
+s: Subscribes yourself to the open terminal list. Every user on that list will receive a private message when he joins the server sent by the bot.
+us: Unsubscribes yourself from the open terminal list.
 h: Shows this message.
