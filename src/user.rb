@@ -97,6 +97,16 @@ class User
     required_level.any? {|req_lvl| top_lvl >= req_lvl}
   end
 
+  # Checks whether this user included in the ot list?
+  #
+  # @info: A user is supposed to be contained in this list, if he has
+  #   subscribed himself via sending Sir Pigeon the command `!s`.
+  #   Assumption: A user's uniqueness is determined by its nickname.
+  # @return [Boolean] true if user is in this list, otherwise false.
+  def in_ot_list?
+    OtList.include?(self)
+  end
+
   # List of user's permissons.
   #
   # @info: the lower the server group id, the higher the permission level.
