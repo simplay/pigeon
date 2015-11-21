@@ -111,6 +111,9 @@ class Bot
     @tasks.append(CommandTask.new(user, message))
   end
 
+  # @info: Every message that is was not send by the bot will be appended to the task list.
+  #   When a client joins the server: the bot sends that client a private message
+  #   if the user is contained in the OtList and is priviliged.
   def attach_listeners
     @ts3_listener = TS3Listener.impl {|name, event|
       if started?
