@@ -24,9 +24,12 @@ class User
     return [] if server_clients.nil?
     @users = server_clients.map do |client|
       group_ids = client.server_groups.map &:to_i
-      group_names = server_groups.values_at(*group_ids)
-      permission_levels = ServerGroup.to_groups group_id_names_hash(group_ids, group_names)
-      User.new(client.get_id, client.get_nickname, permission_levels, client.get_channel_id)
+      groups_client_belongs_to = server_groups.select do |id, _|
+        group_ids.include?(id)
+      end
+
+      permissions = ServerGroup.to_groups(groups_client_belongs_to)
+      User.new(client.get_id, client.get_nickname, permissions, client.get_channel_id)
     end
   end
 
@@ -136,20 +139,6 @@ class User
   def human?
     return false if @is_nil_user
     !bot?
-  end
-
-  protected
-
-  # Forms a Hash from two given equally sized arrays.
-  #
-  # @info: First array depicts the list of hash keys,
-  #   and the second array the hash values.
-  # @param ids [Array<Integer>] server group ids.
-  # @param names [Array<String>] server group names.
-  # @return [Hash{ServerGroupId=>ServerGroupName}] permission list.
-  def self.group_id_names_hash(ids, names)
-      levels = ids.zip(names)
-      Hash[*levels.flatten]
   end
 
 end

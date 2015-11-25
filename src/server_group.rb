@@ -4,7 +4,7 @@
 #   (i.e. a user with only a few rights).
 class ServerGroup
 
-  attr_reader :id, :name
+  attr_reader :id, :name, :rank
 
   include Comparable
 
@@ -13,13 +13,18 @@ class ServerGroup
   end
 
   def initialize(args)
-    @id = args[0].to_i
+    @id = args[0]
     @name = args[1]
+    @rank = args[2]
+  end
+
+  def sort_value
+    $has_sort_values ? rank : id
   end
 
   def self.find_by_name(a_name)
     findings = all.select do |group|
-      pretty_name = group.name.downcase.gsub(" ","_")
+      pretty_name = group.name.downcase.gsub(" ", "_")
       pretty_name == a_name
     end
   end
@@ -58,7 +63,7 @@ class ServerGroup
   #   this is why we have to use the times -1.
   # @param other [ServerGroup]
   def <=>(other)
-    -id <=> -other.id
+    -sort_value <=> -other.sort_value
   end
 
   def self.highest
@@ -70,7 +75,7 @@ class ServerGroup
   end
 
   def self.nil_group
-    @nil_group ||= ServerGroup.new([10000, "nil_group"])
+    @nil_group ||= ServerGroup.new([10000, "nil_group", 10000])
   end
 
   def self.fetch_groups
@@ -79,7 +84,7 @@ class ServerGroup
 
   def self.to_groups(list)
     list.to_a.map do |item|
-      ServerGroup.new(item)
+      ServerGroup.new(item.flatten)
     end
   end
 
