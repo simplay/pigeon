@@ -30,12 +30,14 @@ class Server
 
   # Retrive a list of all available server groups.
   #
-  # @return [Hash{ServerGroupId => ServerGroupName}] list of all server groups.
+  # @return [Hash{ServerGroupId => [ServerGroupName, SortId]}] list of all server groups.
   def self.groups
     server_groups = api.get_server_groups
     return {} if server_groups.nil?
-    scg = server_groups.map {|cg| [cg.get_id, cg.get_name]}
-    Hash[*scg.flatten]
+    g_keys = server_groups.map {|cg| cg.get_id}
+    g_values = server_groups.map {|cg| [cg.get_name, cg.get_sort_id]}
+    scg = g_keys.zip(g_values)
+    Hash[scg]
   end
 
   # Retrive a list of all available server channels.
@@ -62,6 +64,11 @@ class Server
     end
     @api = @query.get_api
     @api.select_virtual_server_by_id(1)
+    $has_sort_values = Server.groups.values.any? do |group|
+      group[1] > 0
+    end
+    info = $has_sort_values ? "SORT IDS" : "IDS"
+    puts "Pigeon Info: Use group #{info} for determing permissions."
   end
 
   # Stop running this server.
