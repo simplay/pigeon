@@ -23,6 +23,8 @@ class Bot
       @bot_id = api.whoAmI.getId
       attach_listeners
       @command_processor.start
+      @req_listener = RequestListener.new(self)
+      @req_listener.start
     end
   end
 
@@ -97,7 +99,7 @@ class Bot
   # @info: Such a message can be read globally in the server message channel.
   # @param message [String] a message that is sent to the server channel.
   def say_to_server(message)
-    api.send_server_message
+    api.send_server_message(message)
   end
 
   protected
