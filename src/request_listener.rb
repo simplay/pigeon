@@ -9,7 +9,7 @@ require 'socket'
 # description accordingly.
 #
 # @example: Running this process will send pigeon the message "1 #{ARGV[0].to_s}".
-#   pigeon will process this message.
+#   pigeon will process this message. Assumption SECRET is pigeon's secret.
 #
 #   require 'socket'
 #   require 'digest/sha1'

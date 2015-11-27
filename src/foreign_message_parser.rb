@@ -22,11 +22,9 @@ require 'digest/sha1'
 #   Note that we are actually working with input_msg.to_json.
 class ForeignMessageParser
 
-  SECRET = "pew" # will later be exported to ENV variables
-
   def initialize(input_msg)
     @input_msg = input_msg
-    @passphrase = to_sha1(SECRET)
+    @passphrase = to_sha1(ENV['P_SECRET'])
     parse
   end
 
@@ -49,6 +47,7 @@ class ForeignMessageParser
   private
 
   def to_sha1(secret)
+    raise "ENV variable P_SECRET not set." if secret.nil?
     Digest::SHA1.hexdigest(secret)
   end
 
