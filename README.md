@@ -27,6 +27,7 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
   export P_PASSWORD="YOUR_TS3_ADMIN_QUERY_PW"
   export P_IP_ADDRESS="YOUR_TS3_IP_ADDRESS"
   export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
+  export P_SECRET="YOUR_SOCKET_PASSPHRASE"
   ```
 
 3. Install dependencies with `bundle`
