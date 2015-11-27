@@ -8,24 +8,36 @@ require 'socket'
 # Pigeon will make use of this data and updates the corresponding minecraft channel
 # description accordingly.
 #
-# @example: Running this process will send pigeon the message foobar.
+# @example: Running this process will send pigeon the message "1 #{ARGV[0].to_s}".
 #   pigeon will process this message.
 #
 #   require 'socket'
-#
+#   require 'digest/sha1'
+#   require 'json'
 #   hostname = "localhost"
 #   port = 21337
+#   SECRET = "pew"
 #
 #   socket = TCPSocket.open(hostname, port)
-#   socket.puts("foobar")
-#
+#   1.times do |i|
+#     content = "#{i.to_s}: #{ARGV[0].to_s}"
+#     msg = {
+#       :header => :text,
+#       :secret => Digest::SHA1.hexdigest(SECRET),
+#       :content => content
+#     }
+#     j_msg = msg.to_json
+#     puts j_msg
+#     socket.puts(j_msg)
+#     sleep 0.2
+#   end
 #   socket.close
 #
 class RequestListener
 
-  def initialize(bot)
+  def initialize(bot, port=21337)
     @hostname = "localhost"
-    @port = 21337
+    @port = port
     @bot = bot
   end
 
@@ -35,8 +47,8 @@ class RequestListener
     loop do
       Thread.start(server.accept) do |client|
         while message = client.gets
-          # notify bot by message
-          @bot.say_in_current_channel(message.chop)
+          fmp = ForeignMessageParser.new(message)
+          @bot.say_to_server(fmp.msg_content) if fmp.got_valid_message?
         end
         client.close
       end
@@ -49,4 +61,3 @@ class RequestListener
   end
 
 end
-
