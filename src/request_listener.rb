@@ -35,8 +35,10 @@ require 'socket'
 #
 class RequestListener
 
-  def initialize(port=21337)
-    @hostname = "localhost"
+  P_EXT_PORT = 21337
+
+  def initialize(ip="localhost", port=P_EXT_PORT)
+    @hostname = ip
     @port = port
   end
 
@@ -44,7 +46,6 @@ class RequestListener
   # Received messages are processed any further if they are valid,
   # i.e. include the pigeon secret and are in the pigeon message format.
   def start
-    @is_running = true
     @server = TCPServer.open(@hostname, @port)
     loop do
       Thread.new(@server.accept) do |client|
