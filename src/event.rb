@@ -1,3 +1,9 @@
+# Events are used to handle different types of fetched foreign messages.
+#
+# @example
+#   Event.new("mss", {:channel_name => "Minecraft", :description => msg})
+#   Event.new("else", msg)
+#
 class Event
 
   attr_reader :name, :content

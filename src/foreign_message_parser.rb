@@ -22,6 +22,10 @@ require 'digest/sha1'
 #   Note that we are actually working with input_msg.to_json.
 class ForeignMessageParser
 
+  # @param input_msg [String] a JSON serialized ruby hash
+  #   containing a header, the secret and some content.
+  # @example
+  #   "{"header":"MYHEADER","secret":"SOMEFANCYKEY","content":"MESSAGE"}"
   def initialize(input_msg)
     @input_msg = input_msg
     @passphrase = to_sha1(ENV['P_SECRET'])

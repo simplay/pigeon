@@ -35,8 +35,22 @@ require 'socket'
 #
 class RequestListener
 
+  # Default Pigeon port
   P_EXT_PORT = 21337
 
+  # Create a new TCP Server listening on a given port and ip
+  # for foreign (trusted) messages.
+  #
+  # @example
+  #   RequestListener.new
+  #   => #<RequestListener:0x463fd068 @hostname="localhost", @port=21337>
+  #   RequestListener.new("127.0.0.1")
+  #   => #<RequestListener:0x463fd068 @hostname="127.0.0.1", @port=21337>
+  #   RequestListener.new("192.168.1.113", 1234)
+  #   => #<RequestListener:0x463fd068 @hostname="192.168.1.113", @port=1234>
+  #
+  # @param ip [String] ip or hostname of tcp socket server
+  # @param port [Integer] port the server is listening to.
   def initialize(ip="localhost", port=P_EXT_PORT)
     @hostname = ip
     @port = port
