@@ -13,6 +13,7 @@ class Bot
     @is_started = false
     @tasks = Tasks.new
     @command_processor = CommandProcessor.new(@tasks)
+    @req_listener = RequestListener.new
   end
 
   def start
@@ -26,7 +27,6 @@ class Bot
       attach_listeners
       @command_processor.start
       Mailbox.subscribe(self)
-      @req_listener = RequestListener.new
       @req_listener.start
     end
   end
@@ -43,6 +43,7 @@ class Bot
     if started?
       @is_started = false
       @command_processor.shut_down
+      @req_listener.stop
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end

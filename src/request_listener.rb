@@ -40,23 +40,27 @@ class RequestListener
     @port = port
   end
 
+  # Start a concurrent tcp socket listener.
+  # Received messages are processed any further if they are valid,
+  # i.e. include the pigeon secret and are in the pigeon message format.
   def start
     @is_running = true
-    server = TCPServer.open(@port)
+    @server = TCPServer.open(@hostname, @port)
     loop do
-      Thread.start(server.accept) do |client|
+      Thread.new(@server.accept) do |client|
         while message = client.gets
           fmp = ForeignMessageParser.new(message)
           Mailbox.append(fmp) if fmp.got_valid_message?
         end
         client.close
       end
-      break unless @is_running
     end
   end
 
+  # Forces the server socket listener to close and shuts down its spawned threads.
+  # Whithout calling this method, Pigeon cannot shut down properly.
   def stop
-    @is_running = false
+    @server.close
   end
 
 end
