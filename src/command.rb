@@ -27,7 +27,7 @@ class Command
   end
 
   def self.debug
-    c = Channel.find_by_name("foobar1")
+    c = Channel.find_by_name("Minecraft")
     @bot.edit_channel_description(c, "foobarpewpew44")
   end
 
