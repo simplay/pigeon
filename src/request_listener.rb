@@ -35,10 +35,9 @@ require 'socket'
 #
 class RequestListener
 
-  def initialize(bot, port=21337)
+  def initialize(port=21337)
     @hostname = "localhost"
     @port = port
-    @bot = bot
   end
 
   def start

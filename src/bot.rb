@@ -26,7 +26,7 @@ class Bot
       attach_listeners
       @command_processor.start
       Mailbox.subscribe(self)
-      @req_listener = RequestListener.new(self)
+      @req_listener = RequestListener.new
       @req_listener.start
     end
   end
