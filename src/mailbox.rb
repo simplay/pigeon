@@ -35,9 +35,11 @@ class Mailbox
   def parse(message)
     case message.msg_header
     when 'mss'
-      "mc: " + message.msg_content
+      msg = "mc: " + message.msg_content
+      Event.new("mss", {:channel_name => "foobar1", :description => msg})
     else
-      "foobar: " + message.msg_content
+      msg = "foobar: " + message.msg_content
+      Event.new("else", msg)
     end
   end
 

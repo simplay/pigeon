@@ -13,7 +13,8 @@ class Command
       :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
       :s => Command.new(ServerGroup.normal) { subscribe_to_ot_list },
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
-      :h => Command.new { help }
+      :h => Command.new { help },
+      :debug => Command.new { debug }
     }
   end
 
@@ -23,6 +24,11 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  def self.debug
+    c = Channel.find_by_name("foobar1")
+    @bot.edit_channel_description(c, "foobarpewpew44")
   end
 
   # Subscribes the command caller to pigeon's ot list.

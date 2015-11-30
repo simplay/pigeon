@@ -6,6 +6,7 @@ java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
 java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 
 class Bot
+
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
     @name = name
@@ -48,7 +49,15 @@ class Bot
   end
 
   def handle_event(message)
-    say_to_server(message)
+    case message.name
+    when 'mss'
+      channel_name = message.content[:channel_name]
+      description = message.content[:description]
+      channel = Channel.find_by_name(channel_name)
+      edit_channel_description(channel, description)
+    when 'else'
+      say_to_server(message.content)
+    end
   end
 
   # Move a given user into a target channel.
