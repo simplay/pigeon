@@ -3,6 +3,7 @@ require 'thread'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
+java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 
 class Bot
   def initialize(config, name="Sir Pigeon")
@@ -56,6 +57,21 @@ class Bot
   # @param channel_id [Integer] an id of an existing channel.
   def move_target(user, channel_id)
     api.move_client(user.id, channel_id)
+  end
+
+  # Edits the description text of a target channel.
+  #
+  # @example
+  #   minecraft_channel = Channel.find_by_name("Minecraft")
+  #   some_description = "this is the minecraft channel"
+  #   edit_channel_description(minecraft_channel, some_description)
+  #
+  # @param channel [Channel] target channel that should be edited.
+  # @param description [String] formatted text that should be used
+  #   for target's channel new description.
+  def edit_channel_description(channel, description)
+    options = { ChannelProperty::CHANNEL_DESCRIPTION => description }
+    api.editChannel(channel.id, options)
   end
 
   # Send a given message into the channel in which the bot
