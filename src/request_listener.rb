@@ -48,7 +48,7 @@ class RequestListener
       Thread.start(server.accept) do |client|
         while message = client.gets
           fmp = ForeignMessageParser.new(message)
-          @bot.say_to_server(fmp.msg_content) if fmp.got_valid_message?
+          Mailbox.append(fmp) if fmp.got_valid_message?
         end
         client.close
       end

@@ -23,6 +23,7 @@ class Bot
       @bot_id = api.whoAmI.getId
       attach_listeners
       @command_processor.start
+      Mailbox.subscribe(self)
       @req_listener = RequestListener.new(self)
       @req_listener.start
     end
@@ -43,6 +44,10 @@ class Bot
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
+  end
+
+  def handle_event(message)
+    say_to_server(message)
   end
 
   # Move a given user into a target channel.
