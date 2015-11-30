@@ -18,7 +18,13 @@ class Mailbox
 
   # @param subscriber [#handle_event] can handle the fired event.
   def subscribe(subscriber)
-    @subscribers << subscriber
+    @subscribers << subscriber unless included?(subscriber)
+  end
+
+  def included?(sub)
+    @subscribers.find do |s|
+      s == sub
+    end
   end
 
   def notify_all_with(message)
@@ -35,8 +41,11 @@ class Mailbox
   def parse(message)
     case message.msg_header
     when 'mss'
-      msg = "mc: " + message.msg_content
-      Event.new("mss", {:channel_name => "foobar1", :description => msg})
+      newlined_msg = message.msg_content.split(";").map do |item|
+        item + "\n"
+      end
+      msg = "Playerlist:\n" + newlined_msg.join
+      Event.new("mss", {:channel_name => "Minecraft", :description => msg})
     else
       msg = "foobar: " + message.msg_content
       Event.new("else", msg)
