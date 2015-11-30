@@ -3,14 +3,17 @@ require 'thread'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
+java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 
 class Bot
+
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
     @name = name
     @is_started = false
     @tasks = Tasks.new
     @command_processor = CommandProcessor.new(@tasks)
+    @req_listener = RequestListener.new
   end
 
   def start
@@ -23,6 +26,8 @@ class Bot
       @bot_id = api.whoAmI.getId
       attach_listeners
       @command_processor.start
+      Mailbox.subscribe(self)
+      @req_listener.start
     end
   end
 
@@ -38,8 +43,21 @@ class Bot
     if started?
       @is_started = false
       @command_processor.shut_down
+      @req_listener.stop
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
+    end
+  end
+
+  def handle_event(message)
+    case message.name
+    when 'mss'
+      channel_name = message.content[:channel_name]
+      description = message.content[:description]
+      channel = Channel.find_by_name(channel_name)
+      edit_channel_description(channel, description)
+    when 'else'
+      say_to_server(message.content)
     end
   end
 
@@ -49,6 +67,21 @@ class Bot
   # @param channel_id [Integer] an id of an existing channel.
   def move_target(user, channel_id)
     api.move_client(user.id, channel_id)
+  end
+
+  # Edits the description text of a target channel.
+  #
+  # @example
+  #   minecraft_channel = Channel.find_by_name("Minecraft")
+  #   some_description = "this is the minecraft channel"
+  #   edit_channel_description(minecraft_channel, some_description)
+  #
+  # @param channel [Channel] target channel that should be edited.
+  # @param description [String] formatted text that should be used
+  #   for target's channel new description.
+  def edit_channel_description(channel, description)
+    options = { ChannelProperty::CHANNEL_DESCRIPTION => description }
+    api.editChannel(channel.id, options)
   end
 
   # Send a given message into the channel in which the bot
@@ -97,7 +130,7 @@ class Bot
   # @info: Such a message can be read globally in the server message channel.
   # @param message [String] a message that is sent to the server channel.
   def say_to_server(message)
-    api.send_server_message
+    api.send_server_message(message)
   end
 
   protected
