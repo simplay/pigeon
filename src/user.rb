@@ -69,6 +69,11 @@ class User
     found_users.empty? ? [nil_user] : found_users
   end
 
+  # Fetch all users that are contained in the ot list
+  # @info: a ot list user is a user that has subscribed himself
+  #   via calling !s to pigeon. Such users will get a private message
+  #   to pigeon whenever they connect to the server. Users can invoke
+  #   commands in this private chat.
   def self.ot_users
     all.select do |user|
       user.in_ot_list?
