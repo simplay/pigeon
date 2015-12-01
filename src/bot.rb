@@ -28,7 +28,6 @@ class Bot
       @command_processor.start
       Mailbox.subscribe(self)
       @req_listener.start
-      reconnect_to_ot_list_users
     end
   end
 
@@ -38,8 +37,7 @@ class Bot
   #   the bot is back online again.
   #   Is used whenever pigeon was updated and restarted in order to
   #   keep the tab reference (from the previous Sir Pigeon) up-to-date
-  def reconnect_to_ot_list_users
-    puts "AAAA => dsfasf"
+  def reestablish_connection_to_ot_users
     User.ot_users.each do |user|
       say_as_private(user, "Hey, I am back again. :) ")
     end
@@ -61,6 +59,13 @@ class Bot
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
+  end
+
+  # Methods invoked here are run before after pigeon
+  # has set up all its services but before a user
+  # could enter any command.
+  def run_after_startup
+    reestablish_connection_to_ot_users
   end
 
   def handle_event(message)
@@ -180,6 +185,7 @@ class Bot
       end
     }
     api.addTS3Listeners(@ts3_listener)
+    run_after_startup
   end
 end
 
