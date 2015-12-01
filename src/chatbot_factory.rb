@@ -24,6 +24,11 @@ class ChatbotFactory
       @session = session
     end
 
+    # Send a message to the bot.
+    #
+    # @info: ChatterBotSession responds to tell.
+    # @param message [String] message we are asking the bot.
+    # @return [String] the bot's answer.
     def tell(message)
       @session.tell(message)
     end
