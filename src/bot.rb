@@ -28,6 +28,20 @@ class Bot
       @command_processor.start
       Mailbox.subscribe(self)
       @req_listener.start
+      reconnect_to_ot_list_users
+    end
+  end
+
+  # Notify all users in the Ot list that pigeon is online again.
+  #
+  # @info this method is used to inform that
+  #   the bot is back online again.
+  #   Is used whenever pigeon was updated and restarted in order to
+  #   keep the tab reference (from the previous Sir Pigeon) up-to-date
+  def reconnect_to_ot_list_users
+    puts "AAAA => dsfasf"
+    User.ot_users.each do |user|
+      say_as_private(user, "Hey, I am back again. :) ")
     end
   end
 

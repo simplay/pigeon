@@ -69,6 +69,12 @@ class User
     found_users.empty? ? [nil_user] : found_users
   end
 
+  def self.ot_users
+    all.select do |user|
+      user.in_ot_list?
+    end
+  end
+
   # List all fetched users previousely fetched via #all
   #
   # @info: in case User#all was not previousely invoked,
