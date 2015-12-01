@@ -31,6 +31,18 @@ class Bot
     end
   end
 
+  # Notify all users in the Ot list that pigeon is online again.
+  #
+  # @info this method is used to inform that
+  #   the bot is back online again.
+  #   Is used whenever pigeon was updated and restarted in order to
+  #   keep the tab reference (from the previous Sir Pigeon) up-to-date
+  def reestablish_connection_to_ot_users
+    User.ot_users.each do |user|
+      say_as_private(user, "Hey, I am back again. :) ")
+    end
+  end
+
   def api
     Server.api
   end
@@ -47,6 +59,13 @@ class Bot
       api.removeTS3Listeners(@ts3_listener)
       Server.stop
     end
+  end
+
+  # Methods invoked here are run before after pigeon
+  # has set up all its services but before a user
+  # could enter any command.
+  def run_after_startup
+    reestablish_connection_to_ot_users
   end
 
   def handle_event(message)
@@ -166,6 +185,7 @@ class Bot
       end
     }
     api.addTS3Listeners(@ts3_listener)
+    run_after_startup
   end
 end
 
