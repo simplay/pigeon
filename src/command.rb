@@ -13,6 +13,8 @@ class Command
       :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
       :s => Command.new(ServerGroup.normal) { subscribe_to_ot_list },
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
+      :cb => Command.new(ServerGroup.normal) { |msg| say_to_cleverbot(msg) },
+      :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
       :h => Command.new { help }
     }
   end
@@ -36,6 +38,16 @@ class Command
   # Unsubscribes command caller from the ot list.
   def self.unsubscribe_from_ot_list
     OtList.remove(Command.sender)
+  end
+
+  def self.say_to_cleverbot(message)
+    answer = ChatbotFactory.cleverbot.tell(message.first)
+    @bot.say_as_private(Command.sender, answer)
+  end
+
+  def self.say_to_pandorabot(message)
+    answer = ChatbotFactory.pandorabot.tell(message.first)
+    @bot.say_as_private(Command.sender, answer)
   end
 
   # Try to invoke a given command by a user.

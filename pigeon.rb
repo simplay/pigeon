@@ -4,6 +4,7 @@ $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
 require 'java'
 require 'teamspeak3-api-1.0.12.jar'
+require 'cleverbot.jar'
 
 require 'url_store'
 require 'url_extractor'
@@ -24,3 +25,4 @@ require 'request_listener'
 require 'foreign_message_parser'
 require 'mailbox'
 require 'event'
+require 'chatbot_factory'
