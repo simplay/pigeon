@@ -118,27 +118,4 @@ class User
     @levels
   end
 
-  # Checks whether this user is a bot.
-  #
-  # @info: Every user that belongs to the server group
-  #   "Admin Server Query" represents a Bot.
-  #   checks whether the nick of a user contains some string
-  #   including 'admin', 'pigeon', 'bot' or 'sir'
-  # @return [Boolean] true if bot otherwise false.
-  def bot?
-    is_qa = @levels.values.include?("Admin Server Query")
-    is_pigeon = @nick.downcase.include?("sir") or @nick.downcase.include?("pigeon")
-    is_admin_bot = @nick.downcase.include?("admin") or @nick.downcase.include?("server")
-    is_qa or is_pigeon or is_admin_bot
-  end
-
-  # Check whether this user is neither a bot nor the nil_user.
-  #
-  # @info: User instances that yield true correspond to real human clients.
-  # @return [Boolean] true if user is a human client otherwise false.
-  def human?
-    return false if @is_nil_user
-    !bot?
-  end
-
 end

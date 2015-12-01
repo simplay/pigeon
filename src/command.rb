@@ -89,7 +89,7 @@ class Command
     sender = Command.sender
     header = "#{sender.nick} sent you: "
     matched_users.each do |user|
-      @bot.say_as_private(user, header+msg) if user.human?
+      @bot.say_as_private(user, header+msg)
     end
   end
 
