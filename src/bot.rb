@@ -34,6 +34,12 @@ class Bot
     @req_listener = RequestListener.new
   end
 
+  def timed_tasks
+    tasks ||= [
+      TimedTask.new(90) { MoveAfkUsers.new(self).run }
+    ]
+  end
+
   # Start the bot and its services if not already running.
   # @info: The order of method invocations matters.
   #   first assign all relevant setup information
@@ -85,6 +91,7 @@ class Bot
       @command_processor.shut_down
       @req_listener.stop
       api.removeTS3Listeners(@ts3_listener)
+      timed_tasks.each(&:stop)
       Server.stop
     end
   end
@@ -94,6 +101,7 @@ class Bot
   # could enter any command.
   def run_after_startup
     reestablish_connection_to_ot_users
+    timed_tasks.each(&:start)
   end
 
   def handle_event(message)
