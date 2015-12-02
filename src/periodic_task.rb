@@ -10,6 +10,7 @@
 class PeriodicTask
   def initialize(bot)
     @bot = bot
+    @afk_channel = Channel.find_by_name("AFK")
   end
 
   def run
@@ -28,6 +29,9 @@ end
 class MoveAfkUsers < PeriodicTask
   def task
     afk_users = User.all.select(&:afk?)
-    @bot.say_to_server "There are #{afk_users.count} afk users"
+    afk_users.each do |user|
+      @bot.move_target(user, @afk_channel.id)
+      @bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
+    end
   end
 end
