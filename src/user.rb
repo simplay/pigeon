@@ -12,6 +12,8 @@ class User
   # Is set to 20 minutes.
   IDLE_TIME_THRESHOLD = 1200
 
+  UNMOVABLE_GROUP_NAME = "Pigeonator"
+
   # Returns a nil user used to represnt and fetch an incorrect user state.
   #
   # @hint: Such a user yields false when invoking User#exists? on it.
@@ -105,6 +107,25 @@ class User
     @levels = permissions
     @channel_id = channel_id
     @is_nil_user = is_nil_user
+  end
+
+  # Does this user belong to a group having a given name
+  # @param group_name [String] name of group we want to check whether the user
+  #   belongs to.
+  def in_group?(group_name)
+    @levels.find do |group|
+      group.name == group_name
+    end
+  end
+
+  # Checks whether this user belongs to the unmovable users.
+  #
+  # @info: Unmovable users will not moved to the afk channel
+  #   after being idle for too long.
+  # @return [Boolean] true if this user belongs to the unmovable group
+  #   otherwise false.
+  def unmovable?
+    in_group?(UNMOVABLE_GROUP_NAME)
   end
 
   # Get the idle time of this user.
