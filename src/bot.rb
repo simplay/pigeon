@@ -49,9 +49,9 @@ class Bot
       Command.prepare(self)
       @is_started = true
       Server.start
-      api.setNickname(@name)
-      api.registerAllEvents
-      @bot_id = api.whoAmI.getId
+      api.set_nickname(@name)
+      api.register_all_events
+      @bot_id = api.who_am_i.get_id
       attach_listeners
       @command_processor.start
       Mailbox.subscribe(self)
@@ -128,7 +128,7 @@ class Bot
   #   for target's channel new description.
   def edit_channel_description(channel, description)
     options = { ChannelProperty::CHANNEL_DESCRIPTION => description }
-    api.editChannel(channel.id, options)
+    api.edit_channel(channel.id, options)
   end
 
   # Send a given message into the channel in which the bot
@@ -141,7 +141,7 @@ class Bot
   # @param is_url [Boolean] should message interpreted as an url?
   def say_in_current_channel(msg, is_url=false)
     msg = "[URL]#{msg}[\/URL]" if is_url
-    api.sendChannelMessage(msg)
+    api.send_channel_message(msg)
   end
 
   # Send a poke message to a target user.
