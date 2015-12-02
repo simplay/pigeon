@@ -39,7 +39,7 @@ class MoveAfkUsers < PeriodicTask
   def task
     afk_users = User.all.select(&:afk?)
     afk_users.each do |user|
-      unless user.channel_id == @afk_channel.id
+      unless (user.channel_id == @afk_channel.id) or user.unmovable?
         @bot.move_target(user, @afk_channel.id)
         @bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
       end
