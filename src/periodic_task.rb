@@ -13,14 +13,21 @@ class PeriodicTask
     @afk_channel = Channel.find_by_name("AFK")
   end
 
+  # Start the task.
+  #
+  # @info: This method is run by to start this periodic task
+  #   in a TimedTask.
   def run
     task
   end
 
   protected
 
+  # Logic of a periodic task.
+  #
+  # @info: A descendant class is supposed to implement this method.
   def task
-    raise "Not implemented yet"
+    raise "Not implemented yet."
   end
 
 end
