@@ -25,13 +25,17 @@ class PeriodicTask
 
 end
 
-# Check the afk state of every online user.
+# Check the afk state of every user that is online.
+# If they are afk and not already located at the AFK channel,
+# then move them to the AFK channel.
 class MoveAfkUsers < PeriodicTask
   def task
     afk_users = User.all.select(&:afk?)
     afk_users.each do |user|
-      @bot.move_target(user, @afk_channel.id)
-      @bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
+      unless user.channel_id == @afk_channel.id
+        @bot.move_target(user, @afk_channel.id)
+        @bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
+      end
     end
   end
 end
