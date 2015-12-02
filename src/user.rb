@@ -7,6 +7,11 @@ class User
 
   attr_reader :id, :nick, :channel_id
 
+  # Threshold time [seconds] a user may be not performing
+  # any action before identified as being idle.
+  # Is set to 15 minutes.
+  IDLE_TIME_THRESHOLD = 900
+
   # Returns a nil user used to represnt and fetch an incorrect user state.
   #
   # @hint: Such a user yields false when invoking User#exists? on it.
@@ -99,6 +104,29 @@ class User
     @levels = permissions
     @channel_id = channel_id
     @is_nil_user = is_nil_user
+  end
+
+  # Get the idle time of this user.
+  #
+  # @info: Being idle means, that the user has neither talked, nor
+  #   performed any other action such as chatting or moving channels.
+  # @return [Float] number of seconds the client is idle.
+  #   If no client was found, then return -1.
+  def idle_time
+    client = Server.api.get_clients.find do |client|
+      client.get_id == @id
+    end
+    return -1.0 if client.nil?
+    client.get_idle_time / 1000.0
+  end
+
+  # Checks whether the current user is afk.
+  #
+  # @info: if a user is idle for at least IDLE_TIME_THRESHOLD seconds,
+  #   he is identified as being afk.
+  #   Such users will be moved to the afk channel.
+  def afk?
+    idle_time >= IDLE_TIME_THRESHOLD
   end
 
   # Checks whether this user the required permissings.

@@ -59,7 +59,7 @@ class TimedTask
 
   # Cancels the timer
   #
-  # @info: A cancaled timer cannot re-started again.
+  # @info: A canceled timer cannot re-started again.
   def stop
     @timer.cancel
   end
