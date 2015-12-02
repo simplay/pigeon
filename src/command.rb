@@ -40,13 +40,27 @@ class Command
     OtList.remove(Command.sender)
   end
 
+  # Send a message to cleverbot
+  #
+  # @info
+  #   !cb "you are a bot" results in
+  #   message = ["you", "are", "a", "bot"]
+  # @param message [Array<String>] user message, word by word.
   def self.say_to_cleverbot(message)
-    answer = ChatbotFactory.cleverbot.tell(message.first)
+    msg = message.join(" ")
+    answer = ChatbotFactory.cleverbot.tell(msg)
     @bot.say_as_private(Command.sender, answer)
   end
 
+  # Send a message to pandorabot
+  #
+  # @info
+  #   !pb "you are a bot" results in
+  #   message = ["you", "are", "a", "bot"]
+  # @param message [Array<String>] user message, word by word.
   def self.say_to_pandorabot(message)
-    answer = ChatbotFactory.pandorabot.tell(message.first)
+    msg = message.join(" ")
+    answer = ChatbotFactory.pandorabot.tell(msg)
     @bot.say_as_private(Command.sender, answer)
   end
 
