@@ -20,8 +20,9 @@ class User
     User.new(-1,"nil_user",[ServerGroup.nil_group],-1,true)
   end
 
-  # List all online users.
+  # List of all online users.
   #
+  # @info: excludes the bot.
   # @return [Array<User>] list of all users currently online on this server.
   def self.all
     server_groups = Server.groups
