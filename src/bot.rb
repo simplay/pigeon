@@ -5,6 +5,24 @@ java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
 java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 
+# A Bot, the so called Sir Pigeon, is a concurrent event handler,
+# used for administering and entertaining TS3 clients and channels.
+#
+# It acts as an automated Server Query Admin (SQA) TS3 client.
+#
+# Sir Pigeon is able to handle external and internal events.
+# Internal events are either fired due to ts3 listeners,
+# such as onTextMessage or onClientJoin, or due to TimedTask tasks.
+# External events are a result of receiving valid messages from foreign services.
+# E.g. status information received by the minecraft server.
+#
+# Sir Pigeon can be started and stopped and keeps a reference to the ts3 api.
+# The bot has implemented several text sending methods, implemented as say methods
+# and a method to edit the description of a target channel.
+#
+# @info: In order to run this bot, configure all relevant ENV variables
+#   as described in the README.
+# Please notice that SQA authentication credentials are required to run the bot.
 class Bot
 
   def initialize(config, name="Sir Pigeon")
@@ -16,14 +34,30 @@ class Bot
     @req_listener = RequestListener.new
   end
 
+  def timed_tasks
+    tasks ||= [
+      TimedTask.new(90) { MoveAfkUsers.new(self).run }
+    ]
+  end
+
+  # Start the bot and its services if not already running.
+  # @info: The order of method invocations matters.
+  #   first assign all relevant setup information
+  #   then start establish a connection to the TS3 server
+  #   then determine the bots user id (used for checking bot's identity)
+  #     used for ignoring messages sent by the bot in the handlers.
+  #   then register the internal ts3 event handlers
+  #   then start the command processor
+  #   then the subscribe to the mailbox
+  #   then start the external event listener.
   def start
     unless started?
       Command.prepare(self)
       @is_started = true
       Server.start
-      api.setNickname(@name)
-      api.registerAllEvents
-      @bot_id = api.whoAmI.getId
+      api.set_nickname(@name)
+      api.register_all_events
+      @bot_id = api.who_am_i.get_id
       attach_listeners
       @command_processor.start
       Mailbox.subscribe(self)
@@ -57,6 +91,7 @@ class Bot
       @command_processor.shut_down
       @req_listener.stop
       api.removeTS3Listeners(@ts3_listener)
+      timed_tasks.each(&:stop)
       Server.stop
     end
   end
@@ -66,6 +101,7 @@ class Bot
   # could enter any command.
   def run_after_startup
     reestablish_connection_to_ot_users
+    timed_tasks.each(&:start)
   end
 
   def handle_event(message)
@@ -100,7 +136,7 @@ class Bot
   #   for target's channel new description.
   def edit_channel_description(channel, description)
     options = { ChannelProperty::CHANNEL_DESCRIPTION => description }
-    api.editChannel(channel.id, options)
+    api.edit_channel(channel.id, options)
   end
 
   # Send a given message into the channel in which the bot
@@ -113,7 +149,7 @@ class Bot
   # @param is_url [Boolean] should message interpreted as an url?
   def say_in_current_channel(msg, is_url=false)
     msg = "[URL]#{msg}[\/URL]" if is_url
-    api.sendChannelMessage(msg)
+    api.send_channel_message(msg)
   end
 
   # Send a poke message to a target user.
@@ -125,6 +161,17 @@ class Bot
   end
 
   # Send a private message to a target user.
+  #
+  # @example: Send a pm to some user.
+  #
+  #   # Retrieve the first user
+  #   first_user = User.all.first
+  #
+  #   # send "hello world" message as a pm to the first user
+  #   say_as_private(first_user, "hello world")
+  #
+  #   # Send a clickable link to the first user
+  #   say_as_private(first_user, "www.somefancyaddress.org", true)
   #
   # @info: Private means that a separate chat-tab
   #   between pigeon and the user is opened in which
@@ -163,6 +210,8 @@ class Bot
     @tasks.append(CommandTask.new(user, message))
   end
 
+  # Defines the ts3 event listener handlers and runs the after startup hooks.
+  #
   # @info: Every message that is was not send by the bot will be appended to the task list.
   #   When a client joins the server: the bot sends that client a private message
   #   if the user is contained in the OtList and is priviliged.
@@ -188,5 +237,4 @@ class Bot
     run_after_startup
   end
 end
-
 
