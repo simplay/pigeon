@@ -2,9 +2,12 @@ GEM
   remote: http://rubygems.org/
   specs:
     awesome_print (1.6.1)
+    builder (3.2.2)
     coderay (1.1.0)
     ffi (1.9.10-java)
     gli (2.13.2)
+    hoe (3.14.2)
+      rake (>= 0.8, < 11.0)
     method_source (0.8.2)
     minitest (5.4.1)
     pry (0.10.3-java)
@@ -12,9 +15,21 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
       spoon (~> 0.0)
+    rake (10.1.0)
+    rawr (1.8.3)
+      rubyzip
+      user-choices
+    rubyzip (1.1.7)
+    s4t-utils (1.0.4)
+      hoe (>= 1.3.0)
     slop (3.6.0)
     spoon (0.0.4)
       ffi
+    user-choices (1.1.6.1)
+      builder (>= 2.1.2)
+      s4t-utils (>= 1.0.3)
+      xml-simple (>= 1.0.11)
+    xml-simple (1.1.5)
 
 PLATFORMS
   java
@@ -24,6 +39,7 @@ DEPENDENCIES
   gli
   minitest
   pry
+  rawr
 
 BUNDLED WITH
    1.10.6
