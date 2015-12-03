@@ -9,8 +9,8 @@ class User
 
   # Threshold time [seconds] a user may be not performing
   # any action before identified as being idle.
-  # Is set to 20 minutes.
-  IDLE_TIME_THRESHOLD = 1200
+  # Is set to 15 minutes.
+  IDLE_TIME_THRESHOLD = 900
 
   UNMOVABLE_GROUP_NAME = "Pigeonator"
 
