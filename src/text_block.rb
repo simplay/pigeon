@@ -42,6 +42,12 @@ class TextBlock
 
 end
 
+class BoldText < TextBlock
+  def parse(message)
+    "[b]#{message}[\/b]"
+  end
+end
+
 # @example
 #   TextLink.new("www.google.coom").to_s
 #   #=> "[URL]www.google.coom[/URL]"
@@ -56,14 +62,15 @@ end
 # @example
 #   LabeledTextLink.new("www.google.coom", "foobar").to_s
 #   #=> "foobar: [URL]www.google.coom[/URL]"
-class LabeledTextLink < TextBlock
-  def initialize(content, header)
-    @header = header
+class LabeledTextLink < TextLink
+  def initialize(content, header, delimiter=":")
+    @header = BoldText.new(header).to_s
+    @delimiter = delimiter
     super(content)
   end
 
   def parse(message)
-    "#{@header}: [URL]#{message}[\/URL]"
+    "#{@header}#{@delimiter}#{super(message)}"
   end
 
 end
