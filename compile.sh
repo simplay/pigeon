@@ -8,7 +8,7 @@ cp -r data build/
 rm build/data/*.pstore
 cp LICENSE build/
 cp README.md build/
-rm data/pigeon_config.yml
+rm build/data/pigeon_config.yml
 echo 'Compiled pigeon.jar to build/'
 zip -r build/pigeon.zip build/
 rm build/pigeon.jar
