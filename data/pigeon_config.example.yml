@@ -1,0 +1,41 @@
+# use_config defines whether this config date should be used.
+# It is either set to true or false.
+# When set to false, the bot assumes that you have set up
+# The necessary credentials via ENV variables.
+# In case ENV variables are assigned and this flag is set to true
+# The values of this file will be used.
+# Example:
+#   useconfig: true
+#   will use this config definitions
+use_config: true
+
+# Username of the Server Query Admin account.
+# By default this is superadmin
+prod_user: i_am_some_superuser
+
+# Password of the Server Query Admin account.
+# This password is shown on the first time you startup your
+# TS3 server.
+prod_password: this_is_for_sure_the_qsa_pw
+
+# A string allowing to identify trustworthy foreign messages
+# Received by the Bot's external Request Listener
+# Every message send by an external service should contain
+# A SHA1 encrypted version of this secret
+# Example:
+#   prod_secret: pigeon
+#   will use the secret pigeon
+prod_secret: da_real_pigeon_secret
+
+# IP address of the production server that our bot wants connect onto.
+# Example:
+#   prod_ip: 127.0.0.1
+#   will use localhost as the server ip.
+prod_ip: 123.234.345.456
+
+# Port of the Server Query Admin
+prod_port: 10011
+
+# Absoulte path to the locally hosted TS3 server the bot should connect to
+# this is not required. You can then set any value to this field.
+server_path: ~/servers/teamspeak3-server_mac/

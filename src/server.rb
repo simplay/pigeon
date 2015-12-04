@@ -51,6 +51,7 @@ class Server
 
   # @param config [ServerConfig]
   def initialize(config)
+    before_start_up
     @query = TS3Query.new(config.data)
   end
 
@@ -59,9 +60,10 @@ class Server
     begin
       @query.connect
     rescue Exception => e
-      puts "#{e}. Could not connect to Teamspeak server. No server is running."
+      puts "#{e}. Could not connect to Teamspeak server. No server is running or you provided incorrect login data in your config/ENV vars."
       exit(1)
     end
+
     @api = @query.get_api
     @api.select_virtual_server_by_id(1)
     $has_sort_values = Server.groups.values.any? do |group|
@@ -79,6 +81,29 @@ class Server
   # Get remote api to this server.
   def api
     @api
+  end
+
+  def before_start_up
+    begin
+      handle_config_setup
+    rescue Exception => e
+      puts e.to_s
+      generate_config
+      abort("Program has terminated")
+    end
+  end
+
+  private
+
+  def generate_config
+      Settings.generate_config
+      puts "Generated default config '#{Settings::CONFIG_FILE_PATH}'."
+      puts "Please fill in the corresponding credentials."
+      fname_path = Settings::CONFIG_FILE_PATH
+  end
+
+  def handle_config_setup
+    raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars were found." unless Settings.usable?
   end
 
 end

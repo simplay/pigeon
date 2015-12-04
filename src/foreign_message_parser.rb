@@ -28,7 +28,7 @@ class ForeignMessageParser
   #   "{"header":"MYHEADER","secret":"SOMEFANCYKEY","content":"MESSAGE"}"
   def initialize(input_msg)
     @input_msg = input_msg
-    @passphrase = to_sha1(ENV['P_SECRET'])
+    @passphrase = to_sha1(Settings.secret)
     parse
   end
 
