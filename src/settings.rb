@@ -66,26 +66,57 @@ class Settings
     instance.secret
   end
 
+  # The username of the Server Query Admin client.
+  #
+  # @info: Used to establish a Server Query Admin connection.
+  #   This username is shown during the first time you startup your
+  #   teamspeak3 server. By default it is 'serveradmin'.
   def prod_user
     guarded_config_env_value('prod_user', 'P_USER')
   end
 
+  # The password of the Server Query Admin client.
+  #
+  # @info: Used to establish a Server Query Admin connection.
+  #   This password is shown during the first time you startup your
+  #   teamspeak3 server.
   def prod_password
     guarded_config_env_value('prod_password', 'P_PASSWORD')
   end
 
+  # The port the teamspeak 3 server is running at.
+  #
+  # @info: When hosting this server locally, usually the
+  #   port 127.0.0.1 is used.
   def prod_ip
     guarded_config_env_value('prod_ip', 'P_IP_ADDRESS')
   end
 
+  # The port the teamspeak 3 server is listening to.
+  #
+  # @info: By port we mean the Server Query Admin port.
+  #   The default port for every TS3 server is 10011.
+  # @return [String] an integer value casted to its string version.
   def prod_port
     guarded_config_env_value('prod_port', 'P_PORT')
   end
 
+  # The absolute path a locally hosted server is located at.
+  #
+  # @return [String] absolute path where server startup script is located
   def server_path
     guarded_config_env_value('server_path', 'P_SERVER_PATH')
   end
 
+  # Returns the Pigeon secret.
+  #
+  # @info: Info is used by the ForeignMessageParser to check whether a received
+  #   foreign message is trustworthy. This secret is defined by the server admin.
+  #   Basically, any password if interest can be chosen. However, all corresponding
+  #   external services have to use a SHA1 encrypted version of that secret
+  #   when sending pigeon a message onto its RequestListener.
+  #
+  # @return [String] a token defining a trustworthy pigeon message.
   def secret
     guarded_config_env_value('prod_secret', 'P_SECRET')
   end

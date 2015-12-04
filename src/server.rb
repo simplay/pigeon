@@ -60,7 +60,7 @@ class Server
     begin
       @query.connect
     rescue Exception => e
-      puts "#{e}. Could not connect to Teamspeak server. No server is running."
+      puts "#{e}. Could not connect to Teamspeak server. No server is running or you provided incorrect login data in your config/ENV vars."
       exit(1)
     end
 
