@@ -51,6 +51,7 @@ class Server
 
   # @param config [ServerConfig]
   def initialize(config)
+    before_start_up
     @query = TS3Query.new(config.data)
   end
 
@@ -82,10 +83,26 @@ class Server
     @api
   end
 
+  def before_start_up
+    begin
+      handle_config_setup
+    rescue Exception => e
+      puts e.to_s
+      generate_config
+      exit(1)
+
+    end
+  end
+
   private
 
+  def generate_config
+      puts "Generated config 'data/pigeon_config.yml'. Please fill in the corresponding credentials."
+
+  end
+
   def handle_config_setup
-    raise "No config #{Settings::CONFIG_FILE_PATH} found." unless Settings.exist?
+    raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars found." unless Settings.usable?
   end
 
 end

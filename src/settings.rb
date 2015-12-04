@@ -1,5 +1,10 @@
 require 'yaml'
 
+# Settings contains all relevant Pigeon runtime parameters,
+# such as server credentials or some secrets defined as tokens.
+# Setting values can either be specified via a config file,
+# that is supposed to be located at '#{CONFIG_FILE_PATH}' or
+# by defining the corresponding ENV variables.
 class Settings
 
   CONFIG_FILE_PATH = "data/pigeon_config.yml"
@@ -8,8 +13,16 @@ class Settings
     @instance ||= Settings.new
   end
 
-  def self.exist?
+  def self.usable?
+    instance.usable?
+  end
+
+  def self.config_exist?
     instance.exist?
+  end
+
+  def self.env_vars_set?
+    instance.env_vars_set?
   end
 
   def self.use_config_credentials?
@@ -40,11 +53,6 @@ class Settings
     instance.secret
   end
 
-  def use_config_credentials?
-    return false unless exist?
-    @config.fetch('use_config')
-  end
-
   def prod_user
     guarded_config_env_value('prod_user', 'P_USER')
   end
@@ -69,8 +77,40 @@ class Settings
     guarded_config_env_value('prod_secret', 'P_SECRET')
   end
 
-  def exist?
+  # Checks whether the settings are valid and thus usable.
+  #
+  # @info: Settings are usable if either a valid config file could be read
+  #   or all corresponding ENV vars are specified.
+  # @return [Boolean] true if we can use the Settings otherwise false.
+  def usable?
+    config_exist? or env_vars_set?
+  end
+
+  # Checks whether a config file '#{CONFIG_FILE_PATH}' exists.
+  def config_exist?
     @does_config_exist
+  end
+
+  # Checks whether all required ENV variables are specified.
+  def env_vars_set?
+    env_var_ids = [
+      'P_USER',
+      'P_PASSWORD',
+      'P_IP_ADDRESS',
+      'P_PORT',
+      'P_SERVER_PATH',
+      'P_SECRET'
+    ]
+    env_var_ids.all? { |env_id| !ENV[env_id].nil? }
+  end
+
+  # Checks whehter we should use the config file given the config file.
+  #
+  # @info: It is possible to diable using the config by the config itself
+  #   by setting the attribute 'use_config' equals false.
+  def use_config_credentials?
+    return false unless config_exist?
+    @config.fetch('use_config')
   end
 
   protected
@@ -100,7 +140,7 @@ class Settings
   # Load the pigeon config file in case it exists.
   def initialize
     @does_config_exist = File.exists? CONFIG_FILE_PATH
-    @config = YAML.load_file(CONFIG_FILE_PATH) if exist?
+    @config = YAML.load_file(CONFIG_FILE_PATH) if config_exist?
   end
 
 end
