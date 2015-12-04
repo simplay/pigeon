@@ -1,4 +1,6 @@
 # Linked Datastructure to concatinate text blocks
+# Every text element managed, edited or created by the bot
+# is supposed to be a TextBlock
 #
 # @example
 #   t = TextBlock.new("foo")
@@ -51,7 +53,7 @@ end
 # @example
 #   TextLink.new("www.google.coom").to_s
 #   #=> "[URL]www.google.coom[/URL]"
-class TextLink < TextBlock
+class LinkText < TextBlock
 
   def parse(message)
     "[URL]#{message}[\/URL]"
@@ -59,10 +61,32 @@ class TextLink < TextBlock
 
 end
 
+class ListText < TextBlock
+  def parse(message)
+    return process_item(message) if message.is_a?(String)
+    (message.count > 1) ? process_list(message) : process_item(message)
+  end
+
+  protected
+
+  def process_list(msgs)
+    list_ites = msgs.map do |msg|
+      "[*]#{msg}"
+    end
+    "[list]#{list}[\/list]"
+  end
+
+  def process_item(msg)
+    "[list][*]#{msg}[\/list]"
+  end
+
+
+end
+
 # @example
 #   LabeledTextLink.new("www.google.coom", "foobar").to_s
 #   #=> "foobar: [URL]www.google.coom[/URL]"
-class LabeledTextLink < TextLink
+class LabeledLinkText < LinkText
   def initialize(content, header, delimiter=":")
     @header = BoldText.new(header).to_s
     @delimiter = delimiter

@@ -144,12 +144,12 @@ class Bot
   # all client that are currently in this channel.
   #
   # @info: An url message is parsed as a clickable-hyperlink
-  # @param msg [String] message that should be broadcasted
+  # @param msg [String, TextBlock] message that should be broadcasted
   #   into the current channel.
   # @param is_url [Boolean] should message interpreted as an url?
   def say_in_current_channel(msg, is_url=false)
-    msg = "[URL]#{msg}[\/URL]" if is_url
-    api.send_channel_message(msg)
+    msg = (!is_url) ? TextBlock.new(msg) : LinkText.new(msg)
+    api.send_channel_message(msg.to_s)
   end
 
   # Send a poke message to a target user.
@@ -176,11 +176,12 @@ class Bot
   # @info: Private means that a separate chat-tab
   #   between pigeon and the user is opened in which
   #   all messages are send to.
+  #
   # @param user [User] the user we want to send a private message.
-  # @param msg [String] private message that is sent to user.
+  # @param msg [String, TextBlock] private message that is sent to user.
   def say_as_private(user, msg, is_url=false)
-    msg = "[URL]#{msg}[\/URL]" if is_url
-    api.send_private_message(user.id, msg)
+    msg = LinkText.new(msg) if is_url
+    api.send_private_message(user.id, msg.to_s)
   end
 
   # Send an offline message to a target user.

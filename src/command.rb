@@ -129,9 +129,17 @@ class Command
       description = CommandDescription.parse(cmd)
       "!#{cmd.to_s} #{description} \n"
     end
-    msg_count = help_msgs.length
-    @bot.say_as_private(sender, "[1/2] " + header + help_msgs.first(5).join)
-    @bot.say_as_private(sender, "[2/2] " + header + help_msgs.last(msg_count-5).join)
+
+    splits = help_msgs.each_slice(5).to_a
+    linked_splits = splits.map do |split|
+      split.inject(TextBlock.new("")) do |concat, item|
+        concat.append_successor(ListText.new(item))
+      end
+    end
+    msg_count = linked_splits.length
+    linked_splits.each_with_index do |split, idx|
+      @bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + linked_splits.to_s)
+    end
   end
 
   def self.leave_server
