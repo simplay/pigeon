@@ -78,6 +78,6 @@ class UrlStore
   end
 
   def store
-    @store ||= PStore.new('urls.pstore')
+    @store ||= PStore.new('data/urls.pstore')
   end
 end
