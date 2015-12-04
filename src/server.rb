@@ -89,20 +89,21 @@ class Server
     rescue Exception => e
       puts e.to_s
       generate_config
-      exit(1)
-
+      abort("Program has terminated")
     end
   end
 
   private
 
   def generate_config
-      puts "Generated config 'data/pigeon_config.yml'. Please fill in the corresponding credentials."
-
+      Settings.generate_config
+      puts "Generated default config '#{Settings::CONFIG_FILE_PATH}'."
+      puts "Please fill in the corresponding credentials."
+      fname_path = Settings::CONFIG_FILE_PATH
   end
 
   def handle_config_setup
-    raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars found." unless Settings.usable?
+    raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars were found." unless Settings.usable?
   end
 
 end

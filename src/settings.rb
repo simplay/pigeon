@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils'
 
 # Settings contains all relevant Pigeon runtime parameters,
 # such as server credentials or some secrets defined as tokens.
@@ -11,6 +12,18 @@ class Settings
 
   def self.instance
     @instance ||= Settings.new
+  end
+
+  def self.config_file_path
+    CONFIG_FILE_PATH
+  end
+
+  # Generates a new config file '#{CONFIG_FILE_PATH}'.
+  # @info: invoked if a config file is expected but none does exist.
+  #   Copy the example config file 'data/pigeon_config.example.yml' and
+  #   rename it to 'data/pigeon_config.yml'.
+  def self.generate_config
+    FileUtils.cp("data/pigeon_config.example.yml", CONFIG_FILE_PATH)
   end
 
   def self.usable?
@@ -124,8 +137,15 @@ class Settings
   #   guarded_config_env_value('prod_port', 'P_PORT')
   #   # => "10011" # default ts3 server query admin port.
   #
+  #   guarded_config_env_value('prod_port', 'P_FOOBAR')
+  #   # => "ENV variable 'P_FOOBAR' not specified."
+  #
   # @info: the pigeon config 'pigeon_config.yml' is located in 'data/'
   #   and the ENV variables are supposed to be defined in a user's bash profile.
+  #
+  # @raises: Exception
+  #   No value could be fetched, report which setting or ENV variable could not
+  #   be retrieved.
   #
   # @param config_id [String] identifier of target config parameter
   # @param env_id [String] identifier of target ENV variable.
@@ -133,8 +153,14 @@ class Settings
   #   in case in neither the setting nor an ENV variable contains
   #   and appropriate value.
   def guarded_config_env_value(config_id, env_id)
-    use_config_credentials? ? @config.fetch(config_id)
-                            : ENV[env_id]
+    param = use_config_credentials? ? @config.fetch(config_id)
+                                    : ENV[env_id]
+    if param.nil?
+      error_msg = use_config_credentials? ? "Config param '#{config_id}'"
+                                          : "ENV variable '#{env_id}'"
+      raise "#{error_msg} not specified."
+    end
+    param
   end
 
   # Load the pigeon config file in case it exists.
