@@ -17,7 +17,8 @@ end
 desc 'Start the test ts3 server'
 command :server do |c|
   c.action do
-    system "cd #{ENV['P_SERVER_PATH']} && ./ts3server_mac"
+    require './pigeon'
+    system "cd #{Settings.server_path} && ./ts3server_mac"
   end
 end
 
