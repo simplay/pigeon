@@ -1,12 +1,10 @@
 $LOAD_PATH << '.'
 $LOAD_PATH << File.expand_path('../src', __FILE__)
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
-
 require 'java'
 require 'teamspeak3-api-1.0.12.jar'
 require 'cleverbot.jar'
 
-require 'settings'
 require 'url_store'
 require 'url_extractor'
 require 'bot'
@@ -29,4 +27,5 @@ require 'event'
 require 'chatbot_factory'
 require 'timed_task'
 require 'periodic_task'
-require 'text_block'
+config = ServerConfig.new
+Bot.new(config, "Sir Pigeon").start

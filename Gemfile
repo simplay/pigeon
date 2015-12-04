@@ -10,3 +10,5 @@ end
 group :test do
   gem 'minitest'
 end
+
+gem 'rawr'

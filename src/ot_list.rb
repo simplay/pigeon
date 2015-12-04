@@ -132,7 +132,7 @@ class OtList
 
   # File containing the ot list db.
   def store
-    @file_db ||= PStore.new('ot_list.pstore')
+    @file_db ||= PStore.new('data/ot_list.pstore')
   end
 
 end

@@ -35,9 +35,9 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 
 ## Installation
 
-1. Clone this repository.
+1 . Clone this repository.
 
-2. Define the following environment variables (e.g. in your `.bash_profile` file):
+2 . Define the following environment variables (e.g. in your `.bash_profile` file):
 
   ```bash
   export P_USER="YOUR_TS3_ADMIN_QUERY_USER_NAME"
@@ -45,10 +45,14 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
   export P_IP_ADDRESS="YOUR_TS3_IP_ADDRESS"
   export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
   export P_SECRET="YOUR_SOCKET_PASSPHRASE"
+  export P_SERVER_PATH="PATH_TO_YOUR_LOCAL_SERVER"
   ```
-3. Install the bundler gem via `gem install bundler`.
 
-4. Install all relevant dependencies by running `bundle`.
+or by setting up a pigeon config file. For doing so perform `cp data/pigeon_config.example.yml data/pigeon_config.yml` and specify the corresponding runtime parameters.
+
+3 . Install the bundler gem via `gem install bundler`.
+
+4 . Install all relevant dependencies by running `bundle`.
 
 ## Running
 

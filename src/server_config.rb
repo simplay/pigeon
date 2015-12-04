@@ -6,10 +6,10 @@ class ServerConfig
   def initialize
     @config = TS3Config.new
     @config.setDebugLevel(Level::ALL)
-    @config.setHost(ENV['P_IP_ADDRESS'])
+    @config.setHost(Settings.prod_ip)
     @config.setCommandTimeout(1000)
-    @config.setQueryPort(ENV['P_PORT'].to_i)
-    @config.setLoginCredentials(ENV['P_USER'], ENV['P_PASSWORD']);
+    @config.setQueryPort(Settings.prod_port.to_i)
+    @config.setLoginCredentials(Settings.prod_user, Settings.prod_password);
   end
 
   # @return [TS3Config] a config to establish a connection to a ts3 server.

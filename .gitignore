@@ -5,3 +5,8 @@ logs
 *.sqlitedb
 test/test_server_credentials.yml
 test/server/
+src/org/*
+lib/java/*
+package/
+build/*
+data/pigeon_config.yml
