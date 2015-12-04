@@ -33,11 +33,13 @@ class Command
   # This channel can be used for sending commands to the bot.
   def self.subscribe_to_ot_list
     OtList.append(Command.sender)
+    @bot.say_as_private(Command.sender, "Successfully subscribed - yay, friends forever.")
   end
 
   # Unsubscribes command caller from the ot list.
   def self.unsubscribe_from_ot_list
     OtList.remove(Command.sender)
+    @bot.say_as_private(Command.sender, "Unsubscribed: Hope, I'm gonna see you soon again. QQ")
   end
 
   # Send a message to cleverbot
