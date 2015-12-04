@@ -46,33 +46,27 @@ class Settings
   end
 
   def prod_user
-    use_config_credentials? ? @config.fetch('prod_user')
-                            : ENV['P_USER']
+    guarded_config_env_value('prod_user', 'P_USER')
   end
 
   def prod_password
-    use_config_credentials? ? @config.fetch('prod_password')
-                            : ENV['P_PASSWORD']
+    guarded_config_env_value('prod_password', 'P_PASSWORD')
   end
 
   def prod_ip
-    use_config_credentials? ? @config.fetch('prod_ip')
-                            : ENV['P_IP_ADDRESS']
+    guarded_config_env_value('prod_ip', 'P_IP_ADDRESS')
   end
 
   def prod_port
-    use_config_credentials? ? @config.fetch('prod_port')
-                            : ENV['P_PORT']
+    guarded_config_env_value('prod_port', 'P_PORT')
   end
 
   def server_path
-    use_config_credentials? ? @config.fetch('server_path')
-                            : ENV['P_SERVER_PATH']
+    guarded_config_env_value('server_path', 'P_SERVER_PATH')
   end
 
   def secret
-    use_config_credentials? ? @config.fetch('prod_secret')
-                            : ENV['P_SECRET']
+    guarded_config_env_value('prod_secret', 'P_SECRET')
   end
 
   def exist?
@@ -81,6 +75,29 @@ class Settings
 
   protected
 
+  # Obtain the guarded Setting value from either 'pigeon_config.yml' or from the
+  # ENV variables. Guarded means, we try to use the config values if a config file exists
+  # and the option 'use_config' is set to true. Otherwise we assume that the setting
+  # value is defined in an appropriate ENV variable.
+  #
+  # @example
+  #   guarded_config_env_value('prod_port', 'P_PORT')
+  #   # => "10011" # default ts3 server query admin port.
+  #
+  # @info: the pigeon config 'pigeon_config.yml' is located in 'data/'
+  #   and the ENV variables are supposed to be defined in a user's bash profile.
+  #
+  # @param config_id [String] identifier of target config parameter
+  # @param env_id [String] identifier of target ENV variable.
+  # @return [String, nil] Corresponding Setting value. Can be nil
+  #   in case in neither the setting nor an ENV variable contains
+  #   and appropriate value.
+  def guarded_config_env_value(config_id, env_id)
+    use_config_credentials? ? @config.fetch(config_id)
+                            : ENV[env_id]
+  end
+
+  # Load the pigeon config file in case it exists.
   def initialize
     @does_config_exist = File.exists? CONFIG_FILE_PATH
     @config = YAML.load_file(CONFIG_FILE_PATH) if exist?
