@@ -41,6 +41,7 @@ class Settings
   end
 
   def use_config_credentials?
+    return false unless exist?
     @config.fetch('use_config')
   end
 
