@@ -62,6 +62,7 @@ class Server
       puts "#{e}. Could not connect to Teamspeak server. No server is running."
       exit(1)
     end
+
     @api = @query.get_api
     @api.select_virtual_server_by_id(1)
     $has_sort_values = Server.groups.values.any? do |group|
@@ -79,6 +80,12 @@ class Server
   # Get remote api to this server.
   def api
     @api
+  end
+
+  private
+
+  def handle_config_setup
+    raise "No config #{Settings::CONFIG_FILE_PATH} found." unless Settings.exist?
   end
 
 end

@@ -6,6 +6,7 @@ require 'java'
 require 'teamspeak3-api-1.0.12.jar'
 require 'cleverbot.jar'
 
+require 'settings'
 require 'url_store'
 require 'url_extractor'
 require 'bot'

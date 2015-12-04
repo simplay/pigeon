@@ -1,0 +1,7 @@
+use_config: true
+prod_user: i_am_some_superuser
+prod_password: this_is_for_sure_the_qsa_pw
+prod_secret: da_real_pigeon_secret
+prod_ip: 123.234.345.456
+prod_port: 10011
+server_path: ~/servers/teamspeak3-server_mac/
