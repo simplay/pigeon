@@ -61,7 +61,12 @@ class Mailbox
       newlined_msg = message.msg_content.split(";").map do |item|
         item + "\n"
       end
-      msg = "Playerlist:\n" + newlined_msg.join
+      layout = DescriptionLayout.new
+      layout.append_text(BoldText.new("Playerlist:"))
+      layout.append_text(ListText.new(newlined_msg)) unless newlined_msg.empty?
+      layout.append_text(BoldText.new("Additional Sources:\n"))
+      layout.append_text(LabeledLinkText.new("www.foobar.com", "dummy"))
+      msg = layout.merge.to_s
       Event.new("mss", {:channel_name => "Minecraft", :description => msg})
     else
       msg = "foobar: " + message.msg_content

@@ -93,7 +93,8 @@ class ListText < LinedText
   end
 
   def process_item(msg)
-    "[list][*]#{msg}[\/list]"
+    txt = (msg.count == 1)? msg.first : msg
+    "[list][*]#{txt}[\/list]"
   end
 
 end
