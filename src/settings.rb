@@ -36,7 +36,7 @@ class Settings
   end
 
   def self.config_exist?
-    instance.exist?
+    instance.config_exist?
   end
 
   def self.env_vars_set?
