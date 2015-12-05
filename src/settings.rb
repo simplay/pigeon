@@ -9,6 +9,7 @@ require 'fileutils'
 class Settings
 
   CONFIG_FILE_PATH = "data/pigeon_config.yml"
+  EXAMPLE_CONFIG_FILE_PATH = "data/pigeon_config.example.yml"
 
   def self.instance
     @instance ||= Settings.new
@@ -23,7 +24,11 @@ class Settings
   #   Copy the example config file 'data/pigeon_config.example.yml' and
   #   rename it to 'data/pigeon_config.yml'.
   def self.generate_config
-    FileUtils.cp("data/pigeon_config.example.yml", CONFIG_FILE_PATH)
+    if SystemInfo.running_on_windows?
+      File.rename(EXAMPLE_CONFIG_FILE_PATH, CONFIG_FILE_PATH)
+    else
+      FileUtils.cp(EXAMPLE_CONFIG_FILE_PATH, CONFIG_FILE_PATH)
+    end
   end
 
   def self.usable?

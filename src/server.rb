@@ -1,6 +1,7 @@
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
 java_import "com.github.theholywaffle.teamspeak3.api.event.TS3Listener"
+
 class Server
 
   # @param config [ServerConfig] minimal data to
@@ -51,7 +52,6 @@ class Server
 
   # @param config [ServerConfig]
   def initialize(config)
-    before_start_up
     @query = TS3Query.new(config.data)
   end
 
@@ -81,33 +81,6 @@ class Server
   # Get remote api to this server.
   def api
     @api
-  end
-
-  def before_start_up
-    begin
-      handle_config_setup
-    rescue Exception => e
-      puts e.to_s
-      generate_config
-      abort("Program has terminated")
-    end
-  end
-
-  private
-
-  def generate_config
-      Settings.generate_config
-      puts "Generated default config '#{Settings::CONFIG_FILE_PATH}'."
-      puts "Please fill in the corresponding credentials."
-      fname_path = Settings::CONFIG_FILE_PATH
-  end
-
-  def handle_config_setup
-    if SystemInfo.running_on_windows? and !Settings.config_exist?
-      raise "No config '#{Settings::CONFIG_FILE_PATH}' exists."
-    else
-      raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars were found." unless Settings.usable?
-    end
   end
 
 end
