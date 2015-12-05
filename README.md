@@ -56,6 +56,19 @@ or by setting up a pigeon config file. For doing so perform `cp data/pigeon_conf
 
 ## Running
 
+### From source
 ```bash
 ./pigeon start
 ```
+
+### Via compiled jar
+
+#### Windows
+
+1. Run `java -jar pigeon.jar`. When running the executable jar for the first time, a config file called `pigeon_config.yml`
+2. Got to `data/` and edit `pigeon_config.yml` with your editor of choice.
+
+#### Mac Os X and Linux
+
+Either define the corresponding the ENV vars defined above or run `java -jar pigeon.jar`. Running the jar for the first time will then generate a config file (if no ENV vars are specified).
+
