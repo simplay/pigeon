@@ -14,37 +14,37 @@ class SystemInfo
     @instance ||= SystemInfo.new
   end
 
-  # Does bofrev run on a mac?
+  # Does pigeon run on a mac?
   #
-  # @return [Boolean] true if bofrev is run on a mac os and false otherwise.
+  # @return [Boolean] true if pigeon is run on a mac os and false otherwise.
   def self.running_on_mac?
     singleton.os.include?('mac')
   end
 
-  # Does bofrev run on a windows os?
+  # Does pigeon run on a windows os?
   #
-  # @return [Boolean] true if bofrev is run on a windows os and false otherwise.
+  # @return [Boolean] true if pigeon is run on a windows os and false otherwise.
   def self.running_on_windows?
     singleton.os.include?('windows')
   end
 
-  # Does bofrev run on a linux os?
+  # Does pigeon run on a linux os?
   #
-  # @return [Boolean] true if bofrev is run on a linux os and false otherwise.
+  # @return [Boolean] true if pigeon is run on a linux os and false otherwise.
   def self.running_on_linux?
     singleton.os.include?('linux')
   end
 
-  # Is bofrev called by an exectuable jar?
+  # Is pigeon called by an exectuable jar?
   #
-  # @return [Boolean] true if bofrev is called by its exectuable jar and false otherwise.
+  # @return [Boolean] true if pigeon is called by its exectuable jar and false otherwise.
   def self.called_by_jar?
     singleton.caller == CALLER_JAR
   end
 
-  # Is bofrev called from a console?
+  # Is pigeon called from a console?
   #
-  # @return [Boolean] true if bofrev is called within the console and false otherwise.
+  # @return [Boolean] true if pigeon is called within the console and false otherwise.
   def self.called_by_console?
     singleton.caller == CALLER_CONSOLE
   end
