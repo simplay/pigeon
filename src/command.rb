@@ -132,13 +132,11 @@ class Command
 
     splits = help_msgs.each_slice(5).to_a
     linked_splits = splits.map do |split|
-      split.inject(TextBlock.new("")) do |concat, item|
-        concat.append_successor(ListText.new(item))
-      end
+      LinedText.new(split)
     end
-    msg_count = linked_splits.length
+    msg_count = linked_splits.count
     linked_splits.each_with_index do |split, idx|
-      @bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + linked_splits.to_s)
+      @bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + split.to_s + "\n")
     end
   end
 

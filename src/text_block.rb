@@ -13,7 +13,7 @@
 #
 class TextBlock
 
-  attr_accessor :predecessor
+  attr_accessor :predecessor, :successor
 
   def initialize(content)
     @content = parse(content)
@@ -61,7 +61,8 @@ class LinkText < TextBlock
 
 end
 
-class ListText < TextBlock
+class LinedText < TextBlock
+
   def parse(message)
     return process_item(message) if message.is_a?(String)
     (message.count > 1) ? process_list(message) : process_item(message)
@@ -70,16 +71,30 @@ class ListText < TextBlock
   protected
 
   def process_list(msgs)
-    list_ites = msgs.map do |msg|
+    list = msgs.map do |msg|
+      split_msg = msg.split(" ")
+      "#{BoldText.new(split_msg[0]).to_s} #{split_msg[1..-1].join(" ")}\n"
+    end
+    "#{list.join}"
+  end
+
+  def process_item(msg)
+    "#{msg}"
+  end
+end
+
+class ListText < LinedText
+
+  def process_list(msgs)
+    list = msgs.map do |msg|
       "[*]#{msg}"
     end
-    "[list]#{list}[\/list]"
+    "[list]\n#{list.join}[\/list]"
   end
 
   def process_item(msg)
     "[list][*]#{msg}[\/list]"
   end
-
 
 end
 
