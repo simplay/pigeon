@@ -103,7 +103,11 @@ class Server
   end
 
   def handle_config_setup
-    raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars were found." unless Settings.usable?
+    if SystemInfo.running_on_windows? and !Settings.config_exist?
+      raise "No config '#{Settings::CONFIG_FILE_PATH}' exists."
+    else
+      raise "Neither config '#{Settings::CONFIG_FILE_PATH}' nor ENV vars were found." unless Settings.usable?
+    end
   end
 
 end
