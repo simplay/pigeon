@@ -26,13 +26,7 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 + JRuby 9.0.1.0
 + Java 7
 + The Bundler gem
-+ A Teamspeak 3 server with query admin access. Please note that the following **Guest Server Goup** permissions have to be set like specified below in order to let the bot run properly:
-
- + `b_virtualserver_info_view 1`
- + `b_virtualserver_channel_list 1`
- + `b_virtualserver_client_list 1`
- + `b_virtualserver_servergroup_list 1`
- + `b_virtualserver_channelgroup 1`
++ A Teamspeak 3 server with query admin access.
 
 ## Installation
 

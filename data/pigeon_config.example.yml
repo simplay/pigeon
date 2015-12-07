@@ -10,7 +10,7 @@
 use_config: true
 
 # Username of the Server Query Admin account.
-# By default this is superadmin
+# By default this is serveradmin
 prod_user: i_am_some_superuser
 
 # Password of the Server Query Admin account.
