@@ -11,4 +11,4 @@ group :test do
   gem 'minitest'
 end
 
-gem 'rawr'
+gem 'rawr', :source => "http://gems.neurogami.com"

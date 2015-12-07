@@ -20,18 +20,13 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 + Show server stats of a linked minecraft server in real time.
 + Moves (automatically) idle players to an AFK channel
 + Prevent a user from being moved by assigning him to a special group.
++ Compiles to an executable jar that can be run on any platform which has java installed.
 
 ## Requirements
 + JRuby 9.0.1.0
 + Java 7
 + The Bundler gem
-+ A Teamspeak 3 server with query admin access. Please note that the following **Guest Server Goup** permissions have to be set like specified below in order to let the bot run properly:
-
- + `b_virtualserver_info_view 1`
- + `b_virtualserver_channel_list 1`
- + `b_virtualserver_client_list 1`
- + `b_virtualserver_servergroup_list 1`
- + `b_virtualserver_channelgroup 1`
++ A Teamspeak 3 server with query admin access.
 
 ## Installation
 
@@ -56,6 +51,19 @@ or by setting up a pigeon config file. For doing so perform `cp data/pigeon_conf
 
 ## Running
 
+### From source
 ```bash
 ./pigeon start
 ```
+
+### Via compiled jar
+
+#### Windows
+
+1. Run `java -jar pigeon.jar`. When running the executable jar for the first time, a config file called `pigeon_config.yml`
+2. Got to `data/` and edit `pigeon_config.yml` with your editor of choice.
+
+#### Mac Os X and Linux
+
+Either define the corresponding the ENV vars defined above or run `java -jar pigeon.jar`. Running the jar for the first time will then generate a config file (if no ENV vars are specified).
+

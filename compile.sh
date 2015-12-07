@@ -1,9 +1,13 @@
 echo 'Compiling Pigeon...'
 rawr install
+cp pigeon.rb start.rb
+echo "config = ServerConfig.new" >> start.rb
+echo "Bot.new(config, 'Sir Pigeon').start" >> start.rb
 rake rawr:jar
+rm start.rb
 mkdir build/lib
 cp package/jar/pigeon.jar build/
-cp -r lib build/
+cp -r lib/java/ build/lib/java/
 cp -r data build/
 rm build/data/*.pstore
 cp LICENSE build/
@@ -16,6 +20,5 @@ rm -rf build/lib
 rm -rf build/data
 rm build/LICENSE
 rm build/README.md
-rm build/start.rb
 rm -rf package/
 rm -rf src/org/

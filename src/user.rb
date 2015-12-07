@@ -5,7 +5,7 @@
 # E.g. the logic behing the '!ll' command.
 class User
 
-  attr_reader :id, :nick, :channel_id
+  attr_reader :id, :nick, :channel_id, :unique_id
 
   # Threshold time [seconds] a user may be not performing
   # any action before identified as being idle.
@@ -19,7 +19,7 @@ class User
   # @hint: Such a user yields false when invoking User#exists? on it.
   # @return [User] sentinel user.
   def self.nil_user
-    User.new(-1,"nil_user",[ServerGroup.nil_group],-1,true)
+    User.new(-1,"nil_user",[ServerGroup.nil_group],-1,"-1",true)
   end
 
   # List of all online users.
@@ -37,7 +37,7 @@ class User
       end
 
       permissions = ServerGroup.to_groups(groups_client_belongs_to)
-      User.new(client.get_id, client.get_nickname, permissions, client.get_channel_id)
+      User.new(client.get_id, client.get_nickname, permissions, client.get_channel_id, client.get_unique_identifier)
     end
   end
 
@@ -99,13 +99,17 @@ class User
 
   # @param id [Integer] corresponds to client id in ts3 db.
   # @param nick [String] corresponds to client nick name in ts3 db.
-  # @param lvls [Array<ServerGroup>] list of groups the user belongs to.
+  # @param permissions [Array<ServerGroup>] list of groups the user belongs to.
   #   ts3 permissions.
-  def initialize(id, nick, permissions, channel_id, is_nil_user=false)
+  # @param channel_id [Integer] channel id this user is currently located at.
+  # @param unique_id [String] unique client id present over ts3 installation.
+  # @param is_nil_user [Boolean] is this user a sentinel object.
+  def initialize(id, nick, permissions, channel_id, unique_id, is_nil_user=false)
     @id = id
     @nick = nick
     @levels = permissions
     @channel_id = channel_id
+    @unique_id = unique_id
     @is_nil_user = is_nil_user
   end
 

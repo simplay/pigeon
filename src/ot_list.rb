@@ -7,8 +7,8 @@ require 'pstore'
 # in memory list are updated accordingly.
 #
 # The ot db uses a user's id as the key.
-# Equality of users it checked by comparing their nicknames.
-# Therefore, by changing the nickname, the user cannot be retrieved in the db.
+# Equality of users it checked by comparing their unique id.
+# Therefore, changing the nickname, a user can be retrieved from the ot list db.
 #
 # @TODO: When a user changes his name (when logged in, update all lists accordingly).
 class OtList
@@ -16,10 +16,11 @@ class OtList
   # Helper class to define a simplified notion of user instances
   # that only repsond to their id and nickname attributes.
   class OtUser
-    attr_reader :id, :nick
-    def initialize(id, nick)
+    attr_reader :id, :nick, :unique_id
+    def initialize(id, nick, unique_id)
       @id = id
       @nick = nick
+      @unique_id = unique_id
     end
   end
 
@@ -53,7 +54,7 @@ class OtList
   def append(user)
     unless include?(user)
       u_id = user.id
-      ot_usr = OtUser.new(u_id, user.nick)
+      ot_usr = OtUser.new(u_id, user.nick, user.unique_id)
       @subscribers << ot_usr
       store.transaction do
         ot_list = store[u_id] ||= []
@@ -95,11 +96,11 @@ class OtList
 
   # Checks whether a given user is contained in the subscriber list.
   #
-  # @info: compares two users by their nickname value
-  # @param user [#nick] the user we want to check for.
+  # @info: compares two users by their unique user id
+  # @param user [#unique_id] the user we want to check for.
   def find(user)
     @subscribers.find do |subscriber|
-      subscriber.nick == user.nick
+      subscriber.unique_id == user.unique_id
     end
   end
 

@@ -33,7 +33,7 @@ configuration do |c|
 	# A list of regexps of files to exclude
 	# default value: []
 	#
-        # c.source_exclude_filter = []
+        c.source_exclude_filter = [/tags/, /logs/, /test/, /Gemfile/, /compile.sh/, /build_configuration.rb/, /data/, /pigeon/, /Rake/, /lib\/java/]
 
 	# The base directory that holds Mirah files, or subdirectories with Mirah files.
 	# default value: "src"

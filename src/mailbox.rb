@@ -3,7 +3,7 @@
 # Messages are parsed based on their header.
 class Mailbox
 
-  # Mailbo Singleton
+  # Mailbox Singleton
   def self.instance
     @instance ||= Mailbox.new
   end
