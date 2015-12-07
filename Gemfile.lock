@@ -1,5 +1,6 @@
 GEM
   remote: http://rubygems.org/
+  remote: http://gems.neurogami.com/
   specs:
     awesome_print (1.6.1)
     builder (3.2.2)
@@ -39,7 +40,7 @@ DEPENDENCIES
   gli
   minitest
   pry
-  rawr
+  rawr!
 
 BUNDLED WITH
    1.10.6
