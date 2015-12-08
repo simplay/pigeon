@@ -110,38 +110,41 @@ class Bootstrap
 
   def self.modify_permissions_normal_group
     ServerGroup.normal.each do |group|
-      skip if group.rank == 0
-      puts "Pigeon Info: Editing Normal group."
-      id = group.id
-      ServerGroup.edit_group_permission(id, "i_group_modify_power", 70)
-      ServerGroup.edit_group_permission(id, "i_group_needed_modify_power", 70)
-      ServerGroup.edit_group_permission(id, "i_group_member_add_power", 70)
-      ServerGroup.edit_group_permission(id, "i_group_needed_member_add_power", 70)
-      ServerGroup.edit_group_permission(id, "i_group_member_remove_power", 70)
-      ServerGroup.edit_group_permission(id, "i_group_needed_member_remove_power", 70)
-      ServerGroup.edit_group_permission(id, "i_permission_modify_power", 70)
-      ServerGroup.edit_group_permission(id, "b_group_is_permanent", 1)
-      ServerGroup.edit_group_permission(id, "i_group_sort_id", 10)
-      ServerGroup.edit_group_permission(id, "i_client_permission_modify_power", 71)
-      ServerGroup.edit_group_permission(id, "i_client_needed_permission_modify_power", 70)
+      if group.rank != 10
+        puts "Pigeon Info: Editing Normal group."
+        id = group.id
+        ServerGroup.edit_group_permission(id, "i_group_modify_power", 70)
+        ServerGroup.edit_group_permission(id, "i_group_needed_modify_power", 70)
+        ServerGroup.edit_group_permission(id, "i_group_member_add_power", 70)
+        ServerGroup.edit_group_permission(id, "i_group_needed_member_add_power", 70)
+        ServerGroup.edit_group_permission(id, "i_group_member_remove_power", 70)
+        ServerGroup.edit_group_permission(id, "i_group_needed_member_remove_power", 70)
+        ServerGroup.edit_group_permission(id, "i_permission_modify_power", 70)
+        ServerGroup.edit_group_permission(id, "b_group_is_permanent", 1)
+        ServerGroup.edit_group_permission(id, "i_group_sort_id", 10)
+        ServerGroup.edit_group_permission(id, "i_client_permission_modify_power", 71)
+        ServerGroup.edit_group_permission(id, "i_client_needed_permission_modify_power", 70)
+      end
     end
   end
 
   def self.modify_permissions_server_admin_group
     ServerGroup.server_admin.each do |group|
-      skip if group.rank == 0
-      puts "Pigeon Info: Server Admin group."
-      id = group.id
-      ServerGroup.edit_group_permission(id, "i_group_sort_id", 1)
+      if group.rank != 1
+        puts "Pigeon Info: Server Admin group."
+        id = group.id
+        ServerGroup.edit_group_permission(id, "i_group_sort_id", 1)
+      end
     end
   end
 
   def self.modify_permissions_server_guest_group
     ServerGroup.guest.each do |group|
-      skip if group.rank == 0
-      puts "Pigeon Info: Editing Guest group."
-      id = group.id
-      ServerGroup.edit_group_permission(id, "i_group_sort_id", 200)
+      if group.rank != 300
+        puts "Pigeon Info: Editing Guest group."
+        id = group.id
+        ServerGroup.edit_group_permission(id, "i_group_sort_id", 300)
+      end
     end
   end
 
