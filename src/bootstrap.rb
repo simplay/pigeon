@@ -4,6 +4,7 @@ class Bootstrap
     generate_groups
     update_default_group_permissions
     generate_channels
+    ServerGroup.update
   end
 
   def self.generate_groups
@@ -17,8 +18,9 @@ class Bootstrap
   end
 
   def self.generate_superuser_group
-    return unless ServerGroup.find_by_name("Superuser").empty?
     id = ServerGroup.create("Superuser")
+    return if id == -1
+    puts "Pigeon Info: Creating Superuser group."
     ServerGroup.edit_group_permission(id, "b_virtualserver_info_view", 1)
     ServerGroup.edit_group_permission(id, "b_virtualserver_connectioninfo_view", 1)
     ServerGroup.edit_group_permission(id, "b_virtualserver_channel_list", 1)
@@ -84,8 +86,9 @@ class Bootstrap
   end
 
   def self.generate_pigeon_group
-    return unless ServerGroup.find_by_name("Pigeonator").empty?
     id = ServerGroup.create("Pigeonator")
+    return if id == -1
+    puts "Pigeon Info: Creating Pigeonator group."
     ServerGroup.edit_group_permission(id, "i_group_modify_power", 72)
     ServerGroup.edit_group_permission(id, "i_group_needed_modify_power", 72, true)
     ServerGroup.edit_group_permission(id, "i_group_member_add_power", 72)
@@ -106,28 +109,40 @@ class Bootstrap
   end
 
   def self.modify_permissions_normal_group
-    id = ServerGroup.normal.first.id
-    ServerGroup.edit_group_permission(id, "i_group_modify_power", 70)
-    ServerGroup.edit_group_permission(id, "i_group_needed_modify_power", 70)
-    ServerGroup.edit_group_permission(id, "i_group_member_add_power", 70)
-    ServerGroup.edit_group_permission(id, "i_group_needed_member_add_power", 70)
-    ServerGroup.edit_group_permission(id, "i_group_member_remove_power", 70)
-    ServerGroup.edit_group_permission(id, "i_group_needed_member_remove_power", 70)
-    ServerGroup.edit_group_permission(id, "i_permission_modify_power", 70)
-    ServerGroup.edit_group_permission(id, "b_group_is_permanent", 1)
-    ServerGroup.edit_group_permission(id, "i_group_sort_id", 10)
-    ServerGroup.edit_group_permission(id, "i_client_permission_modify_power", 71)
-    ServerGroup.edit_group_permission(id, "i_client_needed_permission_modify_power", 70)
+    ServerGroup.normal.each do |group|
+      skip if group.rank == 0
+      puts "Pigeon Info: Editing Normal group."
+      id = group.id
+      ServerGroup.edit_group_permission(id, "i_group_modify_power", 70)
+      ServerGroup.edit_group_permission(id, "i_group_needed_modify_power", 70)
+      ServerGroup.edit_group_permission(id, "i_group_member_add_power", 70)
+      ServerGroup.edit_group_permission(id, "i_group_needed_member_add_power", 70)
+      ServerGroup.edit_group_permission(id, "i_group_member_remove_power", 70)
+      ServerGroup.edit_group_permission(id, "i_group_needed_member_remove_power", 70)
+      ServerGroup.edit_group_permission(id, "i_permission_modify_power", 70)
+      ServerGroup.edit_group_permission(id, "b_group_is_permanent", 1)
+      ServerGroup.edit_group_permission(id, "i_group_sort_id", 10)
+      ServerGroup.edit_group_permission(id, "i_client_permission_modify_power", 71)
+      ServerGroup.edit_group_permission(id, "i_client_needed_permission_modify_power", 70)
+    end
   end
 
   def self.modify_permissions_server_admin_group
-    id = ServerGroup.server_admin.first.id
-    ServerGroup.edit_group_permission(id, "i_group_sort_id", 1)
+    ServerGroup.server_admin.each do |group|
+      skip if group.rank == 0
+      puts "Pigeon Info: Server Admin group."
+      id = group.id
+      ServerGroup.edit_group_permission(id, "i_group_sort_id", 1)
+    end
   end
 
   def self.modify_permissions_server_guest_group
-    id = ServerGroup.guest.first.id
-    ServerGroup.edit_group_permission(id, "i_group_sort_id", 200)
+    ServerGroup.guest.each do |group|
+      skip if group.rank == 0
+      puts "Pigeon Info: Editing Guest group."
+      id = group.id
+      ServerGroup.edit_group_permission(id, "i_group_sort_id", 200)
+    end
   end
 
 end

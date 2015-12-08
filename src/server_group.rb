@@ -21,6 +21,10 @@ class ServerGroup
     @all ||= fetch_groups
   end
 
+  def self.update
+    @all = fetch_groups
+  end
+
   def self.create(name)
     @bot.api.add_server_group(name, PermissionGroupDatabaseType::REGULAR)
   end
