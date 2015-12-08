@@ -161,11 +161,10 @@ class Settings
   #
   # @info: Bootstrapping is run if only env vars are set
   #   or the pigeon config is set to true.
-  #   Will only not be run if it is set as false in the config or
-  #   we marked the config as not being used.
+  #   Will only not be run if it is set as false in the config.
   def run_bootstrapping?
     return true unless env_vars_set?
-    @config.fetch('run_bootstrapping') and use_config_credentials?
+    @config.fetch('run_bootstrapping')
   end
 
   # Checks whehter we should use the config file given the config file.
