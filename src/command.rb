@@ -30,9 +30,9 @@ class Command
 
   def self.append_description_link(msg)
     id = ("mc_"+msg[0]).to_sym
-    link = LabeledLinkText.new(msg[2], msg[1])
+    raw_content = msg[2].gsub(/\[(\/)*URL\]/, "")
+    link = LabeledLinkText.new(content, msg[1])
     DescriptionLinkStore.write(link, id)
-    Mailbox.notify_all_with("mss")
   end
 
   # Subscribes the command caller to pigeon's ot list.
