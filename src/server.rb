@@ -66,6 +66,7 @@ class Server
 
     @api = @query.get_api
     @api.select_virtual_server_by_id(1)
+    Bootstrap.start
     $has_sort_values = Server.groups.values.any? do |group|
       group[1] > 0
     end

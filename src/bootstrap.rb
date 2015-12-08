@@ -3,11 +3,17 @@ class Bootstrap
   def self.start
     generate_groups
     update_default_group_permissions
+    generate_channels
   end
 
   def self.generate_groups
     generate_superuser_group
     generate_pigeon_group
+  end
+
+  def self.generate_channels
+    Channel.create("Minecraft", '0') unless Channel.exist?("Minecraft")
+    Channel.create("AFK") unless Channel.exist?("AFK")
   end
 
   def self.generate_superuser_group
