@@ -15,6 +15,7 @@ class Command
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
       :cb => Command.new(ServerGroup.normal) { |msg| say_to_cleverbot(msg) },
       :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
+      :adl => Command.new(ServerGroup.normal) { |msg| append_description_link(msg) },
       :h => Command.new { help }
     }
   end
@@ -25,6 +26,13 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  def self.append_description_link(msg)
+    id = ("mc_"+msg[0]).to_sym
+    link = LabeledLinkText.new(msg[2], msg[1])
+    DescriptionLinkStore.write(link, id)
+    Mailbox.notify_all_with("mss")
   end
 
   # Subscribes the command caller to pigeon's ot list.
