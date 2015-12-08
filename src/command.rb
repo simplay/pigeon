@@ -15,7 +15,8 @@ class Command
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
       :cb => Command.new(ServerGroup.normal) { |msg| say_to_cleverbot(msg) },
       :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
-      :h => Command.new { help }
+      :h => Command.new { help },
+      :debug => Command.new { debug }
     }
   end
 
@@ -25,6 +26,10 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  def self.debug
+    Bootstrap.start
   end
 
   # Subscribes the command caller to pigeon's ot list.

@@ -1,6 +1,13 @@
 class Channel
   attr_reader :id, :name
 
+  # Remember running pigeon bot instance.
+  #
+  # @param bot [Bot] running Pigeon instance listening to clients on server.
+  def self.prepare(bot)
+    @bot ||= bot
+  end
+
   def self.all
     Server.channels
   end
@@ -15,6 +22,12 @@ class Channel
   def initialize(id, name)
     @id = id
     @name = name
+  end
+
+  # @param name [String] name of new created channel
+  # @param options [Map<ChannelProperty, String>] containing channel options.
+  def self.create(name, options={})
+    @bot.api.create_channel(name, options)
   end
 
 end

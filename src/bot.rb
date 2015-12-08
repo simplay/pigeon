@@ -53,6 +53,8 @@ class Bot
   def start
     unless started?
       Command.prepare(self)
+      Channel.prepare(self)
+      ServerGroup.prepare(self)
       @is_started = true
       Server.start
       api.set_nickname(@name)
