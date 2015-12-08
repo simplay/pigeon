@@ -31,7 +31,7 @@ class Command
   def self.append_description_link(msg)
     id = ("mc_"+msg[0]).to_sym
     raw_content = msg[2].gsub(/\[(\/)*URL\]/, "")
-    link = LabeledLinkText.new(content, msg[1])
+    link = LabeledLinkText.new(raw_content, msg[1])
     DescriptionLinkStore.write(link, id)
   end
 
