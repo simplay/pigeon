@@ -39,3 +39,9 @@ prod_port: 10011
 # Absoulte path to the locally hosted TS3 server the bot should connect to
 # this is not required. You can then set any value to this field.
 server_path: ~/servers/teamspeak3-server_mac/
+
+# Should a bootstrapping step be run
+# Will define default server groups with default permissions
+# called Superadmin and Pigeonator plus the bot will on startup create
+# the channels Minecraft and AFK.
+run_bootstrapping: false

@@ -47,6 +47,10 @@ class Settings
     instance.use_config_credentials?
   end
 
+  def self.run_bootstrapping?
+    instance.run_bootstrapping?
+  end
+
   def self.prod_user
     instance.prod_user
   end
@@ -151,6 +155,16 @@ class Settings
       'P_SECRET'
     ]
     env_var_ids.all? { |env_id| !ENV[env_id].nil? }
+  end
+
+  # Should we bootstrap the target ts3 server on pigeon's startup?
+  #
+  # @info: Bootstrapping is run if only env vars are set
+  #   or the pigeon config is set to true.
+  #   Will only not be run if it is set as false in the config.
+  def run_bootstrapping?
+    return true unless env_vars_set?
+    @config.fetch('run_bootstrapping')
   end
 
   # Checks whehter we should use the config file given the config file.
