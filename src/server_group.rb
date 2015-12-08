@@ -1,3 +1,5 @@
+java_import 'com.github.theholywaffle.teamspeak3.api.PermissionGroupDatabaseType'
+
 # @info: TS3 convention: Lower level values mean higher permission levels.
 #   This means that a low level value corresponds to a very priviliged user
 #   and a high user level corresponds to a low user level
@@ -8,8 +10,37 @@ class ServerGroup
 
   include Comparable
 
+  # Remember running pigeon bot instance.
+  #
+  # @param bot [Bot] running Pigeon instance listening to clients on server.
+  def self.prepare(bot)
+    @bot ||= bot
+  end
+
   def self.all
     @all ||= fetch_groups
+  end
+
+  def self.update
+    @all = fetch_groups
+  end
+
+  def self.create(name)
+    @bot.api.add_server_group(name, PermissionGroupDatabaseType::REGULAR)
+  end
+
+  # Delete a group by its id value.
+  #
+  # @example
+  #   groups = ServerGroup.find_by_name("foobar")
+  #   ServerGroup.delete(g.first.id) unless g.empty?
+  # @param group_id [Integer] id of target group.
+  def self.delete(group_id)
+    @bot.api.delete_server_group(group_id)
+  end
+
+  def self.edit_group_permission(group_id, permission_name, value, negated=false, skipped=false)
+    @bot.api.add_server_group_permission(group_id, permission_name, value, negated, skipped)
   end
 
   def initialize(args)
