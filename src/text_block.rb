@@ -87,14 +87,14 @@ class ListText < LinedText
 
   def process_list(msgs)
     list = msgs.map do |msg|
-      "[*]#{msg}"
+      "[*]#{msg.to_s}"
     end
     "[list]\n#{list.join}[\/list]"
   end
 
   def process_item(msg)
     txt = (msg.count == 1)? msg.first : msg
-    "[list][*]#{txt}[\/list]"
+    "[list][*]#{txt.to_s}[\/list]"
   end
 
 end

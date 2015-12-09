@@ -64,10 +64,10 @@ class Mailbox
       layout = DescriptionLayout.new
       layout.append_text(BoldText.new("Playerlist:"))
       layout.append_text(ListText.new(newlined_msg)) unless newlined_msg.empty?
-      layout.append_text(BoldText.new("Additional Sources:\n"))
+      layout.append_text(BoldText.new("Additional Sources:"))
       mc_bullets = DescriptionLinkStore.find_all_including_key("mc")
       mc_bullets.each do |bullet|
-        layout.append_text(bullet)
+        layout.append_link(bullet)
       end
       msg = layout.merge.to_s
       Event.new("mss", {:channel_name => "Minecraft", :description => msg})
