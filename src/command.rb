@@ -15,6 +15,8 @@ class Command
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
       :cb => Command.new(ServerGroup.normal) { |msg| say_to_cleverbot(msg) },
       :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
+      :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
+      :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :h => Command.new { help }
     }
   end
@@ -25,6 +27,41 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  # Delete a discription link by providing a substring of the target identifier.
+  #
+  # @example
+  #   Given the identifier mc_foo, delete it from the description:
+  #     !ddl foo
+  def self.delete_description_link(msg)
+    id = DescriptionLinkStore.find_all_including_key(msg[0], true).first
+    DescriptionLinkStore.delete(id.first)
+  end
+
+  # passing only one arg should result in listing
+  #
+  # @example
+  #   Add a new link with identifier github, label Github and the given link:
+  #     !adl github_home Github https://github.com
+  #   List all link identifiers containing mc:
+  #     !adl mc
+  def self.append_description_link(msg)
+    case msg.count
+    when 3
+      id = ("mc_"+msg[0]).to_sym
+      raw_content = msg[2].gsub(/\[(\/)*URL\]/, "")
+      link = LabeledLinkText.new(raw_content, msg[1])
+      DescriptionLinkStore.write(link, id)
+    when 1
+      nodes = DescriptionLinkStore.find_all_including_key(msg[0], true)
+      identifiers = nodes.map do |node|
+        key = node.first
+        ":#{key.to_s}"
+      end
+      message = "Known #{msg[0]} nodes:\n"
+      @bot.say_as_private(Command.sender, message+identifiers.join("\n"))
+    end
   end
 
   # Subscribes the command caller to pigeon's ot list.
@@ -129,9 +166,15 @@ class Command
       description = CommandDescription.parse(cmd)
       "!#{cmd.to_s} #{description} \n"
     end
-    msg_count = help_msgs.length
-    @bot.say_as_private(sender, "[1/2] " + header + help_msgs.first(5).join)
-    @bot.say_as_private(sender, "[2/2] " + header + help_msgs.last(msg_count-5).join)
+
+    splits = help_msgs.each_slice(5).to_a
+    linked_splits = splits.map do |split|
+      LinedText.new(split)
+    end
+    msg_count = linked_splits.count
+    linked_splits.each_with_index do |split, idx|
+      @bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + split.to_s + "\n")
+    end
   end
 
   def self.leave_server
@@ -202,4 +245,3 @@ class Command
   end
 
 end
-
