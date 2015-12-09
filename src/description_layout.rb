@@ -1,10 +1,24 @@
+# A description layout is a ordered set of TextBlock instances determining
+# the look and the content of a channel description
+#
+# @example
+#   layout = DescriptionLayout.new
+#   layout.append_text(BoldText.new("Playerlist:"))
+#   layout.append_text(ListText.new(newlined_msg)) unless newlined_msg.empty?
+#   layout.append_text(BoldText.new("Additional Sources:"))
+#   mc_link_bullets = DescriptionLinkStore.find_all_including_key("mc")
+#   layout.append_text(ListText.new mc_link_bullets)
+#   msg = layout.merge.to_s
 class DescriptionLayout
 
   def initialize
     @text_blocks = []
-    @text_links = []
   end
 
+  # Append a text block to this layout.
+  #
+  # @info: The order of appending a block determines the order of rendering in a layout.
+  # @param [< TextBlock] a textblock item that belongs to this layout.
   def append_text(item)
     @text_blocks << item
   end
