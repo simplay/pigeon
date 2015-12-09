@@ -21,6 +21,7 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 + Moves (automatically) idle players to an AFK channel
 + Prevent a user from being moved by assigning him to a special group.
 + Compiles to an executable jar that can be run on any platform which has java installed.
++ Optional boostrapping of default roles and channels.
 
 ## Requirements
 + JRuby 9.0.1.0
