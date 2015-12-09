@@ -9,12 +9,11 @@ class DescriptionLayout
     @text_blocks << item
   end
 
-  def append_link(link)
-    @text_links << link
-  end
-
+  # Merges all included Textblocks defining this Layout.
+  #
+  # @info: Apply #to_s obtain the raw formatted description text.
+  # @return [TextBlock] head text element.
   def merge
-    append_text(ListText.new @text_links)
     return @text_blocks.first if count == 1
     @text_blocks.each_with_index do |item, idx|
       if idx < count-1
@@ -24,6 +23,11 @@ class DescriptionLayout
     @text_blocks.first
   end
 
+  private
+
+  # Number of included text blocks.
+  #
+  # @return [Integer] text item count in this layout.
   def count
     @text_blocks.count
   end
