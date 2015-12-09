@@ -22,14 +22,15 @@ class DescriptionLinkStore
     instance.find(id)
   end
 
-  def self.find_all_including_key(name)
-    instance.find_all_including_key(name)
+  def self.find_all_including_key(name, return_key_value_pair=false)
+    instance.find_all_including_key(name, return_key_value_pair)
   end
 
-  def find_all_including_key(key_name)
+  def find_all_including_key(key_name, return_key_value_pair=false)
     s = all_stored.select do |link_node|
       link_node.to_s.include? key_name
     end
+    return s if return_key_value_pair
     s.map(&:last)
   end
 

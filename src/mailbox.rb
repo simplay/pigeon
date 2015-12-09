@@ -62,11 +62,18 @@ class Mailbox
         item + "\n"
       end
       layout = DescriptionLayout.new
-      layout.append_text(BoldText.new("Playerlist:"))
-      layout.append_text(ListText.new(newlined_msg)) unless newlined_msg.empty?
-      layout.append_text(BoldText.new("Additional Sources:"))
+      layout.append_text(BoldText.new("Server status:\n"))
+      unless newlined_msg.empty?
+        layout.append_text(BoldText.new("Playerlist:"))
+        layout.append_text(ListText.new(newlined_msg))
+      else
+        layout.append_text(BoldText.new("No players currently online."))
+      end
       mc_link_bullets = DescriptionLinkStore.find_all_including_key("mc")
-      layout.append_text(ListText.new mc_link_bullets)
+      unless mc_link_bullets.empty?
+        layout.append_text(BoldText.new("Additional Sources:"))
+        layout.append_text(ListText.new mc_link_bullets)
+      end
       msg = layout.merge.to_s
       Event.new("mss", {:channel_name => "Minecraft", :description => msg})
     else
