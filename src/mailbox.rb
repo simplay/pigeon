@@ -93,12 +93,11 @@ class Mailbox
       layout.append_text(BoldText.new("Additional Sources:"))
       layout.append_text(ListText.new mc_link_bullets)
     end
-    to_regex = Regexp.new "Server status: #{$server_reachable}"
-    if @bot_update_msg.include?("Server status: online")
-      Regexp.new "Server status: #{$server_reachable}"
-      @bot_update_msg.gsub(/Server status: online/, to_regex)
+    to_regex = Regexp.new "Server status: #{$server_reachable.to_s}"
+    if @bot_update_msg.include?("Server status: [color=green]online")
+      @bot_update_msg.gsub(/Server status: [color=green]online[\/color]/, to_regex)
     elsif @bot_update_msg.include?("Server status: offline")
-      @bot_update_msg.gsub(/Server status: offline/, to_regex)
+      @bot_update_msg.gsub(/Server status: [color=red]offline[\/color]/, to_regex)
     end
     @bot_update_msg = layout.merge.to_s
   end

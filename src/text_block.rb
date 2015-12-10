@@ -71,7 +71,7 @@ end
 
 # @example
 #   ColorText.new("foobar", 'red').to_s
-#   #=> "[color=red]foobar[/color]""
+#   #=> "[color=red]foobar[/color]"
 class ColorText < TextBlock
 
   def initialize(content, color)
