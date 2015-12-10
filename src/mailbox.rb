@@ -49,7 +49,7 @@ class Mailbox
   # Initializes an empty subscriber list.
   def initialize
     @subscribers = []
-    $server_reachable = "offline"
+    $server_reachable = ColorText.new("offline", 'red')
     @bot_update_msg = ""
     @newlined_msg = ""
   end
@@ -69,7 +69,9 @@ class Mailbox
     end
   end
 
-
+  # Build the layout of the Minecraft channel when a 'mss' message was received.
+  #
+  # @param content [String] received event's content.
   def build_mc_layout(content)
     unless content == "reachable_update"
       $mss_msg = Time.now
