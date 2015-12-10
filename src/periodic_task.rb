@@ -46,3 +46,15 @@ class MoveAfkUsers < PeriodicTask
     end
   end
 end
+
+class CheckMcServer < PeriodicTask
+  def task
+    if $mss_msg.nil?
+      dt = 100.0
+    else
+      dt = Time.now-$mss_msg
+    end
+    $server_reachable = (dt < 40.0) ? "online" : "offline"
+    Mailbox.instance.notify_all_with(Event.new("mss", 'reachable_update'))
+  end
+end
