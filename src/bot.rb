@@ -37,7 +37,7 @@ class Bot
   def timed_tasks
     tasks ||= [
       TimedTask.new(60.0) { MoveAfkUsers.new(self).run },
-      TimedTask.new(5.0) { CheckMcServer.new(self).run }
+      TimedTask.new(10.0) { CheckMcServer.new(self).run }
     ]
   end
 

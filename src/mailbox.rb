@@ -86,7 +86,7 @@ class Mailbox
       layout.append_text(BoldText.new("Playerlist:"))
       layout.append_text(ListText.new(@newlined_msg))
     else
-      layout.append_text(BoldText.new("No players currently online.\n"))
+      layout.append_text(BoldText.new("Nobody is playing.\n"))
     end
     mc_link_bullets = DescriptionLinkStore.find_all_including_key("mc")
     unless mc_link_bullets.empty?

@@ -54,7 +54,7 @@ class CheckMcServer < PeriodicTask
     else
       dt = Time.now-$mss_msg
     end
-    $server_reachable = (dt < 40.0) ? ColorText.new("online", 'green')
+    $server_reachable = (dt < 20.0) ? ColorText.new("online", 'green')
                                     : ColorText.new("offline", 'red')
     Mailbox.instance.notify_all_with(Event.new("mss", 'reachable_update'))
   end
