@@ -47,6 +47,9 @@ class MoveAfkUsers < PeriodicTask
   end
 end
 
+# Periodically check the time sincee we received a message from the mss server.
+# In case the last message is older than 20 seconds, we asssume that the server
+# is offline.
 class CheckMcServer < PeriodicTask
   def task
     if $mss_msg.nil?
