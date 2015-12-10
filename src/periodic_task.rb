@@ -46,3 +46,19 @@ class MoveAfkUsers < PeriodicTask
     end
   end
 end
+
+# Periodically check the time sincee we received a message from the mss server.
+# In case the last message is older than 20 seconds, we asssume that the server
+# is offline.
+class CheckMcServer < PeriodicTask
+  def task
+    if $mss_msg.nil?
+      dt = 100.0
+    else
+      dt = Time.now-$mss_msg
+    end
+    $server_reachable = (dt < 20.0) ? ColorText.new("online", 'green')
+                                    : ColorText.new("offline", 'red')
+    Mailbox.instance.notify_all_with(Event.new("mss", 'reachable_update'))
+  end
+end

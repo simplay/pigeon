@@ -48,6 +48,10 @@ class ForeignMessageParser
     includes_req_token?
   end
 
+  def to_event
+    Event.new(msg_header, msg_content)
+  end
+
   private
 
   def to_sha1(secret)

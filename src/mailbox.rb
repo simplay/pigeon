@@ -17,7 +17,7 @@ class Mailbox
   #
   # @info: results in firing an mailbox event.
   #   all mailbox' subscribers get notified accordingly.
-  # @param message [String] trusted foreign message reiceived by RequestListener
+  # @param message [Event] trusted foreign message reiceived by RequestListener
   def self.append(message)
     instance.notify_all_with(message)
   end
@@ -49,6 +49,9 @@ class Mailbox
   # Initializes an empty subscriber list.
   def initialize
     @subscribers = []
+    $server_reachable = ColorText.new("offline", 'red')
+    @bot_update_msg = ""
+    @newlined_msg = ""
   end
 
   # Parse a passed foreign message received by an external service.
@@ -56,30 +59,47 @@ class Mailbox
   # @info: Applies a header specific parser.
   # @return [Event] parsed foreign message.
   def parse(message)
-    case message.msg_header
+    case message.name
     when 'mss'
-      newlined_msg = message.msg_content.split(";").map do |item|
-        item + "\n"
-      end
-      layout = DescriptionLayout.new
-      layout.append_text(BoldText.new("Server status:\n"))
-      unless newlined_msg.empty?
-        layout.append_text(BoldText.new("Playerlist:"))
-        layout.append_text(ListText.new(newlined_msg))
-      else
-        layout.append_text(BoldText.new("No players currently online.\n"))
-      end
-      mc_link_bullets = DescriptionLinkStore.find_all_including_key("mc")
-      unless mc_link_bullets.empty?
-        layout.append_text(BoldText.new("Additional Sources:"))
-        layout.append_text(ListText.new mc_link_bullets)
-      end
-      msg = layout.merge.to_s
-      Event.new("mss", {:channel_name => "Minecraft", :description => msg})
+        build_mc_layout(message.content)
+      Event.new("mss", {:channel_name => "Minecraft", :description => @bot_update_msg})
     else
-      msg = "foobar: " + message.msg_content
+      msg = "foobar: " + message.content
       Event.new("else", msg)
     end
+  end
+
+  # Build the layout of the Minecraft channel when a 'mss' message was received.
+  #
+  # @param content [String] received event's content.
+  def build_mc_layout(content)
+    unless content == "reachable_update"
+      $mss_msg = Time.now
+      @newlined_msg = content.split(";").map do |item|
+        item + "\n"
+      end
+    end
+    layout = DescriptionLayout.new
+    layout.append_text(BoldText.new("Server status:"))
+    layout.append_text(TextBlock.new(" #{$server_reachable}\n"))
+    unless @newlined_msg.empty?
+      layout.append_text(BoldText.new("Playerlist:"))
+      layout.append_text(ListText.new(@newlined_msg))
+    else
+      layout.append_text(BoldText.new("Nobody is playing.\n"))
+    end
+    mc_link_bullets = DescriptionLinkStore.find_all_including_key("mc")
+    unless mc_link_bullets.empty?
+      layout.append_text(BoldText.new("Additional Sources:"))
+      layout.append_text(ListText.new mc_link_bullets)
+    end
+    to_regex = Regexp.new "Server status: #{$server_reachable.to_s}"
+    if @bot_update_msg.include?("Server status: [color=green]online")
+      @bot_update_msg.gsub(/Server status: [color=green]online[\/color]/, to_regex)
+    elsif @bot_update_msg.include?("Server status: offline")
+      @bot_update_msg.gsub(/Server status: [color=red]offline[\/color]/, to_regex)
+    end
+    @bot_update_msg = layout.merge.to_s
   end
 
 end

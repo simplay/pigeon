@@ -65,7 +65,22 @@ end
 #   #=> #<BoldText:0x6933b6c6 @content="[b]very bold text[/b]">
 class BoldText < TextBlock
   def parse(message)
-    "[b]#{message}[\/b]"
+    "[b]#{message.to_s}[\/b]"
+  end
+end
+
+# @example
+#   ColorText.new("foobar", 'red').to_s
+#   #=> "[color=red]foobar[/color]"
+class ColorText < TextBlock
+
+  def initialize(content, color)
+    @color = color
+    super(content)
+  end
+
+  def parse(message)
+    "[color=#{@color}]#{message.to_s}[\/color]"
   end
 end
 
@@ -75,7 +90,7 @@ end
 class LinkText < TextBlock
 
   def parse(message)
-    "[URL]#{message}[\/URL]"
+    "[URL]#{message.to_s}[\/URL]"
   end
 
 end
