@@ -52,6 +52,7 @@ class Mailbox
     $server_reachable = ColorText.new("offline", 'red')
     @bot_update_msg = ""
     @newlined_msg = ""
+    $mss_msg = Time.now-100
   end
 
   # Parse a passed foreign message received by an external service.
@@ -61,7 +62,7 @@ class Mailbox
   def parse(message)
     case message.name
     when 'mss'
-        build_mc_layout(message.content)
+      build_mc_layout(message.content)
       Event.new("mss", {:channel_name => "Minecraft", :description => @bot_update_msg})
     else
       msg = "foobar: " + message.content

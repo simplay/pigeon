@@ -51,14 +51,11 @@ end
 # In case the last message is older than 20 seconds, we asssume that the server
 # is offline.
 class CheckMcServer < PeriodicTask
+  REACHABLE_THRESHOLD = 20.0
   def task
-    if $mss_msg.nil?
-      dt = 100.0
-    else
-      dt = Time.now-$mss_msg
-    end
-    $server_reachable = (dt < 20.0) ? ColorText.new("online", 'green')
-                                    : ColorText.new("offline", 'red')
+    dt = Time.now-$mss_msg
+    $server_reachable = (dt < REACHABLE_THRESHOLD) ? ColorText.new("online", 'green')
+                                                   : ColorText.new("offline", 'red')
     Mailbox.instance.notify_all_with(Event.new("mss", 'reachable_update'))
   end
 end
