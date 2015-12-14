@@ -6,6 +6,7 @@
 class User
 
   attr_reader :id, :nick, :channel_id, :unique_id
+  attr_accessor :talking_to_cb
 
   # Threshold time [seconds] a user may be not performing
   # any action before identified as being idle.
@@ -111,6 +112,23 @@ class User
     @channel_id = channel_id
     @unique_id = unique_id
     @is_nil_user = is_nil_user
+    @talking_to_cb = false
+  end
+
+  # Toggle the state of flag talking_to_cb.
+  #
+  # @example
+  #   assume: @toggle_talking_to_cb == true
+  #   toggle_talking_to_cb
+  #   #=> @toggle_talking_to_cb == false
+  #   toggle_talking_to_cb
+  #   #=> @toggle_talking_to_cb == true
+  def toggle_talking_to_cb
+    @toggle_talking_to_cb = !@toggle_talking_to_cb
+  end
+
+  def talking_to_cb?
+    @toggle_talking_to_cb
   end
 
   # Does this user belong to a group having a given name

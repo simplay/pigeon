@@ -14,6 +14,7 @@ class Command
       :s => Command.new(ServerGroup.normal) { subscribe_to_ot_list },
       :us => Command.new(ServerGroup.normal) { unsubscribe_from_ot_list },
       :cb => Command.new(ServerGroup.normal) { |msg| say_to_cleverbot(msg) },
+      :tcbm => Command.new(ServerGroup.normal) { toggle_cleverbot_mode },
       :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
@@ -27,6 +28,12 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  def self.toggle_cleverbot_mode
+    sender = Command.sender
+    session_user = Session.find_user_in_userlist(sender.id)
+    session_user.toggle_talking_to_cb
   end
 
   # Delete a discription link by providing a substring of the target identifier.

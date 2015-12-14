@@ -51,6 +51,10 @@ class CommandProcessor
   end
 
   def parse_message(user, message)
+    sender_in_session = Session.find_user_in_userlist(user.id)
+    if sender_in_session.talking_to_cb?
+      Command.all[:cb].invoke_by(sender_in_session, message.split(" "))
+    end
     UrlExtractor.new(user, message).extract
   end
 

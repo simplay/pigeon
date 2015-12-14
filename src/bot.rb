@@ -103,6 +103,7 @@ class Bot
   # has set up all its services but before a user
   # could enter any command.
   def run_after_startup
+    Session.reload
     reestablish_connection_to_ot_users
     timed_tasks.each(&:start)
   end
@@ -232,7 +233,11 @@ class Bot
           when 'onClientJoin'
             joining_client_nick = event.get_client_nickname
             user = User.find_by_nick(joining_client_nick)
+            Session.append_to_userlist(user)
             append_task(user, "!ot") if user.in_ot_list?
+          when 'onClientLeave'
+            leaving_client_id = event.get_client_id
+            Session.remove_from_userlist(leaving_client_id)
           end
         end
       end
