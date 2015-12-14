@@ -115,6 +115,22 @@ class User
     @talking_to_cb = false
   end
 
+  # Toggle the state of flag talking_to_cb.
+  #
+  # @example
+  #   assume: @toggle_talking_to_cb == true
+  #   toggle_talking_to_cb
+  #   #=> @toggle_talking_to_cb == false
+  #   toggle_talking_to_cb
+  #   #=> @toggle_talking_to_cb == true
+  def toggle_talking_to_cb
+    @toggle_talking_to_cb = !@toggle_talking_to_cb
+  end
+
+  def talking_to_cb?
+    @toggle_talking_to_cb
+  end
+
   # Does this user belong to a group having a given name
   # @param group_name [String] name of group we want to check whether the user
   #   belongs to.
