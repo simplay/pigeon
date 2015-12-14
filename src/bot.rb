@@ -103,6 +103,7 @@ class Bot
   # has set up all its services but before a user
   # could enter any command.
   def run_after_startup
+    Session.reload
     reestablish_connection_to_ot_users
     timed_tasks.each(&:start)
   end

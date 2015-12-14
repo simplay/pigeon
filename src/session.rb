@@ -14,6 +14,16 @@ class Session
     instance.append_to_userlist(user)
   end
 
+  def self.find_user_in_userlist(user_id)
+    instance.find_user_in_userlist(user_id)
+  end
+
+  def self.reload
+    User.all.each do |user|
+      append_to_userlist(user)
+    end
+  end
+
   def append_to_userlist(user)
     @users << user unless userlist_contains?(user)
   end
