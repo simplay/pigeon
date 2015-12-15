@@ -18,6 +18,7 @@ class Command
       :pb => Command.new(ServerGroup.normal) { |msg| say_to_pandorabot(msg) },
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
+      :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
       :h => Command.new { help }
     }
   end
@@ -30,6 +31,21 @@ class Command
     @instr = instr
   end
 
+  # Send a message a poke notification to every user currently online.
+  def self.broadcast(message)
+    msg = message.join(" ")
+    User.all.each do |user|
+      let_bot_say(user, msg)
+    end
+  end
+
+  # Toggle talking to clever bot mod.
+  # While being in this mode, a user is constantly
+  # chatting to cleverbot while writting to pigeon (via pm).
+  # However, commands (messages starting with a '!') are still
+  # correctly parsed and will get invoked.
+  # I.e. they are not send to cleverbot
+  # but the corresponding command is executed.
   def self.toggle_cleverbot_mode
     sender = Command.sender
     session_user = Session.find_user_in_userlist(sender.id)
@@ -143,10 +159,22 @@ class Command
     end
   end
 
+  # Forces the bot to send a private message (pm)
+  # to the sender.
+  #
+  # @info: The bot can only receive messages by users via:
+  #     + the global server chat.
+  #     + the channel the bot is located at (the lobby).
+  #     + private messages.
+  #
+  #   Since users are barely in the server lobby or
+  #   are chatting via the global server chat, the only appropriate
+  #   variant to communicate with pigeon is through sending a pm.
   def self.open_terminal
     @bot.say_as_private(Command.sender, "How may I serve you?")
   end
 
+  # Poking pigeon will result in pigeon poking the sender.
   def self.poke
     let_bot_say(Command.sender, "Hey, stop poking me!")
   end
