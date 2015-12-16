@@ -19,6 +19,7 @@ class Command
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
+      :artd => Command.new(ServerGroup.server_admin) { |msg| append_roll_the_dice(msg) },
       :h => Command.new { help }
     }
   end
@@ -29,6 +30,27 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  # @info:
+  #   formats:
+  #     <ID, URL, FROM, TO>
+  #     <ID, URL, FROM>
+  #     <ID, URL>
+  def self.append_roll_the_dice(msg)
+    id = msg[0]
+    case msg.count
+    when 4
+      TauntLinkStore.write(id, msg[1], msg[2], msg[3])
+    when 3
+      TauntLinkStore.write(id, msg[1], msg[2])
+    when 2
+      TauntLinkStore.write(id, msg[1])
+    when 1
+      # list submatches
+    when 0
+      # list all nodes
+    end
   end
 
   # Send a message a poke notification to every user currently online.

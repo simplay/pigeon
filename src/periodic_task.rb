@@ -63,7 +63,7 @@ end
 class RollTheDice < PeriodicTask
   def task
     user = Session.random_user
-    msg = TauntLinkStore.next_random.to_s
+    msg = "Hey, watch this out:"+TauntLinkStore.next_random.to_s
     @bot.say_as_private(user, msg) unless user.nil?
   end
 end

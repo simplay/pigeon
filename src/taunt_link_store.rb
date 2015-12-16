@@ -4,7 +4,7 @@ class TauntLinkStore
 
     def initialize(link, from_time=nil, to_time=nil)
       raise ArgumentError.new("No youtube link provided.") unless link.include?("www.youtube.com")
-      @link = link
+      @link = link.gsub(/\[(\/){0,1}(URL)\]/ ,"")
       @from_time = from_time
       @to_time = to_time
     end
