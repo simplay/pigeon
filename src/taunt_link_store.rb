@@ -3,7 +3,7 @@ class TauntLinkStore
   class TauntLink
 
     def initialize(link, from_time=nil, to_time=nil)
-      raise ArgumentError.new("No youtube link provided") unless link.include?("www.youtube.com")
+      raise ArgumentError.new("No youtube link provided.") unless link.include?("www.youtube.com")
       @link = link
       @from_time = from_time
       @to_time = to_time
@@ -39,6 +39,14 @@ class TauntLinkStore
     all[n-1].last
   end
 
+  def self.write(id, link, from_time=nil, to_time=nil)
+    instance.write(id, link, from_time=nil, to_time=nil)
+  end
+
+  def self.delete(id)
+    instance.delete(id)
+  end
+
   # Return every stored entity.
   #
   # @return [Array<ID, Array<TauntLink>>] list of entities.
@@ -58,7 +66,6 @@ class TauntLinkStore
   end
 
   # Delete a link by id.
-  #
   def delete(id)
     store.transaction do
       store.delete(id)
@@ -68,7 +75,7 @@ class TauntLinkStore
 
   # Fetch a entity by its identifier.
   #
-  # @return [LabeledLinkText, nil] returns a stored link in case it exists.
+  # @return [TauntLink, nil] returns a stored link in case it exists.
   def find(id)
     store.transaction do
       begin
