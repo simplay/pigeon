@@ -36,7 +36,8 @@ class TauntLinkStore
     all = instance.all_stored
     n = all.count
     return "" if n == 0
-    all[n-1].last
+    idx = rand(0..n-1)
+    all[idx].last
   end
 
   def self.write(id, link, from_time=nil, to_time=nil)
