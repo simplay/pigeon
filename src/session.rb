@@ -39,7 +39,7 @@ class Session
   #
   # @return [User, nil] a random user included in the session.
   def random_user
-    n = users.count
+    n = @users.count
     return if n==0
     idx = rand(0..n-1)
     @users[idx]
