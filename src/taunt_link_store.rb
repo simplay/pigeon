@@ -23,7 +23,7 @@ class TauntLinkStore
       else
         "#{parsed_link}#{extension}"
       end
-      LinkText.new(url).to_s
+      LinkText.new(url, "this").to_s
     end
 
   end
