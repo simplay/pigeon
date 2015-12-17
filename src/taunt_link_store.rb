@@ -48,6 +48,19 @@ class TauntLinkStore
     instance.delete(id)
   end
 
+  def self.all_links
+    instance.all_links
+  end
+
+  def all_links
+    links = all_stored.map do |item|
+      ":#{item.first.to_s} - #{item.last.to_s} \n"
+    end
+    links.each_slice(6).to_a.map do |item|
+      item.join("\n")
+    end
+  end
+
   # Return every stored entity.
   #
   # @return [Array<ID, Array<TauntLink>>] list of entities.

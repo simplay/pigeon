@@ -19,7 +19,7 @@ class Command
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
-      :artd => Command.new(ServerGroup.server_admin) { |msg| append_roll_the_dice(msg) },
+      :rtd => Command.new(ServerGroup.server_admin) { |msg| roll_the_dice(msg) },
       :h => Command.new { help }
     }
   end
@@ -35,21 +35,30 @@ class Command
   # @info:
   #   formats:
   #     <ID, URL, FROM, TO>
+  #       add a url with a given id having a certain from to range
   #     <ID, URL, FROM>
+  #       add a url with a given id starting at second FROM
   #     <ID, URL>
-  def self.append_roll_the_dice(msg)
-    id = msg[0]
+  #       add a url with a given id without having a temporal limit
+  #     <ID>
+  #       Delete the node with a given ID
+  #     NONE
+  #       List all nodes
+  def self.roll_the_dice(msg)
     case msg.count
     when 4
-      TauntLinkStore.write(id, msg[1], msg[2], msg[3])
+      TauntLinkStore.write(msg[0], msg[1], msg[2], msg[3])
     when 3
-      TauntLinkStore.write(id, msg[1], msg[2])
+      TauntLinkStore.write(msg[0], msg[1], msg[2])
     when 2
-      TauntLinkStore.write(id, msg[1])
+      TauntLinkStore.write(msg[0], msg[1])
     when 1
-      # list submatches
+      TauntLinkStore.delete(msg[0].to_sym)
     when 0
-      # list all nodes
+      links = TauntLinkStore.all_links
+      links.each do |link|
+        @bot.say_as_private(Command.sender, link)
+      end
     end
   end
 
