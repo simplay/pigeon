@@ -10,7 +10,6 @@
 class PeriodicTask
 
   def initialize
-    @bot = Bot.instance
     @afk_channel = Channel.find_by_name("AFK")
     $mss_msg = Time.now-100
   end
@@ -42,8 +41,8 @@ class MoveAfkUsers < PeriodicTask
     afk_users = User.all.select(&:afk?)
     afk_users.each do |user|
       unless (user.channel_id == @afk_channel.id) or user.unmovable?
-        @bot.move_target(user, @afk_channel.id)
-        @bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
+        Bot.move_target(user, @afk_channel.id)
+        Bot.say_as_poke(user, "Sorry, but I moved you to the AFK channel.")
       end
     end
   end
@@ -68,7 +67,7 @@ class RollTheDice < PeriodicTask
     user = Session.random_user
     taunt_link = TauntLinkStore.next_random.to_s
     return if taunt_link.empty? or user.nil?
-    msg = "Hey, check #{taunt_link} out."
-    @bot.say_as_private(user, msg)
+    msg = "Hey, check #{taunt_link} out!"
+    Bot.say_as_private(user, msg)
   end
 end
