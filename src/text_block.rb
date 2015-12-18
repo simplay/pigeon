@@ -91,7 +91,7 @@ end
 class LinkText < TextBlock
 
   def initialize(content, ank="")
-    @ank = ank
+    @ank = ank.to_s
     super(content)
   end
 
