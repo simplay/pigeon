@@ -38,7 +38,7 @@ class Bot
     tasks ||= [
       TimedTask.new(60.0) { MoveAfkUsers.new(self).run },
       TimedTask.new(10.0) { CheckMcServer.new(self).run },
-      TimedTask.new(10.0) { RollTheDice.new(self).run }
+      TimedTask.new(3600.0) { RollTheDice.new(self).run }
     ]
   end
 
