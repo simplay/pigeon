@@ -20,6 +20,7 @@ class Command
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
       :rtd => Command.new(ServerGroup.server_admin) { |msg| roll_the_dice(msg) },
+      :who => Command.new(ServerGroup.normal) { who },
       :h => Command.new { help }
     }
   end
@@ -30,6 +31,14 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  # List all users currently online.
+  def self.who
+    user_nicks = Session.users.map do |user|
+      user.nick + "\n"
+    end
+    @bot.say_as_private(Command.sender, user_nicks.join)
   end
 
   # @info:

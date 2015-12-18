@@ -23,6 +23,10 @@ class Session
     instance.random_user
   end
 
+  def self.users
+    instance.users
+  end
+
   # Load each user that is only into the session's memory.
   #
   # @info: This method is called right after the bot's startup phase.
@@ -33,6 +37,10 @@ class Session
     User.all.each do |user|
       append_to_userlist(user)
     end
+  end
+
+  def users
+    @users
   end
 
   # Retrieve a random user from the session
