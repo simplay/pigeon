@@ -66,7 +66,6 @@ class Bot
   #   then start the external event listener.
   def start
     unless started?
-      ServerGroup.prepare(self)
       @is_started = true
       Server.start
       api.set_nickname(@name)

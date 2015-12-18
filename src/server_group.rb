@@ -10,13 +10,6 @@ class ServerGroup
 
   include Comparable
 
-  # Remember running pigeon bot instance.
-  #
-  # @param bot [Bot] running Pigeon instance listening to clients on server.
-  def self.prepare(bot)
-    @bot ||= bot
-  end
-
   def self.all
     @all ||= fetch_groups
   end
@@ -26,7 +19,7 @@ class ServerGroup
   end
 
   def self.create(name)
-    @bot.api.add_server_group(name, PermissionGroupDatabaseType::REGULAR)
+    Server.api.add_server_group(name, PermissionGroupDatabaseType::REGULAR)
   end
 
   # Delete a group by its id value.
@@ -36,11 +29,11 @@ class ServerGroup
   #   ServerGroup.delete(g.first.id) unless g.empty?
   # @param group_id [Integer] id of target group.
   def self.delete(group_id)
-    @bot.api.delete_server_group(group_id)
+    Server.api.delete_server_group(group_id)
   end
 
   def self.edit_group_permission(group_id, permission_name, value, negated=false, skipped=false)
-    @bot.api.add_server_group_permission(group_id, permission_name, value, negated, skipped)
+    Server.api.add_server_group_permission(group_id, permission_name, value, negated, skipped)
   end
 
   def initialize(args)
