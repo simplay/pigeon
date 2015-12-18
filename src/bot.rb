@@ -54,6 +54,17 @@ class Bot
     ]
   end
 
+  # Return the current user id of this Bot instance.
+  #
+  # @return [Integer] id uniquely identifying the bot.
+  def id
+    @bot_id
+  end
+
+  def self.id
+    instance.id
+  end
+
   # Start the bot and its services if not already running.
   # @info: The order of method invocations matters.
   #   first assign all relevant setup information
