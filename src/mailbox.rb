@@ -52,7 +52,6 @@ class Mailbox
     $server_reachable = ColorText.new("offline", 'red')
     @bot_update_msg = ""
     @newlined_msg = ""
-    $mss_msg = Time.now-100
   end
 
   # Parse a passed foreign message received by an external service.

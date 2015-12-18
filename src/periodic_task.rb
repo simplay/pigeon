@@ -8,9 +8,11 @@
 #   ...
 #   tt.stop
 class PeriodicTask
-  def initialize(bot)
-    @bot = bot
+
+  def initialize
+    @bot = Bot.instance
     @afk_channel = Channel.find_by_name("AFK")
+    $mss_msg = Time.now-100
   end
 
   # Start the task.
