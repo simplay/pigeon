@@ -3,13 +3,6 @@ java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 class Channel
   attr_reader :id, :name
 
-  # Remember running pigeon bot instance.
-  #
-  # @param bot [Bot] running Pigeon instance listening to clients on server.
-  def self.prepare(bot)
-    @bot ||= bot
-  end
-
   def self.all
     Server.channels
   end
@@ -53,7 +46,7 @@ class Channel
       ChannelProperty::CHANNEL_NEEDED_TALK_POWER => needed_talkpower.to_s,
       ChannelProperty::CHANNEL_FLAG_PERMANENT => '1'
     }
-    @bot.api.create_channel(name, options)
+    Server.api.create_channel(name, options)
   end
 
 end
