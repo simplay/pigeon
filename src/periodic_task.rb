@@ -59,3 +59,14 @@ class CheckMcServer < PeriodicTask
     Mailbox.instance.notify_all_with(Event.new("mss", 'reachable_update'))
   end
 end
+
+# Sends a random link, stored in TauntLinkStore to a random user.
+class RollTheDice < PeriodicTask
+  def task
+    user = Session.random_user
+    taunt_link = TauntLinkStore.next_random.to_s
+    return if taunt_link.empty? or user.nil?
+    msg = "Hey, watch #{taunt_link} out."
+    @bot.say_as_private(user, msg)
+  end
+end

@@ -19,6 +19,8 @@ class Command
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
+      :rtd => Command.new(ServerGroup.server_admin) { |msg| roll_the_dice(msg) },
+      :who => Command.new(ServerGroup.normal) { who },
       :h => Command.new { help }
     }
   end
@@ -29,6 +31,46 @@ class Command
   def initialize(auth_level=ServerGroup.lowest, &instr)
     @auth_level = auth_level
     @instr = instr
+  end
+
+  # List all users currently online.
+  def self.who
+    user_nicks = Session.users.map do |user|
+      user.nick + "\n"
+    end
+    @bot.say_as_private(Command.sender, user_nicks.join)
+  end
+
+  # Create/Modify/List/Delete a roll to dice (rtd) link (node).
+  #
+  # @info:
+  #   formats:
+  #     <ID, URL, FROM, TO>
+  #       add a url with a given id having a certain from to range
+  #     <ID, URL, FROM>
+  #       add a url with a given id starting at second FROM
+  #     <ID, URL>
+  #       add a url with a given id without having a temporal limit
+  #     <ID>
+  #       Delete the node with a given ID
+  #     NONE
+  #       List all nodes
+  def self.roll_the_dice(msg)
+    case msg.count
+    when 4
+      TauntLinkStore.write(msg[0], msg[1], msg[2], msg[3])
+    when 3
+      TauntLinkStore.write(msg[0], msg[1], msg[2])
+    when 2
+      TauntLinkStore.write(msg[0], msg[1])
+    when 1
+      TauntLinkStore.delete(msg[0])
+    when 0
+      links = TauntLinkStore.all_links
+      links.each do |link|
+        @bot.say_as_private(Command.sender, link)
+      end
+    end
   end
 
   # Send a message a poke notification to every user currently online.

@@ -37,7 +37,8 @@ class Bot
   def timed_tasks
     tasks ||= [
       TimedTask.new(60.0) { MoveAfkUsers.new(self).run },
-      TimedTask.new(10.0) { CheckMcServer.new(self).run }
+      TimedTask.new(10.0) { CheckMcServer.new(self).run },
+      TimedTask.new(3600.0) { RollTheDice.new(self).run }
     ]
   end
 
@@ -111,10 +112,13 @@ class Bot
   def handle_event(message)
     case message.name
     when 'mss'
-      channel_name = message.content[:channel_name]
-      description = message.content[:description]
-      channel = Channel.find_by_name(channel_name)
-      edit_channel_description(channel, description)
+      begin
+        channel_name = message.content[:channel_name]
+        description = message.content[:description]
+        channel = Channel.find_by_name(channel_name)
+        edit_channel_description(channel, description)
+      rescue Exception
+      end
     when 'else'
       say_to_server(message.content)
     end

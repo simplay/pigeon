@@ -45,7 +45,7 @@ class Server
   #
   # @return [Hash{ServerChannels=> ServerChannelName}] list of all server channel.
   def self.channels
-    server_channels = api.get_channels
+    server_channels = api.get_channels || []
     sc = server_channels.map {|sc| [sc.get_id, sc.get_name]}
     Hash[*sc.flatten]
   end

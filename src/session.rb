@@ -19,6 +19,14 @@ class Session
     instance.find_user_in_userlist(user_id)
   end
 
+  def self.random_user
+    instance.random_user
+  end
+
+  def self.users
+    instance.users
+  end
+
   # Load each user that is only into the session's memory.
   #
   # @info: This method is called right after the bot's startup phase.
@@ -29,6 +37,20 @@ class Session
     User.all.each do |user|
       append_to_userlist(user)
     end
+  end
+
+  def users
+    @users
+  end
+
+  # Retrieve a random user from the session
+  #
+  # @return [User, nil] a random user included in the session.
+  def random_user
+    n = @users.count
+    return if n==0
+    idx = rand(0..n-1)
+    @users[idx]
   end
 
   # Add a user to the internal user list.
