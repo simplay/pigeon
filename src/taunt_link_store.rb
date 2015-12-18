@@ -10,6 +10,11 @@ class TauntLinkStore
     # Carries a youtube video
     #
     # @raises: ArgumentError in case no youtube video was passed.
+    # @param link [String] a youtube video link
+    # @param from_time [String, nil] time from which the video should be played.
+    #   in seconds, is optional.
+    # @param to_time [String, nil] time till the video should be played.
+    #   in seconds, is optional.
     def initialize(link, from_time=nil, to_time=nil)
       raise ArgumentError.new("No youtube link provided.") unless link.include?("www.youtube.com")
       @link = link.gsub(/\[(\/){0,1}(URL)\]/ ,"")
@@ -57,7 +62,7 @@ class TauntLinkStore
   end
 
   def self.write(id, link, from_time=nil, to_time=nil)
-    instance.write(id, link, from_time=nil, to_time=nil)
+    instance.write(id, link, from_time, to_time)
   end
 
   def self.delete(id)
@@ -100,9 +105,9 @@ class TauntLinkStore
   # @param id [Symbol] unique identifier of this link
   #   used as lookup index in the db.
   # @param link [String] a youtube video link
-  # @param from_time [Integer] time from which the video should be played.
+  # @param from_time [String, nil] time from which the video should be played.
   #   in seconds, is optional.
-  # @param to_time [Integer] time till the video should be played.
+  # @param to_time [String, nil] time till the video should be played.
   #   in seconds, is optional.
   def write(id, link, from_time=nil, to_time=nil)
     store.transaction do
