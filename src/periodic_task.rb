@@ -60,10 +60,13 @@ class CheckMcServer < PeriodicTask
   end
 end
 
+# Sends a random link, stored in TauntLinkStore to a random user.
 class RollTheDice < PeriodicTask
   def task
     user = Session.random_user
-    msg = "Hey, watch #{TauntLinkStore.next_random.to_s} out."
-    @bot.say_as_private(user, msg) unless user.nil?
+    taunt_link = TauntLinkStore.next_random.to_s
+    return if taunt_link.empty? or user.nil?
+    msg = "Hey, watch #{taunt_link} out."
+    @bot.say_as_private(user, msg)
   end
 end
