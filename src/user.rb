@@ -115,6 +115,14 @@ class User
     @talking_to_cb = false
   end
 
+  # Checks whether this user the bot?
+  #
+  # @return [Boolean] true if this user is the bot
+  #   otherwise false.
+  def bot?
+    id == Bot.id
+  end
+
   # Toggle the state of flag talking_to_cb.
   #
   # @example

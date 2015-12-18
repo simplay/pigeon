@@ -34,26 +34,27 @@ class TimedTask
     # @info: Unfortunately, a block can not be passed during runtime
     #   since we inherit from a Java Class.
     # @param block [Procedure] task.
-    def block=(block)
-      @block = block
+    def task=(task)
+      @task = task
     end
 
     def run
-      @block.call
+      @task.run
     end
   end
 
   # @param interval [Float] amount of seconds one update period takes.
-  def initialize(interval, &block)
+  def initialize(interval, periodic_task)
     @interval = interval
     @timer = Timer.new(true)
-    @block = block
+    @periodic_task = periodic_task
   end
 
   # Invokes the provided block at a given fixed rate.
   def start
     task = PigeonTimerTask.new
-    task.block = @block
+    task.task = @periodic_task
+
     @timer.schedule_at_fixed_rate(task, 0, @interval*1000)
   end
 

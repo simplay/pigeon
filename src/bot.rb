@@ -25,6 +25,18 @@ java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 # Please notice that SQA authentication credentials are required to run the bot.
 class Bot
 
+  def self.instance
+    @instance ||= Bot.new(ServerConfig.new)
+  end
+
+  def self.start
+    instance.start
+  end
+
+  def self.shut_down
+    instance.shut_down
+  end
+
   def initialize(config, name="Sir Pigeon")
     Server.instance(config)
     @name = name
@@ -36,10 +48,21 @@ class Bot
 
   def timed_tasks
     tasks ||= [
-      TimedTask.new(60.0) { MoveAfkUsers.new(self).run },
-      TimedTask.new(10.0) { CheckMcServer.new(self).run },
-      TimedTask.new(3600.0) { RollTheDice.new(self).run }
+      TimedTask.new(60.0, MoveAfkUsers.new),
+      TimedTask.new(10.0, CheckMcServer.new),
+      TimedTask.new(3600.0, RollTheDice.new)
     ]
+  end
+
+  # Return the current user id of this Bot instance.
+  #
+  # @return [Integer] id uniquely identifying the bot.
+  def id
+    @bot_id
+  end
+
+  def self.id
+    instance.id
   end
 
   # Start the bot and its services if not already running.
@@ -54,9 +77,6 @@ class Bot
   #   then start the external event listener.
   def start
     unless started?
-      Command.prepare(self)
-      Channel.prepare(self)
-      ServerGroup.prepare(self)
       @is_started = true
       Server.start
       api.set_nickname(@name)
@@ -132,6 +152,10 @@ class Bot
     api.move_client(user.id, channel_id)
   end
 
+  def self.move_target(user, channel_id)
+    instance.move_target(user, channel_id)
+  end
+
   # Edits the description text of a target channel.
   #
   # @example
@@ -147,6 +171,10 @@ class Bot
     api.edit_channel(channel.id, options)
   end
 
+  def self.edit_channel_description(channel, description)
+    instance.edit_channel_description(channel, description)
+  end
+
   # Send a given message into the channel in which the bot
   # pigeon is currently located. This message can be read by
   # all client that are currently in this channel.
@@ -160,12 +188,20 @@ class Bot
     api.send_channel_message(msg.to_s)
   end
 
+  def self.say_in_current_channel(msg, is_url=false)
+    instance.say_in_current_channel(msg, is_url)
+  end
+
   # Send a poke message to a target user.
   #
   # @param user [User] the user we want to poke
   # @param msg [String] poke message that is sent to user.
   def say_as_poke(user, msg)
     api.poke_client(user.id, msg)
+  end
+
+  def self.say_as_poke(user, msg)
+    instance.say_as_poke(user, msg)
   end
 
   # Send a private message to a target user.
@@ -192,6 +228,10 @@ class Bot
     api.send_private_message(user.id, msg.to_s)
   end
 
+  def self.say_as_private(user, msg, is_url=false)
+    instance.say_as_private(user, msg, is_url)
+  end
+
   # Send an offline message to a target user.
   #
   # @param user [User] the user we want to send an offline message.
@@ -200,12 +240,20 @@ class Bot
     api.send_offline_message(user.id, msg)
   end
 
+  def self.say_as_offline_message(user, msg)
+    instance.say_as_offline_message(user, msg)
+  end
+
   # Send a message to the virual server the bot is currently logged in.
   #
   # @info: Such a message can be read globally in the server message channel.
   # @param message [String] a message that is sent to the server channel.
   def say_to_server(message)
     api.send_server_message(message)
+  end
+
+  def self.say_to_server(message)
+    instance.say_to_server(message)
   end
 
   protected

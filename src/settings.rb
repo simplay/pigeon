@@ -159,11 +159,11 @@ class Settings
 
   # Should we bootstrap the target ts3 server on pigeon's startup?
   #
-  # @info: Bootstrapping is run if only env vars are set
-  #   or the pigeon config is set to true.
+  # @info: Bootstrapping is run if no config exists
+  #   or the pigeon config value 'run_bootstrapping' is set to true.
   #   Will only not be run if it is set as false in the config.
   def run_bootstrapping?
-    return true unless env_vars_set?
+    return true unless config_exist?
     @config.fetch('run_bootstrapping')
   end
 

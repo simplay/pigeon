@@ -57,7 +57,7 @@ class Session
   #
   # @param user [User] a signed in user.
   def append_to_userlist(user)
-    @users << user unless userlist_contains?(user)
+    save_in_userlist(user) unless userlist_contains?(user)
   end
 
   # Remove a user from the internal user list.
@@ -95,6 +95,15 @@ class Session
 
   def initialize
     @users = []
+  end
+
+  private
+
+  # Save a human user in the users list.
+  #
+  # @info: Prevents adding the bot into the session.
+  def save_in_userlist(user)
+    @users << user unless user.bot?
   end
 
 end
