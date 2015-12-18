@@ -1,7 +1,15 @@
+# A taunt link is a funny video collected by users.
+# Such videos are randomly sent to random users every hour.
+# This feature is supposed to entertain the ts3 community.
 class TauntLinkStore
 
+  # A TauntLink is the respresentation of a TauntLinkStore instance.
+  # It's the an anked youtube video that can have a timestamp interval.
   class TauntLink
 
+    # Carries a youtube video
+    #
+    # @raises: ArgumentError in case no youtube video was passed.
     def initialize(link, from_time=nil, to_time=nil)
       raise ArgumentError.new("No youtube link provided.") unless link.include?("www.youtube.com")
       @link = link.gsub(/\[(\/){0,1}(URL)\]/ ,"")
@@ -9,11 +17,16 @@ class TauntLinkStore
       @to_time = to_time
     end
 
+    # Extracts the youtube link from the passed source
+    # and parses it to a embedded yoututbe video.
     def parsed_link
       base = @link.split("watch?v=").last
       "https://www.youtube.com/v/#{base}?"
     end
 
+    # Parsable yoututbe link representation as a anked Linked text.
+    # @info: Can have a defined time interval, an upperbound
+    #   or be a complete youttube video.
     def to_s
       extension = "version=3&autoplay=1"
       url = if !@from_time.nil? && !@to_time.nil?
@@ -32,6 +45,9 @@ class TauntLinkStore
     @instance ||= TauntLinkStore.new
   end
 
+  # Fetches a random link from the file db.
+  #
+  # @return [TauntLink] random taunt link
   def self.next_random
     all = instance.all_stored
     n = all.count
@@ -52,6 +68,10 @@ class TauntLinkStore
     instance.all_links
   end
 
+  # List all linked stored in the file db
+  #
+  # @info: returns the link id and its TauntLink instance.
+  # @return [Array<Array<String, TauntLink>] list of TauntLink,id pairs.
   def all_links
     links = all_stored.map do |item|
       ":#{item.first.to_s} - #{item.last.to_s} \n"
@@ -72,6 +92,18 @@ class TauntLinkStore
     end
   end
 
+  # Stores a given link in the file db.
+  #
+  # @example
+  #   write(:foo, https://www.youtube.com/watch?v=nGOv39628Tw, 10, 20)
+  #
+  # @param id [Symbol] unique identifier of this link
+  #   used as lookup index in the db.
+  # @param link [String] a youtube video link
+  # @param from_time [Integer] time from which the video should be played.
+  #   in seconds, is optional.
+  # @param to_time [Integer] time till the video should be played.
+  #   in seconds, is optional.
   def write(id, link, from_time=nil, to_time=nil)
     store.transaction do
       store[id] = TauntLink.new(link, from_time, to_time)
