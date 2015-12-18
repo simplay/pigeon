@@ -81,8 +81,9 @@ class TauntLinkStore
 
   # Delete a link by id.
   def delete(id)
+    a_id = id.to_s
     store.transaction do
-      store.delete(id)
+      store.delete(a_id)
       store.commit
     end
   end
@@ -91,9 +92,10 @@ class TauntLinkStore
   #
   # @return [TauntLink, nil] returns a stored link in case it exists.
   def find(id)
+    a_id = id.to_s
     store.transaction do
       begin
-        store.fetch(id)
+        store.fetch(a_id)
       rescue
         nil
       end

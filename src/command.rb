@@ -41,6 +41,8 @@ class Command
     @bot.say_as_private(Command.sender, user_nicks.join)
   end
 
+  # Create/Modify/List/Delete a roll to dice (rtd) link (node).
+  #
   # @info:
   #   formats:
   #     <ID, URL, FROM, TO>
@@ -62,7 +64,7 @@ class Command
     when 2
       TauntLinkStore.write(msg[0], msg[1])
     when 1
-      TauntLinkStore.delete(msg[0].to_sym)
+      TauntLinkStore.delete(msg[0])
     when 0
       links = TauntLinkStore.all_links
       links.each do |link|
