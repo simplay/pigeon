@@ -38,7 +38,7 @@ class Command
     user_nicks = Session.users.map do |user|
       user.nick + "\n"
     end
-    @bot.say_as_private(Command.sender, user_nicks.join)
+    Bot.say_as_private(Command.sender, user_nicks.join)
   end
 
   # Create/Modify/List/Delete a roll to dice (rtd) link (node).
@@ -68,7 +68,7 @@ class Command
     when 0
       links = TauntLinkStore.all_links
       links.each do |link|
-        @bot.say_as_private(Command.sender, link)
+        Bot.say_as_private(Command.sender, link)
       end
     end
   end
@@ -125,7 +125,7 @@ class Command
         ":#{key.to_s}"
       end
       message = "Known #{msg[0]} nodes:\n"
-      @bot.say_as_private(Command.sender, message+identifiers.join("\n"))
+      Bot.say_as_private(Command.sender, message+identifiers.join("\n"))
     end
   end
 
@@ -135,13 +135,13 @@ class Command
   # This channel can be used for sending commands to the bot.
   def self.subscribe_to_ot_list
     OtList.append(Command.sender)
-    @bot.say_as_private(Command.sender, "Successfully subscribed - yay, friends forever.")
+    Bot.say_as_private(Command.sender, "Successfully subscribed - yay, friends forever.")
   end
 
   # Unsubscribes command caller from the ot list.
   def self.unsubscribe_from_ot_list
     OtList.remove(Command.sender)
-    @bot.say_as_private(Command.sender, "Unsubscribed: Hope, I'm gonna see you soon again. QQ")
+    Bot.say_as_private(Command.sender, "Unsubscribed: Hope, I'm gonna see you soon again. QQ")
   end
 
   # Send a message to cleverbot
@@ -153,7 +153,7 @@ class Command
   def self.say_to_cleverbot(message)
     msg = message.join(" ")
     answer = ChatbotFactory.cleverbot.tell(msg)
-    @bot.say_as_private(Command.sender, answer)
+    Bot.say_as_private(Command.sender, answer)
   end
 
   # Send a message to pandorabot
@@ -165,7 +165,7 @@ class Command
   def self.say_to_pandorabot(message)
     msg = message.join(" ")
     answer = ChatbotFactory.pandorabot.tell(msg)
-    @bot.say_as_private(Command.sender, answer)
+    Bot.say_as_private(Command.sender, answer)
   end
 
   # Try to invoke a given command by a user.
@@ -196,7 +196,7 @@ class Command
     unless matches.empty?
       sender = Command.sender
       matches.each do |user|
-        @bot.move_target(user, sender.channel_id)
+        Bot.move_target(user, sender.channel_id)
       end
     end
   end
@@ -213,7 +213,7 @@ class Command
   #   are chatting via the global server chat, the only appropriate
   #   variant to communicate with pigeon is through sending a pm.
   def self.open_terminal
-    @bot.say_as_private(Command.sender, "How may I serve you?")
+    Bot.say_as_private(Command.sender, "How may I serve you?")
   end
 
   # Poking pigeon will result in pigeon poking the sender.
@@ -222,7 +222,7 @@ class Command
   end
 
   def self.let_bot_say(sender, msg)
-    @bot.say_as_poke(sender, msg)
+    Bot.say_as_poke(sender, msg)
   end
 
   # Fuzzy matching private message sending via pigeon
@@ -231,7 +231,7 @@ class Command
     sender = Command.sender
     header = "#{sender.nick} sent you: "
     matched_users.each do |user|
-      @bot.say_as_private(user, header+msg)
+      Bot.say_as_private(user, header+msg)
     end
   end
 
@@ -250,13 +250,13 @@ class Command
     end
     msg_count = linked_splits.count
     linked_splits.each_with_index do |split, idx|
-      @bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + split.to_s + "\n")
+      Bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + split.to_s + "\n")
     end
   end
 
   def self.leave_server
-    @bot.say_in_current_channel("I'm leaving now - cu <3")
-    @bot.shut_down
+    Bot.say_in_current_channel("I'm leaving now - cu <3")
+    Bot.shut_down
   end
 
   def self.list_urls(nicks)
@@ -269,42 +269,35 @@ class Command
 
     return if sorted_links.empty?
     message = "Links: \n" + sorted_links.map(&:escaped).join("\n")
-    @bot.say_as_private(Command.sender, message)
+    Bot.say_as_private(Command.sender, message)
   end
 
   def self.crawl_for(keyword, amount)
-    @bot.say_in_current_channel "Searching for wtf stuff..."
+    Bot.say_in_current_channel "Searching for wtf stuff..."
     crawler = keyword.empty? ? Crawler.new : Crawler.new(keyword.first)
     unless crawler.ok?
-      @bot.say_as_private(Command.sender, "Sorry, nothing found...")
+      Bot.say_as_private(Command.sender, "Sorry, nothing found...")
       return
     end
     crawler.links.first(amount).each do |result|
-      @bot.say_as_private(Command.sender, "https://reddit.com"+result.last, true)
+      Bot.say_as_private(Command.sender, "https://reddit.com"+result.last, true)
     end
   end
 
   def self.crawl_img
-    @bot.say_as_private(Command.sender, "Searching for random stuff...")
+    Bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = RedditImgCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_as_private(Command.sender, results.values[random_idx], true)
+    Bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   def self.crawl_wtf
-    @bot.say_as_private(Command.sender, "Searching for random stuff...")
+    Bot.say_as_private(Command.sender, "Searching for random stuff...")
     crawler = WtfCrawler.new
     results = crawler.links
     random_idx = rand(0..results.count-1)
-    @bot.say_as_private(Command.sender, results.values[random_idx], true)
-  end
-
-  # Remember running pigeon bot instance.
-  #
-  # @param bot [Bot] running Pigeon instance listening to clients on server.
-  def self.prepare(bot)
-    @bot ||= bot
+    Bot.say_as_private(Command.sender, results.values[random_idx], true)
   end
 
   # Return sender of current command
