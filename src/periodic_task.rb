@@ -66,7 +66,7 @@ class RollTheDice < PeriodicTask
     user = Session.random_user
     taunt_link = TauntLinkStore.next_random.to_s
     return if taunt_link.empty? or user.nil?
-    msg = "Hey, watch #{taunt_link} out."
+    msg = "Hey, check #{taunt_link} out."
     @bot.say_as_private(user, msg)
   end
 end
