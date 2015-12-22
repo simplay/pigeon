@@ -63,11 +63,51 @@ end
 
 # Sends a random link, stored in TauntLinkStore to a random user.
 class RollTheDice < PeriodicTask
+
+  # Min. time (hours) that should be passed until bot rolls the dice.
+  MIN_TIME = 1
+
+  # Rate in hours one user requires.
+  TIME_RATE_ONE_USER = 4
+
+  def initialize
+    @tic = 0
+    super
+  end
+
+  # Normalized tic value
+  #
+  # @info: Values are in between [1, MIN_TIME+TIME_ONE_USER]
+  def current_tic_interval
+    @tic + 1
+  end
+
   def task
     user = Session.random_user
     taunt_link = TauntLinkStore.next_random.to_s
     return if taunt_link.empty? or user.nil?
-    msg = "Hey, check #{taunt_link} out!"
-    Bot.say_as_private(user, msg)
+    if temporal_thresh_reached
+      msg = "Hey, check #{taunt_link} out!"
+      Bot.say_as_private(user, msg)
+    end
+  end
+
+  private
+
+  def temporal_thresh_reached
+    if current_tic_interval >= temporal_threshold
+      @tic = 0
+      return true
+    end
+    false
+  end
+
+  def temporal_threshold
+    user_count = Session.users.count
+    (TIME_RATE_ONE_USER/user_count + MIN_TIME)
+  end
+
+  def inc_tic
+    @tic = (@tic + 1) % (MIN_TIME + TIME_RATE_ONE_USER)
   end
 end
