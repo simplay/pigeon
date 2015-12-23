@@ -75,18 +75,14 @@ class RollTheDice < PeriodicTask
     super
   end
 
-  # Normalized tic value
+  # Rolls periodically the dice.
   #
-  # @info: Values are in between [1, MIN_TIME+TIME_ONE_USER]
-  def current_tic_interval
-    @tic + 1
-  end
-
+  # Send a random taunt link to a random user included in the session.
   def task
     user = Session.random_user
     taunt_link = TauntLinkStore.next_random.to_s
     return if taunt_link.empty? or user.nil?
-    if temporal_thresh_reached
+    if may_roll_the_dice
       msg = "Hey, check #{taunt_link} out!"
       Bot.say_as_private(user, msg)
     end
@@ -95,14 +91,26 @@ class RollTheDice < PeriodicTask
 
   private
 
-  def temporal_thresh_reached
-    if current_tic_interval >= temporal_threshold
-      return true
-    end
-    false
+  # Checks if enough time has passed allowing to let pigeon roll the dice again.
+  #
+  # @info: Rolling the dice means sending a random user a random link.
+  # @return [Boolean] is pigeon allowed to roll the dice.
+  def may_roll_the_dice
+    current_tic_interval >= tic_threshold
   end
 
-  def temporal_threshold
+  # Normalized tic value
+  #
+  # @info: Values are in between [1, MIN_TIME+TIME_ONE_USER]
+  def current_tic_interval
+    @tic + 1
+  end
+
+  # get the interval length of time units that should pass until pigeon
+  # may roll the dice once again.
+  #
+  # @return [Integer] temporal threshold.
+  def tic_threshold
     user_count = Session.users.count
     (TIME_RATE_ONE_USER/user_count + MIN_TIME)
   end
