@@ -90,13 +90,13 @@ class RollTheDice < PeriodicTask
       msg = "Hey, check #{taunt_link} out!"
       Bot.say_as_private(user, msg)
     end
+    inc_tic
   end
 
   private
 
   def temporal_thresh_reached
     if current_tic_interval >= temporal_threshold
-      @tic = 0
       return true
     end
     false
