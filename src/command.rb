@@ -19,7 +19,7 @@ class Command
       :adl => Command.new(ServerGroup.server_admin) { |msg| append_description_link(msg) },
       :ddl => Command.new(ServerGroup.server_admin) { |msg| delete_description_link(msg) },
       :bc => Command.new(ServerGroup.server_admin) { |msg| broadcast(msg) },
-      :rtd => Command.new(ServerGroup.server_admin) { |msg| roll_the_dice(msg) },
+      :rtd => Command.new(ServerGroup.superuser) { |msg| roll_the_dice(msg) },
       :who => Command.new(ServerGroup.normal) { who },
       :h => Command.new { help }
     }
