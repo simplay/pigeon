@@ -50,7 +50,8 @@ class Bot
     tasks ||= [
       TimedTask.new(60.0, MoveAfkUsers.new),
       TimedTask.new(10.0, CheckMcServer.new),
-      TimedTask.new(3600.0, RollTheDice.new)
+      TimedTask.new(3600.0, RollTheDice.new),
+      TimedTask.new(3600.0, DayChecker.new)
     ]
   end
 

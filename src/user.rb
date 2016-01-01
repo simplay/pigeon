@@ -113,11 +113,16 @@ class User
     @unique_id = unique_id
     @is_nil_user = is_nil_user
     @talking_to_cb = true
-    @rtd_count = 0
+    reset_rtd_count
   end
 
   def inc_rtd
     @rtd_count = @rtd_count + 1
+  end
+
+  # Set the rtd count equal to 0
+  def reset_rtd_count
+    @rtd_count = 0
   end
 
   # Checks whether this user the bot?

@@ -61,6 +61,12 @@ class CheckMcServer < PeriodicTask
   end
 end
 
+class DayChecker < PeriodicTask
+  def task
+    Session.update_day
+  end
+end
+
 # Sends a random link, stored in TauntLinkStore to a random user.
 class RollTheDice < PeriodicTask
 

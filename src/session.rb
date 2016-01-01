@@ -29,6 +29,10 @@ class Session
     instance.users
   end
 
+  def self.update_day
+    instance.update_day
+  end
+
   # Load each user that is only into the session's memory.
   #
   # @info: This method is called right after the bot's startup phase.
@@ -39,6 +43,13 @@ class Session
     User.all.each do |user|
       append_to_userlist(user)
     end
+  end
+
+  # update the current session day
+  def update_day
+    prev_day = @current_day
+    @current_day = Time.now.day
+    users.each(&:reset_rtd_count) if prev_day != @current_day
   end
 
   def users
@@ -115,6 +126,7 @@ class Session
 
   def initialize
     @users = []
+    update_day
   end
 
   private
