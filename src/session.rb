@@ -3,6 +3,8 @@
 # such as whether they re currently talking to cleverbot.
 class Session
 
+  RTD_THRESH = 3
+
   def self.instance
     @instance ||= Session.new
   end
@@ -43,14 +45,32 @@ class Session
     @users
   end
 
+  # Fetch all users that have a rtd count that is at most equal to a given
+  # threshold.
+  #
+  # @info: Select all user having a rtd count at most equal to
+  #   a given threshold value.
+  # @param rtd_count [Integer] max allowed rtd count
+  #   user may exhibit in order to be selected
+  # @return [Array<User>] a list of users having a rtd count at most eqaul
+  #   to a given threshold value.
+  def users_with_rtd_count(rtd_count)
+    users.select do |user|
+      user.rtd_count <= rtd_count
+    end
+  end
+
   # Retrieve a random user from the session
   #
   # @return [User, nil] a random user included in the session.
   def random_user
-    n = @users.count
+    in_range_users = users_with_rtd_count(RTD_THRESH)
+    n = in_range_users.count
     return if n==0
     idx = rand(0..n-1)
-    @users[idx]
+    user = in_range_users[idx]
+    user.inc_rtd unless user.nil?
+    user
   end
 
   # Add a user to the internal user list.

@@ -5,7 +5,7 @@
 # E.g. the logic behing the '!ll' command.
 class User
 
-  attr_reader :id, :nick, :channel_id, :unique_id
+  attr_reader :id, :nick, :channel_id, :unique_id, :rtd_count
   attr_accessor :talking_to_cb
 
   # Threshold time [seconds] a user may be not performing
@@ -113,6 +113,11 @@ class User
     @unique_id = unique_id
     @is_nil_user = is_nil_user
     @talking_to_cb = true
+    @rtd_count = 0
+  end
+
+  def inc_rtd
+    @rtd_count = @rtd_count + 1
   end
 
   # Checks whether this user the bot?
