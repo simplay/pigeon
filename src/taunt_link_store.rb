@@ -50,10 +50,20 @@ class TauntLinkStore
     @instance ||= TauntLinkStore.new
   end
 
-  # Fetches a random link from the file db.
+  # Fetches a random link.
   #
+  # @info: Link is either from the taunt link db or a random z0mg url.
   # @return [TauntLink] random taunt link
   def self.next_random
+    if rand(0..1) % 2 == 0
+      random_rtd_link
+    else
+      url = "http://z0r.de/#{rand(1..7350)}"
+      LinkText.new(url, "this")
+    end
+  end
+
+  def self.random_rtd_link
     all = instance.all_stored
     n = all.count
     return "" if n == 0
