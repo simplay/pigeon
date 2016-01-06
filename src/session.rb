@@ -45,13 +45,22 @@ class Session
     end
   end
 
-  # update the current session day
+  # Updates the current session day
+  #
+  # @info: The previous stored day value is compared against the current day value.
+  #   in case the day value has changed, the rtd counter of every user currently
+  #   held in the session is resetted.
+  #   nb: the rtd counter of a user is used to limit the number of rtd links
+  #   a particular user may receive per day.
   def update_day
     prev_day = @current_day
     @current_day = Time.now.day
     users.each(&:reset_rtd_count) if prev_day != @current_day
   end
 
+  # Return all online users stored in the
+  #
+  # @return [Array<User>] a list of all user currently online in the server.
   def users
     @users
   end

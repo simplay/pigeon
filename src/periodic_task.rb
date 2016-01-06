@@ -61,6 +61,8 @@ class CheckMcServer < PeriodicTask
   end
 end
 
+# This periodic tasks updates the current day (value) stored in the session.
+# The update rate (frequency) is defined in the class Bot (currently once an hour).
 class DayChecker < PeriodicTask
   def task
     Session.update_day

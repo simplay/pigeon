@@ -116,11 +116,23 @@ class User
     reset_rtd_count
   end
 
+  # Increments the rtd counter of this user by 1.
+  #
+  # @info: The rtd (roll the dice) counter determines
+  #   the number of random links a user may receive by the Bot
+  #   a day.
   def inc_rtd
     @rtd_count = @rtd_count + 1
   end
 
-  # Set the rtd count equal to 0
+  # Sets the rtd count equal to 0.
+  #
+  # @info: the rtd (roll the dice) counter denotes the number
+  #   of random links a user has received on the current day.
+  #   The notion of rtd count is used in order to limit the number
+  #   of rtd messages a user may receive per day.
+  #   This regularization behaviour is handled
+  #   in Session and PeriodicTask.
   def reset_rtd_count
     @rtd_count = 0
   end
@@ -145,6 +157,10 @@ class User
     @talking_to_cb = !@talking_to_cb
   end
 
+  # Checks whether this user is currently talking to cleverbot.
+  #
+  # @return [Boolean] true in case the user is chatting to cleverbot,
+  #   otherwise false.
   def talking_to_cb?
     @talking_to_cb
   end
@@ -162,6 +178,7 @@ class User
   #
   # @info: Unmovable users will not moved to the afk channel
   #   after being idle for too long.
+  #   A user is unmovable in case he belongs to the server group 'Pigeonator'
   # @return [Boolean] true if this user belongs to the unmovable group
   #   otherwise false.
   def unmovable?
