@@ -70,6 +70,7 @@ class Session
   #
   # @info: Select all user having a rtd count at most equal to
   #   a given threshold value.
+  #
   # @param rtd_count [Integer] max allowed rtd count
   #   user may exhibit in order to be selected
   # @return [Array<User>] a list of users having a rtd count at most eqaul
@@ -80,7 +81,12 @@ class Session
     end
   end
 
-  # Retrieve a random user from the session
+  # Retrieve a random user from the session.
+  #
+  # @info: Only users that have a rtd counter lower than RTD_THRESH
+  #   can be retrieved. This prevents the Bot sending to many random
+  #   links the same user. This implies: Every user can at most receive
+  #   RTD_THRESH random links (via the rtd feature) per day.
   #
   # @return [User, nil] a random user included in the session.
   def random_user
