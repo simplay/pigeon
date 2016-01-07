@@ -116,6 +116,10 @@ class User
     reset_rtd_count
   end
 
+  def sentinel?
+    @is_nil_user
+  end
+
   # Increments the rtd counter of this user by 1.
   #
   # @info: The rtd (roll the dice) counter determines
