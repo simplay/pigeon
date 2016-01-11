@@ -5,18 +5,25 @@ class TauntLinkStore
 
   class TauntLink
 
+    # @param link [String, #to_s] a multimedia source that
+    #   depicts a taunt link.
     def initialize(link)
       @link = parsed_input_link(link)
     end
 
+    # Parses the multimedia source to store it in the DB.
     def parsed_input_link(link)
       link.to_s
     end
 
+    # Get a pretty string version of the parsed input link.
+    #
+    # @info: This pretty version is renderable in the browser.
     def parsed_link
       @link
     end
 
+    # Get the formatted version of this taunt link.
     def to_s
       LinkText.new(parsed_link, "this").to_s
     end
