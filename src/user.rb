@@ -6,7 +6,7 @@
 class User
 
   attr_reader :id, :nick, :channel_id, :unique_id, :rtd_count
-  attr_accessor :talking_to_cb
+  attr_accessor :talking_to_bot
 
   # Threshold time [seconds] a user may be not performing
   # any action before identified as being idle.
@@ -112,7 +112,7 @@ class User
     @channel_id = channel_id
     @unique_id = unique_id
     @is_nil_user = is_nil_user
-    @talking_to_cb = true
+    @talking_to_bot = true
     reset_rtd_count
   end
 
@@ -145,24 +145,24 @@ class User
     id == Bot.id
   end
 
-  # Toggle the state of flag talking_to_cb.
+  # Toggle the state of flag talking_to_bot.
   #
   # @example
-  #   assume: @talking_to_cb == true
-  #   toggle_talking_to_cb
-  #   #=> @talking_to_cb == false
-  #   toggle_talking_to_cb
-  #   #=> @talking_to_cb == true
-  def toggle_talking_to_cb
-    @talking_to_cb = !@talking_to_cb
+  #   assume: @talking_to_bot == true
+  #   toggle_talking_to_bot
+  #   #=> @talking_to_bot == false
+  #   toggle_talking_to_bot
+  #   #=> @talking_to_bot == true
+  def toggle_talking_to_bot
+    @talking_to_bot = !@talking_to_bot
   end
 
-  # Checks whether this user is currently talking to cleverbot.
+  # Checks whether this user is currently talking to a bot.
   #
   # @return [Boolean] true in case the user is chatting to cleverbot,
   #   otherwise false.
-  def talking_to_cb?
-    @talking_to_cb
+  def talking_to_bot?
+    @talking_to_bot
   end
 
   # Does this user belong to a group having a given name
