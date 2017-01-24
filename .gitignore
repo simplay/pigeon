@@ -10,3 +10,4 @@ lib/java/*
 package/
 build/*
 data/pigeon_config.yml
+*.log
