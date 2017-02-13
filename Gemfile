@@ -11,4 +11,5 @@ group :test do
   gem 'minitest'
 end
 
+gem "telegram_bot", github: 'eljojo/telegram_bot'
 gem 'rawr', :source => "http://gems.neurogami.com"

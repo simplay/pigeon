@@ -1,14 +1,33 @@
+GIT
+  remote: git://github.com/eljojo/telegram_bot.git
+  revision: d09cf9712d3e9913ca9f3bfe362e2a536e021f5a
+  specs:
+    telegram_bot (0.0.7)
+      excon (>= 0.30.0)
+      virtus (>= 1.0.0)
+
 GEM
   remote: http://rubygems.org/
   remote: http://gems.neurogami.com/
   specs:
     awesome_print (1.6.1)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.2)
     coderay (1.1.0)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
+    equalizer (0.0.11)
+    excon (0.54.0)
     ffi (1.9.10-java)
     gli (2.13.2)
     hoe (3.14.2)
       rake (>= 0.8, < 11.0)
+    ice_nine (0.11.2)
     method_source (0.8.2)
     minitest (5.4.1)
     pry (0.10.3-java)
@@ -26,10 +45,16 @@ GEM
     slop (3.6.0)
     spoon (0.0.4)
       ffi
+    thread_safe (0.3.5-java)
     user-choices (1.1.6.1)
       builder (>= 2.1.2)
       s4t-utils (>= 1.0.3)
       xml-simple (>= 1.0.11)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -41,6 +66,7 @@ DEPENDENCIES
   minitest
   pry
   rawr!
+  telegram_bot!
 
 BUNDLED WITH
    1.10.6

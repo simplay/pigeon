@@ -128,6 +128,7 @@ class Bot
     Session.reload
     reestablish_connection_to_ot_users
     timed_tasks.each(&:start)
+    TelegramBot.start
   end
 
   def handle_event(message)
