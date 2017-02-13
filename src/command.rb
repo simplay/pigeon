@@ -239,6 +239,8 @@ class Command
   # list all available help commands
   def self.help
     sender = Command.sender
+    github_url = LinkText.new("https://github.com/simplay/pigeon")
+    version_info = "Sir Pigeon Bot (#{github_url.to_s}) \n" 
     header = "Available commands: \n"
     help_msgs = @all.keys.map do |cmd|
       description = CommandDescription.parse(cmd)
@@ -250,6 +252,7 @@ class Command
       LinedText.new(split)
     end
     msg_count = linked_splits.count
+    Bot.say_as_private(sender, "#{version_info}\n")
     linked_splits.each_with_index do |split, idx|
       Bot.say_as_private(sender, "[#{idx+1}/#{msg_count}] " + header + split.to_s + "\n")
     end
