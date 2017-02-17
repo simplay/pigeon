@@ -240,7 +240,7 @@ class Command
   def self.help
     sender = Command.sender
     github_url = LinkText.new("https://github.com/simplay/pigeon")
-    version_info = "Sir Pigeon Bot (#{github_url.to_s}) \n" 
+    version_info = "Sir Pigeon Bot version #{BoldText.new(Bot::VERSION).to_s} (#{github_url.to_s}) \n" 
     header = "Available commands: \n"
     help_msgs = @all.keys.map do |cmd|
       description = CommandDescription.parse(cmd)
