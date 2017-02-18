@@ -1,10 +1,19 @@
 $LOAD_PATH << '.'
 $LOAD_PATH << File.expand_path('../src', __FILE__)
+#$LOAD_PATH << File.expand_path('../src/textblocks', __FILE__)
 $LOAD_PATH << File.expand_path('../lib', __FILE__)
 
 require 'java'
 require 'teamspeak3-api-1.0.12.jar'
 require 'cleverbot.jar'
+
+require 'textblocks/text_block'
+require 'textblocks/bold_text'
+require 'textblocks/color_text'
+require 'textblocks/lined_text'
+require 'textblocks/link_text'
+require 'textblocks/list_text'
+require 'textblocks/labeled_link_text'
 
 require 'settings'
 require 'url_store'
@@ -29,7 +38,6 @@ require 'event'
 require 'chatbot_factory'
 require 'timed_task'
 require 'periodic_task'
-require 'text_block'
 require 'description_layout'
 require 'system_info'
 require 'bootstrap'

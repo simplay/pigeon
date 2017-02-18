@@ -25,7 +25,7 @@ java_import 'com.github.theholywaffle.teamspeak3.api.ChannelProperty'
 # Please notice that SQA authentication credentials are required to run the bot.
 class Bot
 
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
 
   def self.instance
     @instance ||= Bot.new(ServerConfig.new)
