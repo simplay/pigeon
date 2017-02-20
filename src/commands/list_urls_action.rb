@@ -1,3 +1,4 @@
+# List all stored (shared) links
 class ListUrlAction < WithArgumentsAction
   def run(nicks)
     sorted_links = if nicks.empty?

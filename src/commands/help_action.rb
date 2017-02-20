@@ -1,4 +1,4 @@
-# list all available help commands
+# List all available help commands
 class HelpAction < SimpleAction
 
   def run

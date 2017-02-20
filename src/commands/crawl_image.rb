@@ -1,3 +1,4 @@
+# Crawl an image from reddit by a given keyword
 class CrawlImage < SimpleAction
   def run
     Bot.say_as_private(Command.sender, "Searching for random stuff...")

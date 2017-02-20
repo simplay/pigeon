@@ -1,3 +1,4 @@
+# Searches for a random post in the subreddit WTF
 class CrawlWtfAction < SimpleAction
   def run
     Bot.say_as_private(Command.sender, "Searching for random stuff...")

@@ -1,5 +1,9 @@
+# Every command performs a certain Action and has a certain authentication level.
+# This auth. levels defines which user are allowed to invoke a particular command.
 class Command
 
+  # Collection of all available user commands.
+  # 
   # @return [Hash] of all available commands
   def self.all
     @all ||= {
@@ -21,8 +25,8 @@ class Command
       :ddl  => Command.new(ServerGroup.server_admin, DeleteLinkAction),
       :bc   => Command.new(ServerGroup.server_admin, BroadcastAction),
       :rtd  => Command.new(ServerGroup.superuser, RollTheDiceAction),
-      :who => Command.new(ServerGroup.normal, WhoAction),
-      :h   => Command.new(HelpAction)
+      :who  => Command.new(ServerGroup.normal, WhoAction),
+      :h    => Command.new(HelpAction)
     }
   end
 
