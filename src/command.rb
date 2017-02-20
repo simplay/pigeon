@@ -7,7 +7,7 @@ class Command
       :ll => Command.new(ServerGroup.normal) { |nicks| list_urls(nicks) }, # list links
       :rs => Command.new(ServerGroup.normal) { |keyword| crawl_for(keyword, 1) }, # random shit
       :rsi => Command.new(ServerGroup.normal) { crawl_img },
-      :pm => Command.new(ServerGroup.normal) { |args| pm_to(args[0], args[1]) },
+      :pm => Command.new(ServerGroup.normal) { |args| pm_to(args) },
       :rsw => Command.new(ServerGroup.normal) { crawl_wtf },
       :ot => Command.new(ServerGroup.normal) { open_terminal},
       :dd => Command.new(ServerGroup.server_admin) { |nick| drag_and_drop(nick.first) },
@@ -226,9 +226,33 @@ class Command
     Bot.say_as_poke(sender, msg)
   end
 
-  # Fuzzy matching private message sending via pigeon
-  def self.pm_to(fuzzy_nick, msg)
-    matched_users = User.try_find_all_by_nick(fuzzy_nick)
+  # Send a private message to a target user via Pigeon.
+  #
+  # @example Send the user Heman the message "and I say hey...*sing*"
+  #   !pm Heman, and I say hey...*sing*
+  #
+  # @info: Message format: <NICK>,<MESSAGE>
+  #   a substring matching the target user nick
+  #   followed by the message that should be sent to the target,
+  #   seperated by a ,
+  #   The message is sent to every user nickname that matches
+  #   with msg[0].
+  #   args is a string array containing the target user and the message
+  #   Pigeon is supposed to send.
+  # @param args [Array<String>] the pm arguments.
+  def self.pm_to(args)
+    matched_users = User.try_find_all_by_nick(args.first)
+    msg = args[1..-1].join(" ")
+    if matched_users.empty? or args.any? { |a| a.include?(",") }
+      content = args.join(" ").split(",")
+      fuzzy_nick = content.first.strip
+      m = User.try_find_all_by_nick(fuzzy_nick)
+      if !m.empty? && !m.any? do |u| u.sentinel? end
+        matched_users = m
+        msg = content[1..-1].join(" ")
+      end
+    end
+    return if matched_users.empty?
     sender = Command.sender
     header = "#{sender.nick} sent you: "
     matched_users.each do |user|
