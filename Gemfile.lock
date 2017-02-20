@@ -16,6 +16,8 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
       spoon (~> 0.0)
+    pry-nav (0.2.4)
+      pry (>= 0.9.10, < 0.11.0)
     rake (10.1.0)
     rawr (1.8.3)
       rubyzip
@@ -40,6 +42,7 @@ DEPENDENCIES
   gli
   minitest
   pry
+  pry-nav
   rawr!
 
 BUNDLED WITH
