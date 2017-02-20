@@ -14,7 +14,7 @@ class Crawler
   #   Crawler.new("cute") # fetch links in https://www.reddit.com/r/cute
   def initialize(keyword='new')
     base_address = (keyword == 'new') ? REDDIT_ADDRESS : "#{REDDIT_ADDRESS}r/"
-    url = "#{base_address}#{keyword}/.json"
+    url = "#{base_address}#{keyword}.json"
     page_as_json = open_as_json(url)
     @links = extract_images(page_as_json) unless page_as_json.empty?
   end
