@@ -25,7 +25,7 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
 + Formatted channel descriptions, updated by the bot.
 
 ## Requirements
-+ JRuby 9.0.1.0
++ JRuby 9.1.7.0
 + Java 7
 + The Bundler gem
 + A Teamspeak 3 server with query admin access.
