@@ -9,7 +9,7 @@ class OtListTest < MiniTest::Test
   end
 
   def setup
-    @usr = User.new(1,"peter", nil, 1)
+    @usr = User.new(1,"peter", nil, 1, 1)
   end
 
   def test_can_append_new_user
