@@ -31,7 +31,7 @@ class Command
   # @param action_klass [class < Action] definition of target action.
   def initialize(auth_level=ServerGroup.lowest, action_klass)
     @auth_level = auth_level
-    @instr = action_klass.new
+    @action = action_klass.new
   end
 
   # Try to invoke a given command by a user.
@@ -44,8 +44,7 @@ class Command
   def invoke_by(user, args)
     Command.sender = user
     if user.level? @auth_level
-      #@instr.call(args)
-      @instr.execute(args)
+      @action.execute(args)
     else
       msg = "You do not have permission to use this command!"
       Command.let_bot_say(Command.sender, msg)

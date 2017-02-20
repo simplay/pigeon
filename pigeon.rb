@@ -16,6 +16,9 @@ require 'textblocks/list_text'
 require 'textblocks/labeled_link_text'
 
 require 'commands/action'
+require 'commands/simple_action'
+require 'commands/with_arguments_action'
+
 require 'commands/help_action'
 require 'commands/who_action'
 require 'commands/poke_action'
