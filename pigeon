@@ -1,38 +1,52 @@
 #!/usr/bin/env ruby
 
+require 'pry'
 require 'gli'
-include GLI::App
 
-program_desc 'Pigeon Control'
+module Wrapper
+  include GLI::App
 
-desc 'Start a pigeon'
-command :start do |c|
-  c.action do
-    require './pigeon'
-    Bot.start
+  extend self
+
+  program_desc 'Pigeon Control'
+
+  desc 'Start a pigeon'
+  command :start do |c|
+    c.action do
+      require './pigeon'
+      Bot.start
+    end
   end
-end
 
-desc 'Start the test ts3 server'
-command :server do |c|
-  c.action do
-    require './pigeon'
-    system "cd #{Settings.server_path} && ./ts3server_mac"
+  desc "Starts an interactive console loading the complete environment and codebase" 
+  command :console do |c|
+    c.action do
+      require './pigeon'
+      Pry.start
+    end
   end
-end
 
-desc 'Kill all local ts3 servers'
-command :kill_servers do |c|
-  c.action do
-    system 'ps aux | grep ts3server_mac | xargs kill -9 >/dev/null 2>&1'
+  desc 'Start the test ts3 server'
+  command :server do |c|
+    c.action do
+      require './pigeon'
+      system "cd #{Settings.server_path} && ./ts3server_mac"
+    end
   end
-end
 
-desc 'Run the test suite'
-command :test do |c|
-  c.action do
-    system 'rake test'
+  desc 'Kill all local ts3 servers'
+  command :kill_servers do |c|
+    c.action do
+      system 'ps aux | grep ts3server_mac | xargs kill -9 >/dev/null 2>&1'
+    end
   end
-end
 
-run(ARGV)
+  desc 'Run the test suite'
+  command :test do |c|
+    c.action do
+      system 'rake test'
+    end
+  end
+
+  run(ARGV)
+end
