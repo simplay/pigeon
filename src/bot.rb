@@ -46,6 +46,7 @@ class Bot
     @tasks = Tasks.new
     @command_processor = CommandProcessor.new(@tasks)
     @req_listener = RequestListener.new
+    @telegram_bot = TelegramBotBinding.new
   end
 
   def timed_tasks
@@ -69,7 +70,8 @@ class Bot
   end
 
   # Start the bot and its services if not already running.
-  # @info: The order of method invocations matters.
+  # 
+  # @info: The ORDER of method invocations MATTERS!
   #   first assign all relevant setup information
   #   then start establish a connection to the TS3 server
   #   then determine the bots user id (used for checking bot's identity)
@@ -81,6 +83,7 @@ class Bot
   def start
     unless started?
       @is_started = true
+      @telegram_bot.start
       Server.start
       api.set_nickname(@name)
       api.register_all_events
@@ -120,6 +123,7 @@ class Bot
       api.removeTS3Listeners(@ts3_listener)
       timed_tasks.each(&:stop)
       Server.stop
+      @telegram_bot.shutdown
     end
   end
 

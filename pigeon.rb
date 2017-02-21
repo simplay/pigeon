@@ -7,6 +7,8 @@ require 'java'
 require 'teamspeak3-api-1.0.12.jar'
 require 'cleverbot.jar'
 
+require 'telegram/bot'
+
 require 'textblocks/text_block'
 require 'textblocks/bold_text'
 require 'textblocks/color_text'
@@ -69,3 +71,5 @@ require 'bootstrap'
 require 'description_link_store'
 require 'session'
 require 'taunt_link_store'
+
+require 'telegram_bot_binding'

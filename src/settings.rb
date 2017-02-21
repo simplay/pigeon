@@ -75,6 +75,10 @@ class Settings
     instance.secret
   end
 
+  def self.telegram_token
+    instance.telegram_token
+  end
+
   # The username of the Server Query Admin client.
   #
   # @info: Used to establish a Server Query Admin connection.
@@ -128,6 +132,10 @@ class Settings
   # @return [String] a token defining a trustworthy pigeon message.
   def secret
     guarded_config_env_value('prod_secret', 'P_SECRET')
+  end
+
+  def telegram_token
+    guarded_config_env_value('telegram_token', 'TELEGRAM_TOKEN')
   end
 
   # Checks whether the settings are valid and thus usable.

@@ -21,3 +21,5 @@ gem 'gli'
 
 # Packaging and deployment for standalone JRuby apps
 gem 'rawr', :source => "http://gems.neurogami.com"
+
+gem 'telegram-bot-ruby'

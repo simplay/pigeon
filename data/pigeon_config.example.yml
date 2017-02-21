@@ -27,6 +27,9 @@ prod_password: this_is_for_sure_the_qsa_pw
 #   will use the secret pigeon
 prod_secret: da_real_pigeon_secret
 
+
+telegram_token: your_telegram_bot_token
+
 # IP address of the production server that our bot wants connect onto.
 # Example:
 #   prod_ip: 127.0.0.1
