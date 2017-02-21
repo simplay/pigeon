@@ -16,7 +16,7 @@ class TelegramBotBinding
             when /\/login/
               secret = message.text.split("/login ").last.strip
               status = Bot.login_as_telegram_user("", secret)
-              status_message = status ? "Passord correct" : "Incorrect Passowrd"
+              status_message = status ? "Password Correct" : "Incorrect Password"
               bot.api.send_message(chat_id: message.chat.id, text: status_message)
               append_user(message.from.username) if (status)
             when /^\//
