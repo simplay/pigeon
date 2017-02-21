@@ -31,6 +31,9 @@ GEM
       spoon (~> 0.0)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
+    pry-remote (0.1.8)
+      pry (~> 0.9)
+      slop (~> 3.0)
     rake (10.1.0)
     rawr (1.8.3)
       rubyzip
@@ -65,6 +68,7 @@ DEPENDENCIES
   minitest
   pry
   pry-nav
+  pry-remote
   rawr!
   telegram-bot-ruby
 

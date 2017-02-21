@@ -43,6 +43,8 @@ This project is licensed under the [MIT License](https://github.com/simplay/pige
   export P_PORT="YOUR_TS3_QUERY_SERVER_PORT"
   export P_SECRET="YOUR_SOCKET_PASSPHRASE"
   export P_SERVER_PATH="PATH_TO_YOUR_LOCAL_SERVER"
+  export TELEGRAM_TOKEN="YOUR_TELEGRAM_BOT_API_TOKEN"
+  export TELEGRAM_PASSWORD="TELEGRAM_BOT_PASSWORD"
   ```
 
 or by setting up a pigeon config file. For doing so perform `cp data/pigeon_config.example.yml data/pigeon_config.yml` and specify the corresponding runtime parameters.

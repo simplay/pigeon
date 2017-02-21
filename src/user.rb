@@ -113,6 +113,7 @@ class User
     @unique_id = unique_id
     @is_nil_user = is_nil_user
     @talking_to_bot = true
+    @has_signed_in_telegram = false
     reset_rtd_count
   end
 
@@ -234,6 +235,15 @@ class User
   # @return [Hash{ServerGroupId=>ServerGroupName}] list of user's
   def levels
     @levels
+  end
+
+  # Try to login
+  def login_telegram(secret)
+    @has_signed_in_telegram = password.eql? ""
+  end
+
+  def signed_in_telegram?
+    @has_signed_in_telegram
   end
 
 end

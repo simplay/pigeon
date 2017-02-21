@@ -1,5 +1,6 @@
 require 'yaml'
 require 'fileutils'
+require 'digest/sha1'
 
 # Settings contains all relevant Pigeon runtime parameters,
 # such as server credentials or some secrets defined as tokens.
@@ -79,6 +80,10 @@ class Settings
     instance.telegram_token
   end
 
+  def self.telegram_login_secret
+    instance.telegram_login_secret
+  end
+
   # The username of the Server Query Admin client.
   #
   # @info: Used to establish a Server Query Admin connection.
@@ -134,8 +139,14 @@ class Settings
     guarded_config_env_value('prod_secret', 'P_SECRET')
   end
 
+  # Telegram Bot API token.
   def telegram_token
     guarded_config_env_value('telegram_token', 'TELEGRAM_TOKEN')
+  end
+
+  # Hashed telegram bot password used to perform a login
+  def telegram_login_secret
+    guarded_config_env_value('telegram_password', 'TELEGRAM_PASSWORD', true)
   end
 
   # Checks whether the settings are valid and thus usable.
@@ -189,7 +200,8 @@ class Settings
   # Obtain the guarded Setting value from either 'pigeon_config.yml' or from the
   # ENV variables. Guarded means, we try to use the config values if a config file exists
   # and the option 'use_config' is set to true. Otherwise we assume that the setting
-  # value is defined in an appropriate ENV variable.
+  # value is defined in an appropriate ENV variable. Optionally, lookup values
+  # can be returned hashed (recommended for passwords).
   #
   # @example
   #   guarded_config_env_value('prod_port', 'P_PORT')
@@ -197,6 +209,9 @@ class Settings
   #
   #   guarded_config_env_value('prod_port', 'P_FOOBAR')
   #   # => "ENV variable 'P_FOOBAR' not specified."
+  #   
+  #   guarded_config_env_value('prod_port', 'P_PORT', true)
+  #   # => "31559f5f20066f6567f7d5f6c1d35582f192bcc3" # SHA1 hashed value
   #
   # @info: the pigeon config 'pigeon_config.yml' is located in 'data/'
   #   and the ENV variables are supposed to be defined in a user's bash profile.
@@ -207,10 +222,12 @@ class Settings
   #
   # @param config_id [String] identifier of target config parameter
   # @param env_id [String] identifier of target ENV variable.
+  # @param return_as_hashed [Boolean] determines whether a lookup value should be hashed.
+  #   This is an optional argument and is by default false.
   # @return [String, nil] Corresponding Setting value. Can be nil
   #   in case in neither the setting nor an ENV variable contains
   #   and appropriate value.
-  def guarded_config_env_value(config_id, env_id)
+  def guarded_config_env_value(config_id, env_id, return_as_hashed=false)
     param = use_config_credentials? ? @config.fetch(config_id)
                                     : ENV[env_id]
     if param.nil?
@@ -218,6 +235,7 @@ class Settings
                                           : "ENV variable '#{env_id}'"
       raise "#{error_msg} not specified."
     end
+    param = Digest::SHA1.hexdigest(param) if return_as_hashed
     param
   end
 

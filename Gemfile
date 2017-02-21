@@ -3,7 +3,7 @@ source "http://rubygems.org"
 group :development do
   # A runtime developer console used for debugging
   gem 'pry'
-
+  gem 'pry-remote'
   # Binding navigation commands for Pry to make a simple debugger 
   gem 'pry-nav'
 
@@ -22,4 +22,5 @@ gem 'gli'
 # Packaging and deployment for standalone JRuby apps
 gem 'rawr', :source => "http://gems.neurogami.com"
 
+# Ruby wrapper for Telegram's Bot API
 gem 'telegram-bot-ruby'

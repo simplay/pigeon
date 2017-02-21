@@ -1,4 +1,5 @@
 require 'thread'
+require 'digest/sha1'
 
 java_import 'com.github.theholywaffle.teamspeak3.TS3Query'
 java_import 'com.github.theholywaffle.teamspeak3.TS3Api'
@@ -197,6 +198,15 @@ class Bot
 
   def self.say_in_current_channel(msg, is_url=false)
     instance.say_in_current_channel(msg, is_url)
+  end
+
+  # Register a telegram user. A registered user may invoke ts commands
+  def login_as_telegram_user(username, password)
+    Settings.telegram_login_secret.eql? (Digest::SHA1.hexdigest(password))
+  end
+
+  def self.login_as_telegram_user(username, password)
+    instance.login_as_telegram_user(username, password)
   end
 
   # Send a poke message to a target user.

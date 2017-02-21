@@ -27,8 +27,14 @@ prod_password: this_is_for_sure_the_qsa_pw
 #   will use the secret pigeon
 prod_secret: da_real_pigeon_secret
 
-
+# Your telegram bot api token. You can obtain such a token via
+# signing up as a bot dev.
 telegram_token: your_telegram_bot_token
+
+# The telegram bot password is used to perform a login from telegram.
+# Only telegram users that have successfully performed a login can
+# communicate with the teamspeak users via the bot.
+telegram_password: your_telegram_bot_password
 
 # IP address of the production server that our bot wants connect onto.
 # Example:
