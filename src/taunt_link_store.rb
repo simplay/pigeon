@@ -3,9 +3,35 @@
 # This feature is supposed to entertain the ts3 community.
 class TauntLinkStore
 
+  class TauntLink
+
+    # @param link [String, #to_s] a multimedia source that
+    #   depicts a taunt link.
+    def initialize(link)
+      @link = parsed_input_link(link)
+    end
+
+    # Parses the multimedia source to store it in the DB.
+    def parsed_input_link(link)
+      link.to_s
+    end
+
+    # Get a pretty string version of the parsed input link.
+    #
+    # @info: This pretty version is renderable in the browser.
+    def parsed_link
+      @link
+    end
+
+    # Get the formatted version of this taunt link.
+    def to_s
+      LinkText.new(parsed_link, "this").to_s
+    end
+  end
+
   # A TauntLink is the respresentation of a TauntLinkStore instance.
   # It's the an anked youtube video that can have a timestamp interval.
-  class TauntLink
+  class YoutubeTauntLink < TauntLink
 
     # Carries a youtube video
     #
@@ -16,10 +42,9 @@ class TauntLinkStore
     # @param to_time [String, nil] time till the video should be played.
     #   in seconds, is optional.
     def initialize(link, from_time=nil, to_time=nil)
-      raise ArgumentError.new("No youtube link provided.") unless link.include?("www.youtube.com")
-      @link = link.gsub(/\[(\/){0,1}(URL)\]/ ,"")
       @from_time = from_time
       @to_time = to_time
+      super(link)
     end
 
     # Extracts the youtube link from the passed source
@@ -44,7 +69,14 @@ class TauntLinkStore
       LinkText.new(url, "this").to_s
     end
 
+    protected
+
+    def parse_input_link(link)
+      link.gsub(/\[(\/){0,1}(URL)\]/ ,"")
+    end
+
   end
+
 
   def self.instance
     @instance ||= TauntLinkStore.new
@@ -121,7 +153,9 @@ class TauntLinkStore
   #   in seconds, is optional.
   def write(id, link, from_time=nil, to_time=nil)
     store.transaction do
-      store[id] = TauntLink.new(link, from_time, to_time)
+      link_to_store = link.include?("www.youtube.com") ? YoutubeTauntLink.new(link, from_time, to_time)
+                                                       : TauntLink.new(link)
+      store[id] = link_to_store
       store.commit
     end
   end
